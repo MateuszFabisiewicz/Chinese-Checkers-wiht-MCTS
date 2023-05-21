@@ -81,7 +81,7 @@ namespace Assets.Logic.Algorithms
 
         public void GenerateChildren (Board board)
         {
-            //throw new System.NotImplementedException ();
+            throw new System.NotImplementedException ();
         }
     }
 }

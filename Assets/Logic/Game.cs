@@ -1,4 +1,5 @@
 ﻿using Assets.Logic;
+using Assets.Logic.Algorithms;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
