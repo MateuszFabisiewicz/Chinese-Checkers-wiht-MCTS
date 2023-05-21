@@ -1,3 +1,4 @@
+using Assets.Logic;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -91,13 +92,4 @@ public class HeurPlayer : Player
     {
         throw new System.NotImplementedException ();
     }
-}
-
-public enum PlayerType
-{
-    Human,
-    UCT,
-    RAVE,
-    AUCT,
-    Heuristic
 }
