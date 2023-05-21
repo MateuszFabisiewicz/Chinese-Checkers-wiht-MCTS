@@ -43,6 +43,22 @@ public class Board // może być interpretowana jak stan gry
             }
         }
     }
+
+    public FieldInBoard FindCheckersPosition (int checker, PlayerColor color)
+    {
+        for (int i = 0; i < side; i++)
+        {
+            for (int j = 0; j < side; j++)
+            {
+                if (fields[i, j].playerOnField == color && fields[i, j].checkerIndex == checker)
+                {
+                    return fields[i, j];
+                }
+            }
+        }
+
+        throw new System.Exception ("Nie znaleziono pionka o podanym indeksie i kolorze");
+    }
 }
 
 public struct FieldInBoard
@@ -51,4 +67,5 @@ public struct FieldInBoard
     public int y;
     public PlayerColor fieldType;
     public PlayerColor playerOnField;
+    public int checkerIndex;
 }

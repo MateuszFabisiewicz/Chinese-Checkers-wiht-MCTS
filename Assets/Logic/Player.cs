@@ -1,4 +1,4 @@
-using Assets.Logic;
+﻿using Assets.Logic;
 using Assets.Logic.Algorithms;
 using System.Collections;
 using System.Collections.Generic;
@@ -28,7 +28,7 @@ public abstract class Player //: MonoBehaviour
         checkers[checkerIndex].SetPosition (end);
     }
 
-    public abstract (FieldInBoard, int) MakeChoice (Board board, Player opponentStats);
+    public abstract (FieldInBoard newField, int checkerIndex) MakeChoice (Board board, Player opponentStats);
 }
 
 public class HumanPlayer : Player
@@ -44,7 +44,7 @@ public class HumanPlayer : Player
     }
 }
 
-public class RAVEPlayer : Player
+public class RAVEPlayer : Player // pozmieniać żeby były po UCTPlayer
 {
     public RAVEPlayer (PlayerColor color) : base (color)
     {
