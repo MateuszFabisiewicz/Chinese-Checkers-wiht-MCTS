@@ -1,4 +1,5 @@
 using Assets.Logic;
+using Assets.Logic.Algorithms;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,6 +10,7 @@ public abstract class Player //: MonoBehaviour
     public PlayerColor color;
     protected PlayerType type;
     public Checker[] checkers;
+    protected Node root;
 
     public Player (PlayerColor color)
     {
@@ -34,19 +36,6 @@ public class HumanPlayer : Player
     public HumanPlayer (PlayerColor color) : base(color)
     {
         type = PlayerType.Human;
-    }
-
-    public override (FieldInBoard, int) MakeChoice (Board board, Player opponentStats)
-    {
-        throw new System.NotImplementedException ();
-    }
-}
-
-public class UCTPlayer : Player
-{
-    public UCTPlayer(PlayerColor color): base (color)
-    {
-        type = PlayerType.UCT;
     }
 
     public override (FieldInBoard, int) MakeChoice (Board board, Player opponentStats)
