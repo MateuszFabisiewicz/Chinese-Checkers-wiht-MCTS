@@ -1,4 +1,5 @@
 ﻿using Assets.Logic;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -58,6 +59,53 @@ public class Board // może być interpretowana jak stan gry
         }
 
         throw new System.Exception ("Nie znaleziono pionka o podanym indeksie i kolorze");
+    }
+
+    internal bool IsWinning (PlayerColor color)
+    {
+        // jeśli gracz wypełnił cały trójkąt swoimi pionkami, to wygrał
+        // wpp uznajemy że przegrał 
+
+        int playerCounter = 0, opponentCounter = 0;
+        for (int i = 0; i < triangleSide; i++)
+        {
+            for (int j = 0; j < triangleSide; j++)
+            {
+                // if (fields[i, j].fieldType != PlayerColor.None) -- tylko takie rozważamy
+                if (fields[i, j].playerOnField != PlayerColor.None)
+                {
+                    if (fields[i, j].playerOnField == color && fields[i, j].fieldType != color)
+                    {
+                        playerCounter++;
+                    }
+                    else if (fields[i, j].playerOnField != color && fields[i, j].fieldType == color)
+                    {
+                        opponentCounter++;
+                    }
+                }
+
+                if (fields[side - i - 1, side - j - 1].playerOnField != PlayerColor.None)
+                {
+                    if (fields[side - i - 1, side - j - 1].playerOnField == color && fields[side - i - 1, side - j - 1].fieldType != color)
+                    {
+                        playerCounter++;
+                    }
+                    else if (fields[side - i - 1, side - j - 1].playerOnField != color && fields[side - i - 1, side - j - 1].fieldType == color)
+                    {
+                        opponentCounter++;
+                    }
+                }
+            }
+        }
+
+        if (playerCounter == Game.checkerCount)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }
 

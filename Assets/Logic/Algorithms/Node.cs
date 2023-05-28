@@ -40,17 +40,37 @@ namespace Assets.Logic.Algorithms
 
         public bool GenerateChildren () 
         {
+            // dla każdego pionka patrzymy czy może się ruszyć
+            // jeśli tak to tworzymy dzieci z każdego możliwego ruchu
             throw new NotImplementedException();
         }
 
         public void UpdateWinningProbability (PlayerColor color)
         {
-            throw new NotImplementedException();
+            if (this.children.Count == 0)
+            {
+                if (this.state.IsWinning (color))
+                {
+                    this.winningProbability = 1;
+                }
+                else
+                {
+                    this.winningProbability = 0;
+                }
+            }
+            else
+            {
+                double sum = 0;
+                foreach (var child in this.children)
+                {
+                    sum += child.winningProbability;
+                }
+                this.winningProbability = sum / this.children.Count;
+            }
         }
 
         public Node (Node original)
         {
-            //this = new Node(original.state, original.parent);
             this.state = original.state;
             this.parent = original.parent;
             this.winningProbability = original.winningProbability;
