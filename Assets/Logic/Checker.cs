@@ -12,8 +12,15 @@ public class Checker
         this.color = color;
     }
 
+    public Checker(Checker oldChecker)
+    {
+        this.ID = oldChecker.ID;
+        this.color = oldChecker.color;
+    }
+
     public void SetPosition (FieldInBoard newPlace)
     {
         placement = newPlace;
+        newPlace.checkerIndex = ID;
     }
 }

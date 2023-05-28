@@ -73,8 +73,12 @@ public class Game //: MonoBehaviour
             {
                 players[0].checkers[checkerIndex].SetPosition (board.fields[i, j]);
                 board.fields[i, j].playerOnField = players[0].color;
+                board.fields[i, j].checker = players[0].checkers[checkerIndex];
+
                 players[1].checkers[checkerIndex].SetPosition (board.fields[Board.side - i - 1, Board.side - j - 1]);
                 board.fields[Board.side - i - 1, Board.side - j - 1].playerOnField = players[1].color;
+                board.fields[Board.side - i - 1, Board.side - j - 1].checker = players[1].checkers[checkerIndex];
+
                 checkerIndex++;
             }
         }

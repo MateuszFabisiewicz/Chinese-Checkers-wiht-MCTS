@@ -18,12 +18,12 @@ namespace Assets.Logic.Algorithms
             type = PlayerType.UCT;
         }
 
-        public override (FieldInBoard, int) MakeChoice (Board board, Player opponentStats)
+        public override (FieldInBoard, int, PlayerColor) MakeChoice (Board board, Player opponentStats)
         {
             root = new Node (board, null);
             root.winningProbability = 0.5; // lub 0, jeszcze rozważyć
 
-            bool childreanGenerated = root.GenerateChildren (); // tworzymy startowe drzewo - póki co tylko dzieci root, każde z szansą 0.5 wygranej,
+            bool childrenGenerated = root.GenerateChildren (this.color); // tworzymy startowe drzewo - póki co tylko dzieci root, każde z szansą 0.5 wygranej,
                                                                 // chyba że akurat jest wygrana
 
             int i = 0;
@@ -96,6 +96,7 @@ namespace Assets.Logic.Algorithms
                 node = BestUCT (node);
             }
 
+            node.visitCount++; // chyba w tym miejscu zwiększamy?
             return node;
         }
 
@@ -113,13 +114,13 @@ namespace Assets.Logic.Algorithms
 
         private void Expand (Node leaf)
         {
-            bool expanded = leaf.GenerateChildren ();
+            bool expanded = leaf.GenerateChildren (this.color);
 
             if (expanded) // powstały dzieci, możemy iść dalej
             {
                 foreach (Node child in leaf.children)
                 {
-                    child.GenerateChildren ();
+                    child.GenerateChildren (this.color);
                 }
             }
         }

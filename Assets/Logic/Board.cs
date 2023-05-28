@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Scripting.APIUpdating;
 
 public class Board // może być interpretowana jak stan gry
 {
@@ -39,6 +40,28 @@ public class Board // może być interpretowana jak stan gry
                     newField.fieldType = PlayerColor.None;
                     newField.playerOnField = PlayerColor.None;
                 }
+
+                fields[i, j] = newField;
+            }
+        }
+    }
+
+    public Board(Board oldBoard)
+    {
+        for (int i = 0; i < side; i++)
+        {
+            for (int j = 0; j < side; j++)
+            {
+                FieldInBoard newField = new FieldInBoard
+                {
+                    x = i,
+                    y = j
+                };
+
+                newField.fieldType = oldBoard.fields[i, j].fieldType;
+                newField.playerOnField = oldBoard.fields[i, j].playerOnField;
+                newField.checkerIndex = oldBoard.fields[i, j].checkerIndex;
+                newField.checker = new Checker (oldBoard.fields[i, j].checker);
 
                 fields[i, j] = newField;
             }
@@ -107,6 +130,19 @@ public class Board // może być interpretowana jak stan gry
             return false;
         }
     }
+
+    public Board(Board oldBoard, FieldInBoard oldField, FieldInBoard newField)
+    {
+        Board newBoard = new Board (oldBoard);
+
+        newBoard.fields[newField.x, newField.y].checkerIndex = oldField.checkerIndex;
+        newBoard.fields[newField.x, newField.y].checker = new Checker (oldField.checker);
+        newBoard.fields[newField.x, newField.y].playerOnField = oldField.playerOnField;
+
+        oldBoard.fields[oldField.x, oldField.y].playerOnField = PlayerColor.None;
+        oldBoard.fields[oldField.x, oldField.y].checkerIndex = -1;
+        oldBoard.fields[oldField.x, oldField.y].checker = null;
+    }
 }
 
 public struct FieldInBoard
@@ -116,4 +152,5 @@ public struct FieldInBoard
     public PlayerColor fieldType;
     public PlayerColor playerOnField;
     public int checkerIndex;
+    public Checker checker;
 }
