@@ -143,7 +143,7 @@ namespace Assets.Logic.Algorithms
             //throw new NotImplementedException();
         }
 
-        private List<(FieldInBoard newField, Board newState)> Jump (FieldInBoard oldField, Board board)
+        private List<(FieldInBoard newField, Board newState)> Jump (FieldInBoard oldField, Board board) // dodać zapobieganie zawracania (w stosunku do rodzica)
         {
             // rozważamy też te 6 pól dookoła oraz pole w linii prostej
             // po wykonaniu skoku możemy dalej skakać (potencjalnie)
