@@ -69,7 +69,7 @@ public class Game //: MonoBehaviour
         int checkerIndex = 0;
         for (int i = 0; i < Board.triangleSide; i++)
         {
-            for (int j = 0; j < Board.triangleSide; j++)
+            for (int j = 0; j < Board.triangleSide - i; j++)
             {
                 players[0].checkers[checkerIndex].SetPosition (board.fields[i, j]);
                 board.fields[i, j].playerOnField = players[0].color;
