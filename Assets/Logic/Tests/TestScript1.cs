@@ -10,7 +10,7 @@ public class TestScript1
 {
     // A Test behaves as an ordinary method
     [Test]
-    public void TestScript1SimplePasses()
+    public void CreatingGame()
     {
         // Use the Assert class to test conditions
         Game testGame = new Game (PlayerType.UCT, PlayerType.UCT);
