@@ -29,7 +29,7 @@ public class TestScript1
     }
 
     [Test]
-    public void TwoUCTGameTest () // TODO: test dwóch graczy UCT, aż któryś nie wygra (albo 100 ruchów wykonanych)
+    public void TwoUCTGameTest () // TODO: spojrzeć co ruch co się dzieje
     {
         int i = 0, currPlayer = 0;
         Game testGame = new Game (PlayerType.UCT, PlayerType.UCT);
