@@ -16,6 +16,7 @@ public class Checker
     {
         this.ID = oldChecker.ID;
         this.color = oldChecker.color;
+        this.placement = oldChecker.placement;
     }
 
     public void SetPosition (FieldInBoard newPlace)

@@ -18,6 +18,16 @@ public class TestScript1
         Assert.AreEqual (testGame.players.Length, 2);
     }
 
+    [Test]
+    public void FirstMoveTest ()
+    {
+        Game testGame = new Game (PlayerType.UCT, PlayerType.UCT);
+
+        var answer = testGame.players[0].MakeChoice (testGame.board, testGame.players[1]);
+
+        Assert.AreEqual (answer.player, testGame.players[0].color);
+    }
+
     // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
     // `yield return null;` to skip a frame.
     [UnityTest]

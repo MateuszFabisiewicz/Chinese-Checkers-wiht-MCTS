@@ -13,7 +13,6 @@ public class Board // może być interpretowana jak stan gry
 
     public Board ()
     {
-        int checkerCounter = 0;
         for (int i = 0; i < side; i++)
         {
             for (int j = 0; j < side; j++)
@@ -25,13 +24,12 @@ public class Board // może być interpretowana jak stan gry
                     //checkerIndex = -1
                 };
 
-                if (i < triangleSide && j < triangleSide)
+                if (i < triangleSide && j < triangleSide - i)
                 {
                     newField.fieldType = PlayerColor.Blue;
                     newField.playerOnField = PlayerColor.Blue;
-                    checkerCounter++;
                 }
-                else if (i >= side- triangleSide && j >= side- triangleSide)
+                else if (i >= side - triangleSide && j >= 2*side - triangleSide - i - 1)
                 {
                     newField.fieldType = PlayerColor.Red;
                     newField.playerOnField = PlayerColor.Red;
@@ -62,7 +60,9 @@ public class Board // może być interpretowana jak stan gry
                 newField.fieldType = oldBoard.fields[i, j].fieldType;
                 newField.playerOnField = oldBoard.fields[i, j].playerOnField;
                 //newField.checkerIndex = oldBoard.fields[i, j].checkerIndex;
-                newField.checker = new Checker (oldBoard.fields[i, j].checker);
+                newField.checker = oldBoard.fields[i, j].checker != null ? new Checker (oldBoard.fields[i, j].checker) : null;
+                if (newField.checker != null)
+                    newField.checker.SetPosition (newField);
 
                 fields[i, j] = newField;
             }
@@ -132,17 +132,17 @@ public class Board // może być interpretowana jak stan gry
         }
     }
 
-    public Board(Board oldBoard, FieldInBoard oldField, FieldInBoard newField)
+    public Board(Board oldBoard, FieldInBoard oldField, FieldInBoard newField) : this (oldBoard)
     {
-        Board newBoard = new Board (oldBoard);
+        //this = new Board (oldBoard);
 
-        //newBoard.fields[newField.x, newField.y].checkerIndex = oldField.checkerIndex;
-        newBoard.fields[newField.x, newField.y].checker = new Checker (oldField.checker);
-        newBoard.fields[newField.x, newField.y].playerOnField = oldField.playerOnField;
+        fields[newField.x, newField.y].playerOnField = oldField.playerOnField;
+        fields[newField.x, newField.y].checker = new Checker (oldField.checker);
+        fields[newField.x, newField.y].checker.SetPosition (fields[newField.x, newField.y]);
+        //fields[newField.x, newField.y].playerOnField = oldField.playerOnField;
 
-        oldBoard.fields[oldField.x, oldField.y].playerOnField = PlayerColor.None;
-        //oldBoard.fields[oldField.x, oldField.y].checkerIndex = -1;
-        oldBoard.fields[oldField.x, oldField.y].checker = null;
+        fields[oldField.x, oldField.y].playerOnField = PlayerColor.None;
+        fields[oldField.x, oldField.y].checker = null;
     }
 }
 
