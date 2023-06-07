@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Unity.Jobs.LowLevel.Unsafe;
 using UnityEngine;
+using static PlasticPipe.PlasticProtocol.Messages.Serialization.ItemHandlerMessagesSerialization;
+using static UnityEditor.Graphs.Styles;
 
 namespace Assets.Logic.Algorithms
 {
@@ -54,66 +56,47 @@ namespace Assets.Logic.Algorithms
                 color = parent.move.playerWhoMoved == PlayerColor.Red ? PlayerColor.Blue : PlayerColor.Red;
             }
 
-            //if (parent == null) // jesteśmy w root
-            //{
             for (int i = 0; i < Game.checkerCount; i++)
             {
                 FieldInBoard field = state.FindCheckersPosition (i, color);
 
                 #region zwykły ruch
                 // możemy iść +1 na y, +1 na x, -1 na y, -1 na x, -1 na y +1 na x, +1 na y -1 na x
-                if (field.y + 1 < Board.side && state.fields[field.x, field.y + 1].playerOnField == PlayerColor.None)
-                {
-                    Checker checker = new Checker (field.checker);
-                    Board newState = new Board (state, field, state.fields[field.x, field.y + 1]);
 
-                    Node node = new Node (newState, this, checker.ID, state.fields[field.x, field.y + 1], color);
-                    children.Add (node);
+                Node newNode = OneMove ((field.x, field.y + 1), state, field);
+                if (newNode != null)
+                {
+                    children.Add (newNode);
                 }
 
-                if (field.x + 1 < Board.side && state.fields[field.x + 1, field.y].playerOnField == PlayerColor.None)
+                newNode = OneMove ((field.x + 1, field.y), state, field);
+                if (newNode != null)
                 {
-                    Checker checker = new Checker (field.checker);
-                    Board newState = new Board (state, field, state.fields[field.x + 1, field.y]);
-
-                    Node node = new Node (newState, this, checker.ID, state.fields[field.x + 1, field.y], color);
-                    children.Add (node);
+                    children.Add (newNode);
                 }
 
-                if (field.y - 1 >= 0 && state.fields[field.x, field.y - 1].playerOnField == PlayerColor.None)
+                newNode = OneMove ((field.x, field.y - 1), state, field);
+                if (newNode != null)
                 {
-                    Checker checker = new Checker (field.checker);
-                    Board newState = new Board (state, field, state.fields[field.x, field.y - 1]);
-
-                    Node node = new Node (newState, this, checker.ID, state.fields[field.x, field.y - 1], color);
-                    children.Add (node);
+                    children.Add (newNode);
                 }
 
-                if (field.x - 1 >= 0 && state.fields[field.x - 1, field.y].playerOnField == PlayerColor.None)
+                newNode = OneMove ((field.x - 1, field.y), state, field);
+                if (newNode != null)
                 {
-                    Checker checker = new Checker (field.checker);
-                    Board newState = new Board (state, field, state.fields[field.x - 1, field.y]);
-
-                    Node node = new Node (newState, this, checker.ID, state.fields[field.x - 1, field.y], color);
-                    children.Add (node);
+                    children.Add (newNode);
                 }
 
-                if (field.y - 1 >= 0 && field.x + 1 < Board.side && state.fields[field.x + 1, field.y - 1].playerOnField == PlayerColor.None)
+                newNode = OneMove ((field.x + 1, field.y - 1), state, field);
+                if (newNode != null)
                 {
-                    Checker checker = new Checker (field.checker);
-                    Board newState = new Board (state, field, state.fields[field.x + 1, field.y - 1]);
-
-                    Node node = new Node (newState, this, checker.ID, state.fields[field.x + 1, field.y - 1], color);
-                    children.Add (node);
+                    children.Add (newNode);
                 }
 
-                if (field.x - 1 >= 0 && field.y + 1 < Board.side && state.fields[field.x - 1, field.y + 1].playerOnField == PlayerColor.None)
+                newNode = OneMove ((field.x - 1, field.y + 1), state, field);
+                if (newNode != null)
                 {
-                    Checker checker = new Checker (field.checker);
-                    Board newState = new Board (state, field, state.fields[field.x - 1, field.y + 1]);
-
-                    Node node = new Node (newState, this, checker.ID, state.fields[field.x - 1, field.y + 1], color);
-                    children.Add (node);
+                    children.Add (newNode);
                 }
 
                 #endregion
@@ -134,14 +117,22 @@ namespace Assets.Logic.Algorithms
 
                 #endregion
             }
-            //}
-            //else
-            //{
-            // jak w root, ale color to odwrotność koloru rodzica
-            //}
 
             return children.Count > 0;
-            //throw new NotImplementedException();
+        }
+
+        private Node OneMove ((int x, int y) end, Board board, FieldInBoard oldField)
+        {
+            if (end.x < Board.side && end.y < Board.side && end.x >= 0 && end.y >= 0
+                               && board.fields[end.x, end.y].playerOnField == PlayerColor.None)
+            {
+                Board newState = new Board (board, oldField, board.fields[end.x, end.y]);
+
+                Node node = new Node (newState, this, oldField.checker.ID, newState.fields[end.x, end.y], oldField.checker.color);
+                return node;
+            }
+            else 
+                return null;
         }
 
         private List<(FieldInBoard newField, Board newState)> OneJump ((int x, int y) end, (int x, int y) inter, Board board, FieldInBoard oldField, FieldInBoard lastPlace, FieldInBoard originalPlace)
@@ -170,76 +161,16 @@ namespace Assets.Logic.Algorithms
             List<(FieldInBoard newField, Board newState)> jumps = new List<(FieldInBoard newField, Board newState)> ();
 
             jumps.AddRange (OneJump ((oldField.x, oldField.y + 2), (oldField.x, oldField.y + 1), board, oldField, lastPlace, originalPlace));
-            //if (oldField.y + 2 < Board.side && board.fields[oldField.x, oldField.y + 1].playerOnField != PlayerColor.None
-            //    && board.fields[oldField.x, oldField.y + 2].playerOnField == PlayerColor.None
-            //    && oldField.x != lastPlace.x && oldField.y + 2 != lastPlace.y 
-            //    && oldField.x != originalPlace.x && oldField.y + 2 != lastPlace.y)
-            //{
-            //    Board newState = new Board (board, oldField, board.fields[oldField.x, oldField.y + 2]);
-
-            //    jumps.Add ((newState.fields[oldField.x, oldField.y + 2], newState));
-            //    jumps.AddRange (Jump (newState.fields[oldField.x, oldField.y + 2], newState, oldField, originalPlace));
-            //}
 
             jumps.AddRange (OneJump ((oldField.x + 2, oldField.y), (oldField.x + 1, oldField.y), board, oldField, lastPlace, originalPlace));
-            //if (oldField.x + 2 < Board.side && board.fields[oldField.x + 1, oldField.y].playerOnField != PlayerColor.None
-            //    && board.fields[oldField.x + 2, oldField.y].playerOnField == PlayerColor.None
-            //    && oldField.x + 2 != lastPlace.x && oldField.y != lastPlace.y
-            //    && oldField.x + 2 != originalPlace.x && oldField.y != lastPlace.y)
-            //{
-            //    Board newState = new Board (board, oldField, board.fields[oldField.x + 2, oldField.y]);
-
-            //    jumps.Add ((newState.fields[oldField.x + 2, oldField.y], newState));
-            //    jumps.AddRange (Jump (newState.fields[oldField.x + 2, oldField.y], newState, oldField, originalPlace));
-            //}
 
             jumps.AddRange (OneJump ((oldField.x, oldField.y - 2), (oldField.x, oldField.y - 1), board, oldField, lastPlace, originalPlace));
-            //if (oldField.y - 2 >= 0 && board.fields[oldField.x, oldField.y - 1].playerOnField != PlayerColor.None
-            //    && board.fields[oldField.x, oldField.y - 2].playerOnField == PlayerColor.None
-            //    && oldField.x != lastPlace.x && oldField.y - 2 != lastPlace.y
-            //    && oldField.x != originalPlace.x && oldField.y - 2 != lastPlace.y)
-            //{
-            //    Board newState = new Board (board, oldField, board.fields[oldField.x, oldField.y - 2]);
-
-            //    jumps.Add ((newState.fields[oldField.x, oldField.y - 2], newState));
-            //    jumps.AddRange (Jump (newState.fields[oldField.x, oldField.y - 2], newState, oldField, originalPlace));
-            //}
 
             jumps.AddRange (OneJump ((oldField.x - 2, oldField.y), (oldField.x - 1, oldField.y), board, oldField, lastPlace, originalPlace));
-            //if (oldField.x - 2 >= 0 && board.fields[oldField.x - 1, oldField.y].playerOnField != PlayerColor.None
-            //    && board.fields[oldField.x - 2, oldField.y].playerOnField == PlayerColor.None
-            //    && oldField.x - 2 != lastPlace.x && oldField.y != lastPlace.y
-            //    && oldField.x - 2 != originalPlace.x && oldField.y != lastPlace.y)
-            //{
-            //    Board newState = new Board (board, oldField, board.fields[oldField.x - 2, oldField.y]);
-
-            //    jumps.Add ((newState.fields[oldField.x - 2, oldField.y], newState));
-            //    jumps.AddRange (Jump (newState.fields[oldField.x - 2, oldField.y], newState, oldField, originalPlace));
-            //}
 
             jumps.AddRange (OneJump ((oldField.x + 2, oldField.y - 2), (oldField.x + 1, oldField.y - 1), board, oldField, lastPlace, originalPlace));
-            //if (oldField.y - 2 >= 0 && oldField.x + 2 < Board.side && board.fields[oldField.x + 1, oldField.y - 1].playerOnField != PlayerColor.None
-            //    && board.fields[oldField.x + 2, oldField.y - 2].playerOnField == PlayerColor.None
-            //    && oldField.x + 2 != lastPlace.x && oldField.y - 2 != lastPlace.y
-            //    && oldField.x + 2 != originalPlace.x && oldField.y - 2 != lastPlace.y)
-            //{
-            //    Board newState = new Board (board, oldField, board.fields[oldField.x + 2, oldField.y - 2]);
-
-            //    jumps.Add ((newState.fields[oldField.x + 2, oldField.y - 2], newState));
-            //    jumps.AddRange (Jump (newState.fields[oldField.x + 2, oldField.y - 2], newState, oldField, originalPlace));
-            //}
 
             jumps.AddRange (OneJump ((oldField.x - 2, oldField.y + 2), (oldField.x - 1, oldField.y + 1), board, oldField, lastPlace, originalPlace));
-            //if (oldField.x - 2 >= 0 && oldField.y + 2 < Board.side && board.fields[oldField.x - 1, oldField.y + 1].playerOnField != PlayerColor.None
-            //    && board.fields[oldField.x - 2, oldField.y + 2].playerOnField == PlayerColor.None
-            //    && oldField.x - 2 != lastPlace.x && oldField.y + 2 != lastPlace.y
-            //    && oldField.x - 2 != originalPlace.x && oldField.y + 2 != lastPlace.y)
-            //{
-            //    Board newState = new Board (board, oldField, board.fields[oldField.x - 2, oldField.y + 2]);
-
-            //    jumps.Add ((newState.fields[oldField.x - 2, oldField.y + 2], newState));
-            //    jumps.AddRange (Jump (newState.fields[oldField.x - 2, oldField.y + 2], newState, oldField, originalPlace));
-            //}
 
             return jumps;
         }
