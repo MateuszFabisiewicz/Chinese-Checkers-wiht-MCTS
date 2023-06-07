@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using Assets.Logic;
 using NUnit.Framework;
@@ -26,6 +26,28 @@ public class TestScript1
         var answer = testGame.players[0].MakeChoice (testGame.board, testGame.players[1]);
 
         Assert.AreEqual (answer.player, testGame.players[0].color);
+    }
+
+    [Test]
+    public void TwoUCTGameTest () // TODO: test dwóch graczy UCT, aż któryś nie wygra (albo 100 ruchów wykonanych)
+    {
+        int i = 0, currPlayer = 0;
+        Game testGame = new Game (PlayerType.UCT, PlayerType.UCT);
+
+        while (testGame.Win () == PlayerColor.None && i < 100)
+        {
+            i++;
+            var answer = testGame.players[currPlayer].MakeChoice (testGame.board, testGame.players[1]);
+            testGame.MoveChecker (answer.newField, answer.checkerIndex, currPlayer);
+            currPlayer = (currPlayer + 1) % 2;
+        }
+
+        //var answer = testGame.players[0].MakeChoice (testGame.board, testGame.players[1]);
+
+        if (i < 100)
+            Assert.AreNotEqual (testGame.Win (), PlayerColor.None);
+        else 
+            Assert.AreEqual (testGame.Win (), PlayerColor.None);
     }
 
     // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use

@@ -121,4 +121,16 @@ public class Game //: MonoBehaviour
         else
             return PlayerColor.None;
     }
+
+    public void MoveChecker (FieldInBoard newField, int checkerIndex, int playerWhoMoved)
+    {
+        FieldInBoard oldField = board.FindCheckersPosition (checkerIndex, players[playerWhoMoved].color);
+
+        board.fields[newField.x, newField.y].playerOnField = players[playerWhoMoved].color;
+        board.fields[newField.x, newField.y].checker = players[playerWhoMoved].checkers[checkerIndex];
+        players[playerWhoMoved].checkers[checkerIndex].SetPosition (newField);
+
+        board.fields[oldField.x, oldField.y].playerOnField = PlayerColor.None;
+        board.fields[oldField.x, oldField.y].checker = null;
+    }
 }
