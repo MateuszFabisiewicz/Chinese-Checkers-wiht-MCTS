@@ -56,6 +56,11 @@ namespace Assets.Logic.Algorithms
                 }
             }
 
+            if (bestChild == null)
+            {
+                bestChild = root.children[0];
+            }
+
             return bestChild;
         }
 
@@ -104,10 +109,14 @@ namespace Assets.Logic.Algorithms
         {
             double[] UCTValues = new double[node.children.Count];
 
-            foreach (Node child in node.children)
+            for (int i = 0; i < node.children.Count; i++)
             {
-                UCTValues[child.move.checkerIndex] = child.winningProbability + C * Math.Sqrt (Math.Log (node.visitCount) / child.visitCount);
+                UCTValues[i] = node.children[i].winningProbability + C * Math.Sqrt (Math.Log (node.visitCount) / node.children[i].visitCount);
             }
+            //foreach (Node child in node.children)
+            //{
+            //    UCTValues[child.move.checkerIndex] = child.winningProbability + C * Math.Sqrt (Math.Log (node.visitCount) / child.visitCount);
+            //}
 
             return node.children[UCTValues.ToList ().IndexOf (UCTValues.Max ())];
         }

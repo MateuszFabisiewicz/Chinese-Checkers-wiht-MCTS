@@ -275,6 +275,7 @@ namespace Assets.Logic.Algorithms
             this.winningProbability = original.winningProbability;
             this.visitCount = original.visitCount;
             this.move = original.move;
+            this.children = new List<Node> ();
             foreach (var child in original.children)
             {
                 this.children.Add (new Node (child));
