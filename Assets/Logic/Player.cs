@@ -56,16 +56,3 @@ public class RAVEPlayer : Player // pozmieniać żeby były po UCTPlayer
         throw new System.NotImplementedException ();
     }
 }
-
-public class HeurPlayer : Player
-{
-    public HeurPlayer (PlayerColor color) : base (color)
-    {
-        type = PlayerType.Heuristic;
-    }
-
-    public override (FieldInBoard, int, PlayerColor) MakeChoice (Board board, Player opponentStats)
-    {
-        throw new System.NotImplementedException ();
-    }
-}
