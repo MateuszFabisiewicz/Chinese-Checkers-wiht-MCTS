@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TreeEditor;
 using Unity.VisualScripting;
+using UnityEngine.SocialPlatforms.Impl;
 
 namespace Assets.Logic.Algorithms
 {
@@ -24,7 +25,7 @@ namespace Assets.Logic.Algorithms
             root.winningProbability = 0.5; // lub 0, jeszcze rozważyć
 
             bool childrenGenerated = root.GenerateChildren (this.color); // tworzymy startowe drzewo - póki co tylko dzieci root, każde z szansą 0.5 wygranej,
-                                                                // chyba że akurat jest wygrana
+                                                                         // chyba że akurat jest wygrana
 
             int i = 0;
             while (i < loopCount) // ileś loopów
@@ -33,7 +34,7 @@ namespace Assets.Logic.Algorithms
                 Expand (leaf);
                 Node simulationResult = Rollout (leaf); // symulujemy rozgrywkę, zwracamy liść z wynikiem
                 Backpropagate (leaf, simulationResult); // aktualizujemy wartości w drzewie
-                
+
                 i++;
             }
 
@@ -79,13 +80,13 @@ namespace Assets.Logic.Algorithms
 
         private Node Rollout (Node leaf)
         {
-            Node node = new Node(leaf);
+            Node node = leaf;
             while (node.children.Count > 0) // póki możemy iść dalej
             {
                 // stosujemy random rollout policy
                 Random random = new Random ();
                 int randomIndex = random.Next (0, node.children.Count);
-                node = new (node.children[randomIndex]);
+                node = node.children[randomIndex];
             }
 
             return node; // zwracamy końcowy node
@@ -120,14 +121,23 @@ namespace Assets.Logic.Algorithms
 
         private void Expand (Node leaf)
         {
-            bool expanded = leaf.GenerateChildren (this.color);
-
-            if (expanded) // powstały dzieci, możemy iść dalej
+            while (leaf.children.Count > 0)
             {
-                foreach (Node child in leaf.children)
-                {
-                    child.GenerateChildren (this.color);
-                }
+                leaf = Traverse (leaf);
+            }
+
+            if (leaf.children.Count == 0)
+            {
+                bool expanded = leaf.GenerateChildren (this.color);
+
+                //if (expanded) // powstały dzieci, możemy iść dalej
+                //{
+                //    foreach (Node child in leaf.children)
+                //    {
+                //        child.GenerateChildren (this.color);
+                //        //Expand (child);
+                //    }
+                //}
             }
         }
     }

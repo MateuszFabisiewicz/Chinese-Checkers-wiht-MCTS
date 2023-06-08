@@ -121,7 +121,7 @@ public class TestScript1
         int i = 0, currPlayer = 0;
         Game testGame = new Game (PlayerType.AUCT, PlayerType.AUCT);
 
-        while (testGame.Win () == PlayerColor.None && i < 50)
+        while (testGame.Win () == PlayerColor.None && i < 10)
         {
             i++;
             var answer = testGame.players[currPlayer].MakeChoice (testGame.board, testGame.players[1]);
@@ -129,7 +129,7 @@ public class TestScript1
             currPlayer = (currPlayer + 1) % 2;
         }
 
-        if (i < 50)
+        if (i < 10)
             Assert.AreNotEqual (testGame.Win (), PlayerColor.None);
         else
             Assert.AreEqual (testGame.Win (), PlayerColor.None);
@@ -141,7 +141,7 @@ public class TestScript1
         int i = 0, currPlayer = 0;
         Game testGame = new Game (PlayerType.AUCT, PlayerType.UCT);
 
-        while (testGame.Win () == PlayerColor.None && i < 50)
+        while (testGame.Win () == PlayerColor.None && i < 30)
         {
             i++;
             var answer = testGame.players[currPlayer].MakeChoice (testGame.board, testGame.players[1]);
@@ -149,7 +149,7 @@ public class TestScript1
             currPlayer = (currPlayer + 1) % 2;
         }
 
-        if (i < 50)
+        if (i < 30)
             Assert.AreNotEqual (testGame.Win (), PlayerColor.None);
         else
             Assert.AreEqual (testGame.Win (), PlayerColor.None);

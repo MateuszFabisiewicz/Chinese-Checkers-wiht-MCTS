@@ -35,7 +35,8 @@ namespace Assets.Logic.Algorithms
             this.state = state;
             this.parent = parentNode;
             children = new List<Node> ();
-            visitCount = 0;
+            visitCount = 1;
+            velocity = 1;
         }
 
         public Node (Board state, Node parentNode, int changedChecker, FieldInBoard fieldOfChecker, PlayerColor player)
@@ -43,7 +44,8 @@ namespace Assets.Logic.Algorithms
             this.state = state;
             this.parent = parentNode;
             children = new List<Node> ();
-            visitCount = 0;
+            visitCount = 1;
+            velocity = 1;
             move = (fieldOfChecker, changedChecker, player);
         }
 
@@ -183,14 +185,7 @@ namespace Assets.Logic.Algorithms
         {
             if (this.children.Count == 0)
             {
-                if (this.state.IsWinning (color))
-                {
-                    this.winningProbability = 1;
-                }
-                else
-                {
-                    this.winningProbability = 0;
-                }
+                this.winningProbability = this.state.IsWinning (color);
             }
             else
             {
@@ -205,22 +200,18 @@ namespace Assets.Logic.Algorithms
 
         public void UpdateAccWinRation (PlayerColor color)
         {
-            this.accWinRation = 0;
-            foreach (var child in this.children)
-            {
-                this.accWinRation += child.CalculateW () * child.accWinRation;
-            }
-
+            //this.accWinRation = 0;
             if (this.children.Count == 0)
             {
-                // to chyba dajemy 0 albo 1 (zgodnie z winningProbability)
-                if (this.state.IsWinning (color))
+                this.accWinRation = this.state.IsWinning (color);
+            }
+            else
+            {
+                this.accWinRation = 0;
+                double w = this.CalculateW ();
+                foreach (var child in this.children)
                 {
-                    this.accWinRation = 1;
-                }
-                else
-                {
-                    this.accWinRation = 0;
+                    this.accWinRation += w * child.accWinRation;
                 }
             }
         }
@@ -233,7 +224,10 @@ namespace Assets.Logic.Algorithms
                 sumOfChildV += child.velocity;
             }
 
-            return this.velocity / sumOfChildV;
+            if (sumOfChildV != 0)
+                return this.velocity / sumOfChildV;
+            else 
+                return 0;
         }
 
         public Node (Node original)

@@ -10,7 +10,6 @@ namespace Assets.Logic.Algorithms
     public class AUCTPlayer : UCTPlayer
     {
         internal double lambda = 0.5; // do przetestowania ewentualnie
-        
 
         public AUCTPlayer (PlayerColor color) : base (color)
         {
@@ -39,6 +38,11 @@ namespace Assets.Logic.Algorithms
 
             while (node.children.Count != 0)
             {
+                node.visitCount++;
+                foreach (var child in node.children)
+                {
+                    child.velocity = lambda * child.velocity;
+                }
                 node = BestAUCT (node);
                 node.velocity += 1;
             }
@@ -47,6 +51,10 @@ namespace Assets.Logic.Algorithms
             // i jeśli zostanie ten wybrany, to dodajemy mu 1 (wpp. "dodajemy" 0)
 
             node.visitCount++;
+            //foreach (var child in node.children)
+            //{
+            //    child.velocity = lambda * child.velocity;
+            //} // bessęsu, nie ma dzieci przecie
             return node;
         }
 
@@ -57,8 +65,8 @@ namespace Assets.Logic.Algorithms
 
             for (int i = 0; i < node.children.Count; i++)
             {
-                node.children[i].velocity = lambda * node.children[i].velocity;
-                node.children[i].UpdateAccWinRation (color); // chyba?
+                //node.children[i].velocity = lambda * node.children[i].velocity;
+                //node.children[i].UpdateAccWinRation (color); // chyba?
                 AUCTValues[i] = node.children[i].accWinRation + C * Math.Sqrt (Math.Log (node.visitCount) / node.children[i].visitCount);
             }
 
