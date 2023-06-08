@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Game //: MonoBehaviour
+public class Game
 {
     public const int playerCount = 2;
     public const int checkerCount = 10; // liczba pionków gracza
@@ -62,6 +62,9 @@ public class Game //: MonoBehaviour
                 break;
         }
 
+        players[0].id = 0;
+        players[1].id = 1;
+
         // tworzymy planszę
         board = new Board ();
 
@@ -69,12 +72,18 @@ public class Game //: MonoBehaviour
         int checkerIndex = 0;
         for (int i = 0; i < Board.triangleSide; i++)
         {
-            for (int j = 0; j < Board.triangleSide; j++)
+            for (int j = 0; j < Board.triangleSide - i; j++)
             {
-                players[0].checkers[checkerIndex].SetPosition (board.fields[i, j]);
                 board.fields[i, j].playerOnField = players[0].color;
-                players[1].checkers[checkerIndex].SetPosition (board.fields[Board.side - i - 1, Board.side - j - 1]);
+                board.fields[i, j].checker = players[0].checkers[checkerIndex];
+                //board.fields[i, j].checkerIndex = players[0].checkers[checkerIndex].ID;
+                players[0].checkers[checkerIndex].SetPosition (board.fields[i, j]);
+
                 board.fields[Board.side - i - 1, Board.side - j - 1].playerOnField = players[1].color;
+                board.fields[Board.side - i - 1, Board.side - j - 1].checker = players[1].checkers[checkerIndex];
+                //board.fields[Board.side - i - 1, Board.side - j - 1].checkerIndex = players[1].checkers[checkerIndex].ID;
+                players[1].checkers[checkerIndex].SetPosition (board.fields[Board.side - i - 1, Board.side - j - 1]);
+
                 checkerIndex++;
             }
         }
@@ -90,7 +99,7 @@ public class Game //: MonoBehaviour
         int countBlue = 0;
         int countRed = 0;
 
-        for (int i = 0; i < Board.side; i++) // ewentualnie zrobić po triangleSide i testować też Board.side - i - 1 itd
+        for (int i = 0; i < Board.side; i++)
         {
             for (int j = 0; j < Board.side; j++)
             {
@@ -111,5 +120,17 @@ public class Game //: MonoBehaviour
             return PlayerColor.Red;
         else
             return PlayerColor.None;
+    }
+
+    public void MoveChecker (FieldInBoard newField, int checkerIndex, int playerWhoMoved)
+    {
+        FieldInBoard oldField = board.FindCheckersPosition (checkerIndex, players[playerWhoMoved].color);
+
+        board.fields[newField.x, newField.y].playerOnField = players[playerWhoMoved].color;
+        board.fields[newField.x, newField.y].checker = players[playerWhoMoved].checkers[checkerIndex];
+        players[playerWhoMoved].checkers[checkerIndex].SetPosition (newField);
+
+        board.fields[oldField.x, oldField.y].playerOnField = PlayerColor.None;
+        board.fields[oldField.x, oldField.y].checker = null;
     }
 }

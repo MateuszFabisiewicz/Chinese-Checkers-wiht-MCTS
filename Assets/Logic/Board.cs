@@ -1,7 +1,9 @@
 ﻿using Assets.Logic;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Scripting.APIUpdating;
 
 public class Board // może być interpretowana jak stan gry
 {
@@ -11,7 +13,6 @@ public class Board // może być interpretowana jak stan gry
 
     public Board ()
     {
-        int checkerCounter = 0;
         for (int i = 0; i < side; i++)
         {
             for (int j = 0; j < side; j++)
@@ -22,13 +23,12 @@ public class Board // może być interpretowana jak stan gry
                     y = j
                 };
 
-                if (i < triangleSide && j < triangleSide)
+                if (i < triangleSide && j < triangleSide - i)
                 {
                     newField.fieldType = PlayerColor.Blue;
                     newField.playerOnField = PlayerColor.Blue;
-                    checkerCounter++;
                 }
-                else if (i >= side- triangleSide && j >= side- triangleSide)
+                else if (i >= side - triangleSide && j >= 2*side - triangleSide - i - 1)
                 {
                     newField.fieldType = PlayerColor.Red;
                     newField.playerOnField = PlayerColor.Red;
@@ -44,13 +44,36 @@ public class Board // może być interpretowana jak stan gry
         }
     }
 
+    public Board(Board oldBoard)
+    {
+        for (int i = 0; i < side; i++)
+        {
+            for (int j = 0; j < side; j++)
+            {
+                FieldInBoard newField = new FieldInBoard
+                {
+                    x = i,
+                    y = j
+                };
+
+                newField.fieldType = oldBoard.fields[i, j].fieldType;
+                newField.playerOnField = oldBoard.fields[i, j].playerOnField;
+                newField.checker = oldBoard.fields[i, j].checker != null ? new Checker (oldBoard.fields[i, j].checker) : null;
+                if (newField.checker != null)
+                    newField.checker.SetPosition (newField);
+
+                fields[i, j] = newField;
+            }
+        }
+    }
+
     public FieldInBoard FindCheckersPosition (int checker, PlayerColor color)
     {
         for (int i = 0; i < side; i++)
         {
             for (int j = 0; j < side; j++)
             {
-                if (fields[i, j].playerOnField == color && fields[i, j].checkerIndex == checker)
+                if (fields[i, j].playerOnField == color && fields[i, j].checker.ID == checker)
                 {
                     return fields[i, j];
                 }
@@ -58,6 +81,63 @@ public class Board // może być interpretowana jak stan gry
         }
 
         throw new System.Exception ("Nie znaleziono pionka o podanym indeksie i kolorze");
+    }
+
+    public bool IsWinning (PlayerColor color)
+    {
+        // jeśli gracz wypełnił cały trójkąt swoimi pionkami, to wygrał
+        // wpp uznajemy że przegrał 
+
+        int playerCounter = 0, opponentCounter = 0;
+        for (int i = 0; i < triangleSide; i++)
+        {
+            for (int j = 0; j < triangleSide; j++)
+            {
+                // if (fields[i, j].fieldType != PlayerColor.None) -- tylko takie rozważamy
+                if (fields[i, j].playerOnField != PlayerColor.None)
+                {
+                    if (fields[i, j].playerOnField == color && fields[i, j].fieldType != color)
+                    {
+                        playerCounter++;
+                    }
+                    else if (fields[i, j].playerOnField != color && fields[i, j].fieldType == color)
+                    {
+                        opponentCounter++;
+                    }
+                }
+
+                if (fields[side - i - 1, side - j - 1].playerOnField != PlayerColor.None)
+                {
+                    if (fields[side - i - 1, side - j - 1].playerOnField == color && fields[side - i - 1, side - j - 1].fieldType != color)
+                    {
+                        playerCounter++;
+                    }
+                    else if (fields[side - i - 1, side - j - 1].playerOnField != color && fields[side - i - 1, side - j - 1].fieldType == color)
+                    {
+                        opponentCounter++;
+                    }
+                }
+            }
+        }
+
+        if (playerCounter == Game.checkerCount)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public Board(Board oldBoard, FieldInBoard oldField, FieldInBoard newField) : this (oldBoard)
+    {
+        fields[newField.x, newField.y].playerOnField = oldField.playerOnField;
+        fields[newField.x, newField.y].checker = new Checker (oldField.checker);
+        fields[newField.x, newField.y].checker.SetPosition (fields[newField.x, newField.y]);
+
+        fields[oldField.x, oldField.y].playerOnField = PlayerColor.None;
+        fields[oldField.x, oldField.y].checker = null;
     }
 }
 
@@ -67,5 +147,5 @@ public struct FieldInBoard
     public int y;
     public PlayerColor fieldType;
     public PlayerColor playerOnField;
-    public int checkerIndex;
+    public Checker checker;
 }

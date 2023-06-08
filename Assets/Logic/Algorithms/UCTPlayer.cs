@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TreeEditor;
+using Unity.VisualScripting;
 
 namespace Assets.Logic.Algorithms
 {
@@ -16,18 +18,19 @@ namespace Assets.Logic.Algorithms
             type = PlayerType.UCT;
         }
 
-        public override (FieldInBoard, int) MakeChoice (Board board, Player opponentStats)
+        public override (FieldInBoard, int, PlayerColor) MakeChoice (Board board, Player opponentStats)
         {
             root = new Node (board, null);
             root.winningProbability = 0.5; // lub 0, jeszcze rozważyć
 
-            root.GenerateChildren (); // tworzymy startowe drzewo - póki co tylko dzieci root, każde z szansą 0.5 wygranej,
-                                      // chyba że akurat jest wygrana
+            bool childrenGenerated = root.GenerateChildren (this.color); // tworzymy startowe drzewo - póki co tylko dzieci root, każde z szansą 0.5 wygranej,
+                                                                // chyba że akurat jest wygrana
 
             int i = 0;
             while (i < loopCount) // ileś loopów
             {
                 Node leaf = Traverse (root); // wybieramy liść do rozbudowy
+                Expand (leaf);
                 Node simulationResult = Rollout (leaf); // symulujemy rozgrywkę, zwracamy liść z wynikiem
                 Backpropagate (leaf, simulationResult); // aktualizujemy wartości w drzewie
                 
@@ -53,35 +56,78 @@ namespace Assets.Logic.Algorithms
                 }
             }
 
+            if (bestChild == null)
+            {
+                bestChild = root.children[0];
+            }
+
             return bestChild;
         }
 
-        private void Backpropagate (Node leaf, Node simulationResult)
+        private void Backpropagate (Node leaf, Node simulationResult) // leaf niepotrzebny?
         {
-            throw new NotImplementedException ();
+            //idziemy od simulationResult po parentach, aż dojdziemy do leaf
+            simulationResult.UpdateWinningProbability (color);
+            Node node = simulationResult.parent;
+
+            while (node.parent != null)
+            {
+                node.UpdateWinningProbability (color);
+                node = node.parent;
+            }
         }
 
         private Node Rollout (Node leaf)
         {
-            throw new NotImplementedException ();
+            Node node = new Node(leaf);
+            while (node.children.Count > 0) // póki możemy iść dalej
+            {
+                // stosujemy random rollout policy
+                Random random = new Random ();
+                int randomIndex = random.Next (0, node.children.Count);
+                node = new (node.children[randomIndex]);
+            }
+
+            return node; // zwracamy końcowy node
         }
 
         private Node Traverse (Node root) // selection/exploration and exploitation
         {
             // choose node according to UCT policy
-            double[] UCTValues = new double[root.children.Count];
+            Node node = root;
 
-            foreach (Node child in root.children)
+            while (node.children.Count != 0)
             {
-                UCTValues[child.move.checkerIndex] = child.winningProbability + C * Math.Sqrt (Math.Log (root.visitCount) / child.visitCount);
+                node = BestUCT (node);
             }
 
-            return root.children[UCTValues.ToList ().IndexOf (UCTValues.Max ())];
+            node.visitCount++;
+            return node;
         }
 
-        public void GenerateChildren (Board board)
+        private Node BestUCT (Node node)
         {
-            throw new System.NotImplementedException ();
+            double[] UCTValues = new double[node.children.Count];
+
+            for (int i = 0; i < node.children.Count; i++)
+            {
+                UCTValues[i] = node.children[i].winningProbability + C * Math.Sqrt (Math.Log (node.visitCount) / node.children[i].visitCount);
+            }
+
+            return node.children[UCTValues.ToList ().IndexOf (UCTValues.Max ())];
+        }
+
+        private void Expand (Node leaf)
+        {
+            bool expanded = leaf.GenerateChildren (this.color);
+
+            if (expanded) // powstały dzieci, możemy iść dalej
+            {
+                foreach (Node child in leaf.children)
+                {
+                    child.GenerateChildren (this.color);
+                }
+            }
         }
     }
 }

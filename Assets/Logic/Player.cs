@@ -28,7 +28,7 @@ public abstract class Player //: MonoBehaviour
         checkers[checkerIndex].SetPosition (end);
     }
 
-    public abstract (FieldInBoard newField, int checkerIndex) MakeChoice (Board board, Player opponentStats);
+    public abstract (FieldInBoard newField, int checkerIndex, PlayerColor player) MakeChoice (Board board, Player opponentStats);
 }
 
 public class HumanPlayer : Player
@@ -38,7 +38,7 @@ public class HumanPlayer : Player
         type = PlayerType.Human;
     }
 
-    public override (FieldInBoard, int) MakeChoice (Board board, Player opponentStats)
+    public override (FieldInBoard, int, PlayerColor) MakeChoice (Board board, Player opponentStats)
     {
         throw new System.NotImplementedException ();
     }
@@ -51,7 +51,7 @@ public class RAVEPlayer : Player // pozmieniać żeby były po UCTPlayer
         type = PlayerType.RAVE;
     }
 
-    public override (FieldInBoard, int) MakeChoice (Board board, Player opponentStats)
+    public override (FieldInBoard, int, PlayerColor) MakeChoice (Board board, Player opponentStats)
     {
         throw new System.NotImplementedException ();
     }
@@ -64,7 +64,7 @@ public class AUCTPlayer : Player
         type = PlayerType.AUCT;
     }
 
-    public override (FieldInBoard, int) MakeChoice (Board board, Player opponentStats)
+    public override (FieldInBoard, int, PlayerColor) MakeChoice (Board board, Player opponentStats)
     {
         throw new System.NotImplementedException ();
     }
@@ -77,7 +77,7 @@ public class HeurPlayer : Player
         type = PlayerType.Heuristic;
     }
 
-    public override (FieldInBoard, int) MakeChoice (Board board, Player opponentStats)
+    public override (FieldInBoard, int, PlayerColor) MakeChoice (Board board, Player opponentStats)
     {
         throw new System.NotImplementedException ();
     }
