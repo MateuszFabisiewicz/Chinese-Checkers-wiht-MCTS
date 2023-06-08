@@ -35,7 +35,7 @@ public class Game
                 break;
 
             case PlayerType.Heuristic:
-                players[0] = new HeurPlayer (PlayerColor.Blue);
+                players[0] = new HeuristicPlayer (PlayerColor.Blue);
                 break;
         }
 
@@ -58,7 +58,7 @@ public class Game
                 break;
 
             case PlayerType.Heuristic:
-                players[1] = new HeurPlayer (PlayerColor.Red);
+                players[1] = new HeuristicPlayer (PlayerColor.Red);
                 break;
         }
 
