@@ -24,6 +24,10 @@ namespace Assets.Logic.Algorithms
 
         public Board state { get; private set; }
 
+        public double velocity { get; set; } // dla gracza AUCT
+
+        public double accWinRation { get; set; } // dla gracza AUCT
+
         public (FieldInBoard newField, int checkerIndex, PlayerColor playerWhoMoved) move { get; private set; }
 
         public Node (Board state, Node parentNode)
@@ -197,6 +201,39 @@ namespace Assets.Logic.Algorithms
                 }
                 this.winningProbability = sum / this.children.Count;
             }
+        }
+
+        public void UpdateAccWinRation (PlayerColor color)
+        {
+            this.accWinRation = 0;
+            foreach (var child in this.children)
+            {
+                this.accWinRation += child.CalculateW () * child.accWinRation;
+            }
+
+            if (this.children.Count == 0)
+            {
+                // to chyba dajemy 0 albo 1 (zgodnie z winningProbability)
+                if (this.state.IsWinning (color))
+                {
+                    this.accWinRation = 1;
+                }
+                else
+                {
+                    this.accWinRation = 0;
+                }
+            }
+        }
+
+        public double CalculateW ()
+        {
+            double sumOfChildV = 0;
+            foreach (var child in this.children)
+            {
+                sumOfChildV += child.velocity;
+            }
+
+            return this.velocity / sumOfChildV;
         }
 
         public Node (Node original)

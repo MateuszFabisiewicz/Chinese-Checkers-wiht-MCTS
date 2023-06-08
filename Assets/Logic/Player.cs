@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Player //: MonoBehaviour
+public abstract class Player
 {
     public int id;
     public PlayerColor color;
@@ -49,19 +49,6 @@ public class RAVEPlayer : Player // pozmieniać żeby były po UCTPlayer
     public RAVEPlayer (PlayerColor color) : base (color)
     {
         type = PlayerType.RAVE;
-    }
-
-    public override (FieldInBoard, int, PlayerColor) MakeChoice (Board board, Player opponentStats)
-    {
-        throw new System.NotImplementedException ();
-    }
-}
-
-public class AUCTPlayer : Player
-{
-    public AUCTPlayer (PlayerColor color) : base (color)
-    {
-        type = PlayerType.AUCT;
     }
 
     public override (FieldInBoard, int, PlayerColor) MakeChoice (Board board, Player opponentStats)

@@ -10,8 +10,8 @@ namespace Assets.Logic.Algorithms
 {
     public class UCTPlayer : Player
     {
-        int loopCount = 1000;
-        double C = Math.Sqrt (2); // stała eksploracji
+        internal int loopCount = 1000;
+        internal double C = Math.Sqrt (2); // stała eksploracji
 
         public UCTPlayer (PlayerColor color) : base (color)
         {
@@ -64,7 +64,7 @@ namespace Assets.Logic.Algorithms
             return bestChild;
         }
 
-        private void Backpropagate (Node leaf, Node simulationResult) // leaf niepotrzebny?
+        internal virtual void Backpropagate (Node leaf, Node simulationResult) // leaf niepotrzebny?
         {
             //idziemy od simulationResult po parentach, aż dojdziemy do leaf
             simulationResult.UpdateWinningProbability (color);
@@ -91,13 +91,14 @@ namespace Assets.Logic.Algorithms
             return node; // zwracamy końcowy node
         }
 
-        private Node Traverse (Node root) // selection/exploration and exploitation
+        internal virtual Node Traverse (Node root) // selection/exploration and exploitation
         {
             // choose node according to UCT policy
             Node node = root;
 
             while (node.children.Count != 0)
             {
+                node.visitCount++;
                 node = BestUCT (node);
             }
 
@@ -105,7 +106,7 @@ namespace Assets.Logic.Algorithms
             return node;
         }
 
-        private Node BestUCT (Node node)
+        internal Node BestUCT (Node node)
         {
             double[] UCTValues = new double[node.children.Count];
 
