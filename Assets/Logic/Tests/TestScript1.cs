@@ -76,7 +76,7 @@ public class TestScript1
     }
 
     [Test]
-    public void FirstMoveTest ()
+    public void FirstUCTMoveTest ()
     {
         Game testGame = new Game (PlayerType.UCT, PlayerType.UCT);
 
@@ -102,6 +102,56 @@ public class TestScript1
         if (i < 100)
             Assert.AreNotEqual (testGame.Win (), PlayerColor.None);
         else 
+            Assert.AreEqual (testGame.Win (), PlayerColor.None);
+    }
+
+    [Test]
+    public void FirstAUCTMoveTest ()
+    {
+        Game testGame = new Game (PlayerType.AUCT, PlayerType.UCT);
+
+        var answer = testGame.players[0].MakeChoice (testGame.board, testGame.players[1]);
+
+        Assert.AreEqual (answer.player, testGame.players[0].color);
+    }
+
+    [Test]
+    public void TwoAUCTGameTest ()
+    {
+        int i = 0, currPlayer = 0;
+        Game testGame = new Game (PlayerType.AUCT, PlayerType.AUCT);
+
+        while (testGame.Win () == PlayerColor.None && i < 10)
+        {
+            i++;
+            var answer = testGame.players[currPlayer].MakeChoice (testGame.board, testGame.players[1]);
+            testGame.MoveChecker (answer.newField, answer.checkerIndex, currPlayer);
+            currPlayer = (currPlayer + 1) % 2;
+        }
+
+        if (i < 10)
+            Assert.AreNotEqual (testGame.Win (), PlayerColor.None);
+        else
+            Assert.AreEqual (testGame.Win (), PlayerColor.None);
+    }
+
+    [Test]
+    public void AUCTAndUCTGameTest ()
+    {
+        int i = 0, currPlayer = 0;
+        Game testGame = new Game (PlayerType.AUCT, PlayerType.UCT);
+
+        while (testGame.Win () == PlayerColor.None && i < 30)
+        {
+            i++;
+            var answer = testGame.players[currPlayer].MakeChoice (testGame.board, testGame.players[1]);
+            testGame.MoveChecker (answer.newField, answer.checkerIndex, currPlayer);
+            currPlayer = (currPlayer + 1) % 2;
+        }
+
+        if (i < 30)
+            Assert.AreNotEqual (testGame.Win (), PlayerColor.None);
+        else
             Assert.AreEqual (testGame.Win (), PlayerColor.None);
     }
 }

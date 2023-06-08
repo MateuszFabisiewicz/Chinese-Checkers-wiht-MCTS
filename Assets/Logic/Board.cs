@@ -83,10 +83,11 @@ public class Board // może być interpretowana jak stan gry
         throw new System.Exception ("Nie znaleziono pionka o podanym indeksie i kolorze");
     }
 
-    public bool IsWinning (PlayerColor color)
+    public double IsWinning (PlayerColor color)
     {
         // jeśli gracz wypełnił cały trójkąt swoimi pionkami, to wygrał
-        // wpp uznajemy że przegrał 
+        // jeśli drugi gracz wypełnił to uznajemy że przegrał 
+        // wpp liczymy "stopień wygrania" - ile swoich pionków ma gracz na polach przeciwnika
 
         int playerCounter = 0, opponentCounter = 0;
         for (int i = 0; i < triangleSide; i++)
@@ -122,11 +123,15 @@ public class Board // może być interpretowana jak stan gry
 
         if (playerCounter == Game.checkerCount)
         {
-            return true;
+            return 1;
+        }
+        else if (opponentCounter == Game.checkerCount)
+        {
+            return 0;
         }
         else
         {
-            return false;
+            return (double)playerCounter / (double)Game.checkerCount;
         }
     }
 
