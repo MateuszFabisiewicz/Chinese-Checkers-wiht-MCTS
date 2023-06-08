@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Game //: MonoBehaviour
+public class Game
 {
     public const int playerCount = 2;
     public const int checkerCount = 10; // liczba pionków gracza
@@ -99,7 +99,7 @@ public class Game //: MonoBehaviour
         int countBlue = 0;
         int countRed = 0;
 
-        for (int i = 0; i < Board.side; i++) // ewentualnie zrobić po triangleSide i testować też Board.side - i - 1 itd
+        for (int i = 0; i < Board.side; i++)
         {
             for (int j = 0; j < Board.side; j++)
             {

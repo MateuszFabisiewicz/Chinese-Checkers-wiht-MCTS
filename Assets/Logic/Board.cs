@@ -21,7 +21,6 @@ public class Board // może być interpretowana jak stan gry
                 {
                     x = i,
                     y = j
-                    //checkerIndex = -1
                 };
 
                 if (i < triangleSide && j < triangleSide - i)
@@ -59,7 +58,6 @@ public class Board // może być interpretowana jak stan gry
 
                 newField.fieldType = oldBoard.fields[i, j].fieldType;
                 newField.playerOnField = oldBoard.fields[i, j].playerOnField;
-                //newField.checkerIndex = oldBoard.fields[i, j].checkerIndex;
                 newField.checker = oldBoard.fields[i, j].checker != null ? new Checker (oldBoard.fields[i, j].checker) : null;
                 if (newField.checker != null)
                     newField.checker.SetPosition (newField);
@@ -85,7 +83,7 @@ public class Board // może być interpretowana jak stan gry
         throw new System.Exception ("Nie znaleziono pionka o podanym indeksie i kolorze");
     }
 
-    internal bool IsWinning (PlayerColor color)
+    public bool IsWinning (PlayerColor color)
     {
         // jeśli gracz wypełnił cały trójkąt swoimi pionkami, to wygrał
         // wpp uznajemy że przegrał 
@@ -134,12 +132,9 @@ public class Board // może być interpretowana jak stan gry
 
     public Board(Board oldBoard, FieldInBoard oldField, FieldInBoard newField) : this (oldBoard)
     {
-        //this = new Board (oldBoard);
-
         fields[newField.x, newField.y].playerOnField = oldField.playerOnField;
         fields[newField.x, newField.y].checker = new Checker (oldField.checker);
         fields[newField.x, newField.y].checker.SetPosition (fields[newField.x, newField.y]);
-        //fields[newField.x, newField.y].playerOnField = oldField.playerOnField;
 
         fields[oldField.x, oldField.y].playerOnField = PlayerColor.None;
         fields[oldField.x, oldField.y].checker = null;
@@ -152,6 +147,5 @@ public struct FieldInBoard
     public int y;
     public PlayerColor fieldType;
     public PlayerColor playerOnField;
-    //public int checkerIndex;
     public Checker checker;
 }

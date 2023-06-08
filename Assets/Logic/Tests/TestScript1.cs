@@ -4,18 +4,75 @@ using Assets.Logic;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
-//using Assets.Logic;
 
 public class TestScript1
 {
-    // A Test behaves as an ordinary method
     [Test]
     public void CreatingGame()
     {
-        // Use the Assert class to test conditions
         Game testGame = new Game (PlayerType.UCT, PlayerType.UCT);
 
         Assert.AreEqual (testGame.players.Length, 2);
+    }
+
+    [Test]
+    public void WinConditionTest ()
+    {
+        Game testGame = new Game (PlayerType.UCT, PlayerType.UCT);
+
+        testGame.MoveChecker (testGame.board.fields[0, 8], 0, 1);
+        testGame.MoveChecker (testGame.board.fields[1, 8], 1, 1);
+        testGame.MoveChecker (testGame.board.fields[2, 8], 2, 1);
+        testGame.MoveChecker (testGame.board.fields[3, 8], 3, 1);
+        testGame.MoveChecker (testGame.board.fields[4, 8], 4, 1);
+        testGame.MoveChecker (testGame.board.fields[1, 7], 5, 1);
+        testGame.MoveChecker (testGame.board.fields[2, 7], 6, 1);
+        testGame.MoveChecker (testGame.board.fields[3, 7], 7, 1);
+        testGame.MoveChecker (testGame.board.fields[4, 7], 8, 1);
+        testGame.MoveChecker (testGame.board.fields[5, 7], 9, 1);
+
+        testGame.MoveChecker (testGame.board.fields[5, 8], 0, 0);
+        testGame.MoveChecker (testGame.board.fields[6, 8], 1, 0);
+        testGame.MoveChecker (testGame.board.fields[7, 8], 2, 0);
+        testGame.MoveChecker (testGame.board.fields[8, 8], 3, 0);
+        testGame.MoveChecker (testGame.board.fields[6, 7], 4, 0);
+        testGame.MoveChecker (testGame.board.fields[7, 7], 5, 0);
+        testGame.MoveChecker (testGame.board.fields[8, 7], 6, 0);
+        testGame.MoveChecker (testGame.board.fields[7, 6], 7, 0);
+        testGame.MoveChecker (testGame.board.fields[8, 6], 8, 0);
+        testGame.MoveChecker (testGame.board.fields[8, 5], 9, 0);
+
+        Assert.AreEqual (testGame.Win (), testGame.players[0].color);
+    }
+
+    [Test]
+    public void OtherWinConditionTest ()
+    {
+        Game testGame = new Game (PlayerType.UCT, PlayerType.UCT);
+
+        testGame.MoveChecker (testGame.board.fields[0, 8], 0, 1);
+        testGame.MoveChecker (testGame.board.fields[1, 8], 1, 1);
+        testGame.MoveChecker (testGame.board.fields[2, 8], 2, 1);
+        testGame.MoveChecker (testGame.board.fields[3, 8], 3, 1);
+        testGame.MoveChecker (testGame.board.fields[4, 8], 4, 1);
+        testGame.MoveChecker (testGame.board.fields[1, 7], 5, 1);
+        testGame.MoveChecker (testGame.board.fields[2, 7], 6, 1);
+        testGame.MoveChecker (testGame.board.fields[3, 7], 7, 1);
+        testGame.MoveChecker (testGame.board.fields[4, 7], 8, 1);
+        testGame.MoveChecker (testGame.board.fields[5, 7], 9, 1);
+
+        testGame.MoveChecker (testGame.board.fields[5, 8], 0, 0);
+        testGame.MoveChecker (testGame.board.fields[6, 8], 1, 0);
+        testGame.MoveChecker (testGame.board.fields[7, 8], 2, 0);
+        testGame.MoveChecker (testGame.board.fields[8, 8], 3, 0);
+        testGame.MoveChecker (testGame.board.fields[6, 7], 4, 0);
+        testGame.MoveChecker (testGame.board.fields[7, 7], 5, 0);
+        testGame.MoveChecker (testGame.board.fields[8, 7], 6, 0);
+        testGame.MoveChecker (testGame.board.fields[7, 6], 7, 0);
+        testGame.MoveChecker (testGame.board.fields[8, 6], 8, 0);
+        testGame.MoveChecker (testGame.board.fields[8, 5], 9, 0);
+
+        Assert.AreEqual (testGame.board.IsWinning (testGame.players[0].color), true);
     }
 
     [Test]
@@ -29,7 +86,7 @@ public class TestScript1
     }
 
     [Test]
-    public void TwoUCTGameTest () // TODO: spojrzeć co ruch co się dzieje
+    public void TwoUCTGameTest ()
     {
         int i = 0, currPlayer = 0;
         Game testGame = new Game (PlayerType.UCT, PlayerType.UCT);
@@ -42,21 +99,9 @@ public class TestScript1
             currPlayer = (currPlayer + 1) % 2;
         }
 
-        //var answer = testGame.players[0].MakeChoice (testGame.board, testGame.players[1]);
-
         if (i < 100)
             Assert.AreNotEqual (testGame.Win (), PlayerColor.None);
         else 
             Assert.AreEqual (testGame.Win (), PlayerColor.None);
-    }
-
-    // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
-    // `yield return null;` to skip a frame.
-    [UnityTest]
-    public IEnumerator TestScript1WithEnumeratorPasses()
-    {
-        // Use the Assert class to test conditions.
-        // Use yield to skip a frame.
-        yield return null;
     }
 }

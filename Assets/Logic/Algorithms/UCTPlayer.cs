@@ -101,7 +101,7 @@ namespace Assets.Logic.Algorithms
                 node = BestUCT (node);
             }
 
-            node.visitCount++; // chyba w tym miejscu zwiększamy?
+            node.visitCount++;
             return node;
         }
 
@@ -113,10 +113,6 @@ namespace Assets.Logic.Algorithms
             {
                 UCTValues[i] = node.children[i].winningProbability + C * Math.Sqrt (Math.Log (node.visitCount) / node.children[i].visitCount);
             }
-            //foreach (Node child in node.children)
-            //{
-            //    UCTValues[child.move.checkerIndex] = child.winningProbability + C * Math.Sqrt (Math.Log (node.visitCount) / child.visitCount);
-            //}
 
             return node.children[UCTValues.ToList ().IndexOf (UCTValues.Max ())];
         }
@@ -132,11 +128,6 @@ namespace Assets.Logic.Algorithms
                     child.GenerateChildren (this.color);
                 }
             }
-        }
-
-        public void GenerateChildren (Board board)
-        {
-            throw new System.NotImplementedException ();
         }
     }
 }

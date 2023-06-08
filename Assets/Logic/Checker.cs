@@ -22,6 +22,5 @@ public class Checker
     public void SetPosition (FieldInBoard newPlace)
     {
         placement = newPlace;
-        //newPlace.checkerIndex = ID;
     }
 }
