@@ -69,37 +69,37 @@ namespace Assets.Logic.Algorithms
                 #region zwykły ruch
                 // możemy iść +1 na y, +1 na x, -1 na y, -1 na x, -1 na y +1 na x, +1 na y -1 na x
 
-                Node newNode = OneMove ((field.x, field.y + 1), state, field);
+                Node newNode = OneMove ((field.x, field.y + 1), state, field, color);
                 if (newNode != null)
                 {
                     children.Add (newNode);
                 }
 
-                newNode = OneMove ((field.x + 1, field.y), state, field);
+                newNode = OneMove ((field.x + 1, field.y), state, field, color);
                 if (newNode != null)
                 {
                     children.Add (newNode);
                 }
 
-                newNode = OneMove ((field.x, field.y - 1), state, field);
+                newNode = OneMove ((field.x, field.y - 1), state, field, color);
                 if (newNode != null)
                 {
                     children.Add (newNode);
                 }
 
-                newNode = OneMove ((field.x - 1, field.y), state, field);
+                newNode = OneMove ((field.x - 1, field.y), state, field, color);
                 if (newNode != null)
                 {
                     children.Add (newNode);
                 }
 
-                newNode = OneMove ((field.x + 1, field.y - 1), state, field);
+                newNode = OneMove ((field.x + 1, field.y - 1), state, field, color);
                 if (newNode != null)
                 {
                     children.Add (newNode);
                 }
 
-                newNode = OneMove ((field.x - 1, field.y + 1), state, field);
+                newNode = OneMove ((field.x - 1, field.y + 1), state, field, color);
                 if (newNode != null)
                 {
                     children.Add (newNode);
@@ -127,10 +127,14 @@ namespace Assets.Logic.Algorithms
             return children.Count > 0;
         }
 
-        private Node OneMove ((int x, int y) end, Board board, FieldInBoard oldField)
+        private Node OneMove ((int x, int y) end, Board board, FieldInBoard oldField, PlayerColor playerColor)
         {
+            PlayerColor opponentColor = playerColor == PlayerColor.Red ? PlayerColor.Blue : PlayerColor.Red;
+            bool isInOpponent = oldField.fieldType == opponentColor;
+
             if (end.x < Board.side && end.y < Board.side && end.x >= 0 && end.y >= 0
-                               && board.fields[end.x, end.y].playerOnField == PlayerColor.None)
+                && board.fields[end.x, end.y].playerOnField == PlayerColor.None &&
+                ((isInOpponent && board.fields[end.x, end.y].fieldType == opponentColor) || !isInOpponent))
             {
                 Board newState = new Board (board, oldField, board.fields[end.x, end.y]);
 
