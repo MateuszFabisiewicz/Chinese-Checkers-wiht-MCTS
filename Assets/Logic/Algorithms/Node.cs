@@ -110,7 +110,7 @@ namespace Assets.Logic.Algorithms
                 #region skok
                 // patrzymy na możliwości skoku - nie rozważamy cofnięć!
                 // while można się ruszyć 
-                var listOfJumpResults = Jump (field, state, field, field);
+                var listOfJumpResults = Jump (field, state, field, field, color);
                 listOfJumpResults = listOfJumpResults.Distinct ().ToList (); // sprawdzić czy distnict działa poprawnie
 
                 foreach (var result in listOfJumpResults)
@@ -145,42 +145,45 @@ namespace Assets.Logic.Algorithms
                 return null;
         }
 
-        private List<(FieldInBoard newField, Board newState)> OneJump ((int x, int y) end, (int x, int y) inter, Board board, FieldInBoard oldField, FieldInBoard lastPlace, FieldInBoard originalPlace)
+        private List<(FieldInBoard newField, Board newState)> OneJump ((int x, int y) end, (int x, int y) inter, Board board, FieldInBoard oldField, FieldInBoard lastPlace, FieldInBoard originalPlace, PlayerColor playerColor)
         {
             List<(FieldInBoard newField, Board newState)> jumps = new List<(FieldInBoard newField, Board newState)> ();
+            PlayerColor opponentColor = playerColor == PlayerColor.Red ? PlayerColor.Blue : PlayerColor.Red;
+            bool isInOpponent = oldField.fieldType == opponentColor;
 
             if (end.x < Board.side && end.y < Board.side && end.x >= 0 && end.y >= 0
                 && board.fields[inter.x, inter.y].playerOnField != PlayerColor.None
                 && board.fields[end.x, end.y].playerOnField == PlayerColor.None
                 && end.x != lastPlace.x && end.y != lastPlace.y
-                && end.x != originalPlace.x && end.y != lastPlace.y)
+                && end.x != originalPlace.x && end.y != lastPlace.y &&
+                ((isInOpponent && board.fields[end.x, end.y].fieldType == opponentColor) || !isInOpponent))
             {
                 Board newState = new Board (board, oldField, board.fields[end.x, end.y]);
 
                 jumps.Add ((newState.fields[end.x, end.y], newState));
-                jumps.AddRange (Jump (newState.fields[end.x, end.y], newState, oldField, originalPlace));
+                jumps.AddRange (Jump (newState.fields[end.x, end.y], newState, oldField, originalPlace, playerColor));
             }
 
             return jumps;
         }
 
-        private List<(FieldInBoard newField, Board newState)> Jump (FieldInBoard oldField, Board board, FieldInBoard lastPlace, FieldInBoard originalPlace) // dodać zapobieganie zawracania (w stosunku do rodzica)
+        private List<(FieldInBoard newField, Board newState)> Jump (FieldInBoard oldField, Board board, FieldInBoard lastPlace, FieldInBoard originalPlace, PlayerColor playerColor) // dodać zapobieganie zawracania (w stosunku do rodzica)
         {
             // rozważamy też te 6 pól dookoła oraz pole w linii prostej
             // po wykonaniu skoku możemy dalej skakać (potencjalnie)
             List<(FieldInBoard newField, Board newState)> jumps = new List<(FieldInBoard newField, Board newState)> ();
 
-            jumps.AddRange (OneJump ((oldField.x, oldField.y + 2), (oldField.x, oldField.y + 1), board, oldField, lastPlace, originalPlace));
+            jumps.AddRange (OneJump ((oldField.x, oldField.y + 2), (oldField.x, oldField.y + 1), board, oldField, lastPlace, originalPlace, playerColor));
 
-            jumps.AddRange (OneJump ((oldField.x + 2, oldField.y), (oldField.x + 1, oldField.y), board, oldField, lastPlace, originalPlace));
+            jumps.AddRange (OneJump ((oldField.x + 2, oldField.y), (oldField.x + 1, oldField.y), board, oldField, lastPlace, originalPlace, playerColor));
 
-            jumps.AddRange (OneJump ((oldField.x, oldField.y - 2), (oldField.x, oldField.y - 1), board, oldField, lastPlace, originalPlace));
+            jumps.AddRange (OneJump ((oldField.x, oldField.y - 2), (oldField.x, oldField.y - 1), board, oldField, lastPlace, originalPlace, playerColor));
 
-            jumps.AddRange (OneJump ((oldField.x - 2, oldField.y), (oldField.x - 1, oldField.y), board, oldField, lastPlace, originalPlace));
+            jumps.AddRange (OneJump ((oldField.x - 2, oldField.y), (oldField.x - 1, oldField.y), board, oldField, lastPlace, originalPlace, playerColor));
 
-            jumps.AddRange (OneJump ((oldField.x + 2, oldField.y - 2), (oldField.x + 1, oldField.y - 1), board, oldField, lastPlace, originalPlace));
+            jumps.AddRange (OneJump ((oldField.x + 2, oldField.y - 2), (oldField.x + 1, oldField.y - 1), board, oldField, lastPlace, originalPlace, playerColor));
 
-            jumps.AddRange (OneJump ((oldField.x - 2, oldField.y + 2), (oldField.x - 1, oldField.y + 1), board, oldField, lastPlace, originalPlace));
+            jumps.AddRange (OneJump ((oldField.x - 2, oldField.y + 2), (oldField.x - 1, oldField.y + 1), board, oldField, lastPlace, originalPlace, playerColor));
 
             return jumps;
         }

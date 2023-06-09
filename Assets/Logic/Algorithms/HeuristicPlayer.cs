@@ -20,7 +20,6 @@ namespace Assets.Logic.Algorithms
         private const double opponentTriangleH = 0.2;
         private const double forwardMove = 0.4; // zhardkodowane dla kolorów
         private const double notYetMoved = 0.4; // startingField w checker
-        //private const double backwardMove = -0.3;
 
         public HeuristicPlayer (PlayerColor color) : base (color)
         {
@@ -125,11 +124,14 @@ namespace Assets.Logic.Algorithms
         private List<FieldInBoard> OneJump (FieldInBoard startField, Board board, (int X, int Y) newField, (int X, int Y) interField, FieldInBoard previousPlace)
         {
             List<FieldInBoard> moves = new List<FieldInBoard> ();
+            PlayerColor opponentColor = color == PlayerColor.Blue ? PlayerColor.Red : PlayerColor.Blue;
+            bool isInOpponent = startField.fieldType == opponentColor;
 
             if (newField.X < Board.side && newField.X >= 0 && newField.Y < Board.side && newField.Y >= 0 &&
                 previousPlace.x != newField.X && previousPlace.y != newField.Y &&
                 board.fields[interField.X, interField.Y].playerOnField != PlayerColor.None &&
-                board.fields[newField.X, newField.Y].playerOnField == PlayerColor.None)
+                board.fields[newField.X, newField.Y].playerOnField == PlayerColor.None &&
+                (!isInOpponent || (isInOpponent && board.fields[newField.X, newField.Y].fieldType == opponentColor)))
             {
                 moves.Add (board.fields[newField.X, newField.Y]);
                 moves.AddRange (GetPossibleFieldsThroughJumps (board.fields[newField.X, newField.Y], board, startField));
@@ -141,29 +143,37 @@ namespace Assets.Logic.Algorithms
         private List<FieldInBoard> GetPossibleFieldsOneApart (int i, PlayerColor color, Board board)
         {
             FieldInBoard checkerField = board.FindCheckersPosition (i, color);
+            PlayerColor opponentColor = color == PlayerColor.Blue ? PlayerColor.Red : PlayerColor.Blue;
+            bool isInOpponent = checkerField.fieldType == opponentColor;
 
             List<FieldInBoard> possibleFields = new List<FieldInBoard> ();
-            if (checkerField.x + 1 < Board.side && board.fields[checkerField.x + 1, checkerField.y].playerOnField == PlayerColor.None)
+            if (checkerField.x + 1 < Board.side && board.fields[checkerField.x + 1, checkerField.y].playerOnField == PlayerColor.None &&
+                (!isInOpponent || (isInOpponent && board.fields[checkerField.x + 1, checkerField.y].fieldType == opponentColor)))
             {
                 possibleFields.Add (board.fields[checkerField.x + 1, checkerField.y]);
             }
-            if (checkerField.x - 1 >= 0 && board.fields[checkerField.x - 1, checkerField.y].playerOnField == PlayerColor.None)
+            if (checkerField.x - 1 >= 0 && board.fields[checkerField.x - 1, checkerField.y].playerOnField == PlayerColor.None && 
+                (!isInOpponent || (isInOpponent && board.fields[checkerField.x - 1, checkerField.y].fieldType == opponentColor)))
             {
                 possibleFields.Add (board.fields[checkerField.x - 1, checkerField.y]);
             }
-            if (checkerField.y + 1 < Board.side && board.fields[checkerField.x, checkerField.y + 1].playerOnField == PlayerColor.None)
+            if (checkerField.y + 1 < Board.side && board.fields[checkerField.x, checkerField.y + 1].playerOnField == PlayerColor.None &&
+                (!isInOpponent || (isInOpponent && board.fields[checkerField.x, checkerField.y + 1].fieldType == opponentColor)))
             {
                 possibleFields.Add (board.fields[checkerField.x, checkerField.y + 1]);
             }
-            if (checkerField.y - 1 >= 0 && board.fields[checkerField.x, checkerField.y - 1].playerOnField == PlayerColor.None)
+            if (checkerField.y - 1 >= 0 && board.fields[checkerField.x, checkerField.y - 1].playerOnField == PlayerColor.None &&
+                (!isInOpponent || (isInOpponent && board.fields[checkerField.x, checkerField.y - 1].fieldType == opponentColor)))
             {
                 possibleFields.Add (board.fields[checkerField.x, checkerField.y - 1]);
             }
-            if (checkerField.x + 1 < Board.side && checkerField.y - 1 >= 0 && board.fields[checkerField.x + 1, checkerField.y - 1].playerOnField == PlayerColor.None)
+            if (checkerField.x + 1 < Board.side && checkerField.y - 1 >= 0 && board.fields[checkerField.x + 1, checkerField.y - 1].playerOnField == PlayerColor.None &&
+                (!isInOpponent || (isInOpponent && board.fields[checkerField.x + 1, checkerField.y - 1].fieldType == opponentColor)))
             {
                 possibleFields.Add (board.fields[checkerField.x + 1, checkerField.y - 1]);
             }
-            if (checkerField.x - 1 >= 0 && checkerField.y + 1 < Board.side && board.fields[checkerField.x - 1, checkerField.y + 1].playerOnField == PlayerColor.None)
+            if (checkerField.x - 1 >= 0 && checkerField.y + 1 < Board.side && board.fields[checkerField.x - 1, checkerField.y + 1].playerOnField == PlayerColor.None &&
+                (!isInOpponent || (isInOpponent && board.fields[checkerField.x - 1, checkerField.y + 1].fieldType == opponentColor)))
             {
                 possibleFields.Add (board.fields[checkerField.x - 1, checkerField.y + 1]);
             }
