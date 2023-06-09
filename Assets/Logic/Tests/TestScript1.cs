@@ -72,7 +72,7 @@ public class TestScript1
         testGame.MoveChecker (testGame.board.fields[8, 6], 8, 0);
         testGame.MoveChecker (testGame.board.fields[8, 5], 9, 0);
 
-        Assert.AreEqual (testGame.board.IsWinning (testGame.players[0].color), true);
+        Assert.AreEqual (testGame.board.IsWinning (testGame.players[0].color), 1.0);
     }
 
     [Test]
