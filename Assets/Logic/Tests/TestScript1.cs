@@ -154,4 +154,34 @@ public class TestScript1
         else
             Assert.AreEqual (testGame.Win (), PlayerColor.None);
     }
+
+    [Test]
+    public void FirstHeuristicMoveTest ()
+    {
+        Game testGame = new Game (PlayerType.Heuristic, PlayerType.UCT);
+
+        var answer = testGame.players[0].MakeChoice (testGame.board, testGame.players[1]);
+
+        Assert.AreEqual (answer.player, testGame.players[0].color);
+    }
+
+    [Test]
+    public void TwoHeuristicGameTest ()
+    {
+        int i = 0, currPlayer = 0;
+        Game testGame = new Game (PlayerType.Heuristic, PlayerType.Heuristic);
+
+        while (testGame.Win () == PlayerColor.None && i < 100)
+        {
+            i++;
+            var answer = testGame.players[currPlayer].MakeChoice (testGame.board, testGame.players[1]);
+            testGame.MoveChecker (answer.newField, answer.checkerIndex, currPlayer);
+            currPlayer = (currPlayer + 1) % 2;
+        }
+
+        if (i < 100)
+            Assert.AreNotEqual (testGame.Win (), PlayerColor.None);
+        else
+            Assert.AreEqual (testGame.Win (), PlayerColor.None);
+    }
 }

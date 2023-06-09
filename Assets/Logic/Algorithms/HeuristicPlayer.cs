@@ -13,11 +13,11 @@ namespace Assets.Logic.Algorithms
     {
         private const int strongDist = 1;
         private const int distance = 2;
-        private const double jumpH = 0.2;
+        private const double jumpH = 0.3;
         private const double strongDistH = 0.1;
         private const double distH = 0.05;
-        private const double triangleH = 0.2;
-        private const double opponentTriangleH = 0.15;
+        private const double triangleH = 0.5;
+        private const double opponentTriangleH = 0.2;
 
         public HeuristicPlayer (PlayerColor color) : base (color)
         {
@@ -77,7 +77,8 @@ namespace Assets.Logic.Algorithms
             }
 
             // zwracamy ruch z największą wartością heurystyki
-            possibleMoves.Sort ((x, y) => x.heuristic.CompareTo (y.heuristic));
+            possibleMoves.Sort ((x, y) => y.heuristic.CompareTo (x.heuristic));
+            //possibleMoves.OrderByDescending (x => x.heuristic);
             return (possibleMoves[0].newField, possibleMoves[0].checkerId, color);
         }
 
