@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class Goal : MonoBehaviour
 {
-    GameManager gameManager;
+    private GameManager gameManager;
+    public Field field;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -13,7 +15,11 @@ public class Goal : MonoBehaviour
 
     private void OnMouseDown()
     {
-        gameManager.goalPosition = transform.position;
-        gameManager.canMove = true;
+        if (gameManager.isPawnClicked)
+        {
+            gameManager.goalPosition = transform.position;
+            gameManager.goalField = field;
+            gameManager.canMove = true;
+        }
     }
 }

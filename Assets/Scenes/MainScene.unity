@@ -236,6 +236,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ef18845636262f429776e75301e95ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fields: []
+  player1Pawns: []
+  player2Pawns: []
+  canMove: 0
+  goalPosition: {x: 0, y: 0}
+  goalField:
+    id: 0
+    rowNumber: 0
+    columnNumber: 0
+    prefab: {fileID: 0}
   player1PawnPrefab: {fileID: 7140002910617950194, guid: 8a20d9943ae639b43b32ca7c69bcc714, type: 3}
   player2PawnPrefab: {fileID: 7140002910617950194, guid: 81ea0712d05c819419f120ef02804460, type: 3}
   fieldPrefab: {fileID: 2102094056734615320, guid: 9a602aa3c543a7a47a0105f429b748b5, type: 3}
@@ -331,7 +341,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1528401860}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.007, y: -0.0424, z: 0}
+  m_LocalPosition: {x: -0.007, y: -0.0424, z: 1}
   m_LocalScale: {x: 17.839676, y: 10.106402, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

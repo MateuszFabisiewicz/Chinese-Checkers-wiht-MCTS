@@ -6,11 +6,13 @@ using System;
 using System.Linq;
 
 [System.Serializable]
-public struct Field: IEquatable<Field>
+public class Field: IEquatable<Field>
 {
     public int id;
     public int rowNumber;
     public int columnNumber;
+    public int mctsX;
+    public int mctsY;
     public GameObject prefab;
     //public List<Field> neighbours;
     // All possible neighbours:
@@ -41,6 +43,8 @@ public class GameManager : MonoBehaviour
     public Field[] player2Pawns;
     public bool canMove = false;
     public Vector2 goalPosition;
+    public Field goalField;
+    public bool isPawnClicked = false;
 
     public GameObject player1PawnPrefab;
     public GameObject player2PawnPrefab;
@@ -70,30 +74,44 @@ public class GameManager : MonoBehaviour
             for(int j = 0; j < numberOfColumnsInRow[i]; j++)
             {
                 var field = Instantiate(fieldPrefab, new Vector3(x,y,0), Quaternion.identity);
-                fields[index] = new Field()
-                {
-                    id = index++,
-                    rowNumber = i,
-                    columnNumber = j,
-                    prefab = field
-                };
-                /*
-                var move = field.GetComponent<Move>();
-                move.type = 0;
-                move.field = new Field()
+                var goal = field.GetComponent<Goal>();
+                goal.field =  new Field()
                 {
                     id = index,
                     rowNumber = i,
                     columnNumber = j,
                     prefab = field
                 };
-                fields[index++] = move.field;
-                */
-                x +=0.7f;
+                fields[index++] = goal.field;
+                x += 0.7f;
             }
 
             x = i >= 8 ? firstFieldX + 0.355f : firstFieldX - 0.355f;
             y -= 0.5f;
+        }
+        
+        // konwersja wspó³rzêdnych planszy na wspó³rzêdne z Board
+        int col = 0;
+        int row = 16;
+        
+        for(int i = 0;i < 9; i++)
+        {
+            row = 16 - i;
+            col = i;
+            for (int j = 0; j < 9; j++)
+            {
+                var pom = fields.FirstOrDefault(x => x.columnNumber == col && x.rowNumber == row);
+                if (pom != null)
+                {
+                    pom.mctsX = i;
+                    pom.mctsY = j;
+                }
+                row--;
+                if(row < 8)
+                {
+                    col--;
+                }
+            }
         }
     }
 
@@ -111,6 +129,8 @@ public class GameManager : MonoBehaviour
                 id = fields[i].id,
                 rowNumber = fields[i].rowNumber,
                 columnNumber = fields[i].columnNumber,
+                mctsX = fields[i].mctsX,
+                mctsY = fields[i].mctsY,
                 prefab = player1
             };
             player1Pawns[i] = move.field;
@@ -131,6 +151,8 @@ public class GameManager : MonoBehaviour
                 id = fields[i].id,
                 rowNumber = fields[i].rowNumber,
                 columnNumber = fields[i].columnNumber,
+                mctsX = fields[i].mctsX,
+                mctsY = fields[i].mctsY,
                 prefab = player2
             };
             player2Pawns[j++] = move.field;
@@ -162,17 +184,61 @@ public class GameManager : MonoBehaviour
                 return true;
         }
 
-        return false;
+        return false;  
     }
 
-    public List<Field> EmptyNeighbourFields(Field f)
+    private List<Field> EmptyNeighbourFields(Field f)
     {
         var adjacentPlayer1Pawns = Array.FindAll(player1Pawns, x => CheckNeighbour(f, x));
+       
         var adjacentPlayer2Pawns = Array.FindAll(player2Pawns, x => CheckNeighbour(f, x));
         
         var playersPawns = adjacentPlayer1Pawns.Union(adjacentPlayer2Pawns);
+        
         var adjacentFields = Array.FindAll(fields, x => CheckNeighbour(f,x));
-
+        
         return adjacentFields.Except(playersPawns).ToList();
     }
+    
+    private List<Field> FieldsWhereCanJump(Field f)
+    {
+        List<Field> result = new();
+
+        var adjacentPlayer1Pawns = Array.FindAll(player1Pawns, x => CheckNeighbour(f, x));
+        var adjacentPlayer2Pawns = Array.FindAll(player2Pawns, x => CheckNeighbour(f, x));
+        var adjacentPlayersPawns = adjacentPlayer1Pawns.Union(adjacentPlayer2Pawns);
+
+        foreach(var neighbour in adjacentPlayersPawns)
+        {
+            var adjacentFields = EmptyNeighbourFields(neighbour);
+            result.AddRange(adjacentFields.Where(x => 
+            Math.Abs(x.columnNumber - f.columnNumber) == 2 && Math.Abs(x.rowNumber - f.rowNumber) == 2
+            || Math.Abs(x.columnNumber - f.columnNumber) == 2 && Math.Abs(x.rowNumber - f.rowNumber) == 0
+            || Math.Abs(x.columnNumber - f.columnNumber) == 0 && Math.Abs(x.rowNumber - f.rowNumber) == 2));
+        }
+
+        return result;
+    }
+    
+    public void HighlightPossibleMoveFields(Field f,Color c)
+    {
+        var emptyFields = EmptyNeighbourFields(f);
+        var fieldsToJump = FieldsWhereCanJump(f);
+        Debug.Log(fieldsToJump.Count);
+        var pom = emptyFields.Union(fieldsToJump);
+        foreach (var field in pom)
+        {
+            field.prefab.transform.GetComponent<Renderer>().material.color = c;
+        }
+    }
+
+    public void ClearHighlihtOnBoard()
+    {
+        foreach(var field in fields)
+        {
+            field.prefab.transform.GetComponent<Renderer>().material.color = Color.white;
+            field.prefab.transform.position = new Vector3(field.prefab.transform.position.x, field.prefab.transform.position.y,0.5f);
+        }
+    }
+
 }
