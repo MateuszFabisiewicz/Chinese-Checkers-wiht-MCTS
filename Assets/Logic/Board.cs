@@ -59,8 +59,10 @@ public class Board // może być interpretowana jak stan gry
                 newField.fieldType = oldBoard.fields[i, j].fieldType;
                 newField.playerOnField = oldBoard.fields[i, j].playerOnField;
                 newField.checker = oldBoard.fields[i, j].checker != null ? new Checker (oldBoard.fields[i, j].checker) : null;
-                if (newField.checker != null)
+                if (newField.checker != null) // potrzebne??
+                {
                     newField.checker.SetPosition (newField);
+                }
 
                 fields[i, j] = newField;
             }

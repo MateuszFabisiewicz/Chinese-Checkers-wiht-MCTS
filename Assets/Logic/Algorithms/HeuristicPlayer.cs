@@ -18,6 +18,9 @@ namespace Assets.Logic.Algorithms
         private const double distH = 0.05;
         private const double triangleH = 0.5;
         private const double opponentTriangleH = 0.2;
+        private const double forwardMove = 0.4; // zhardkodowane dla kolorów
+        private const double notYetMoved = 0.4; // startingField w checker
+        //private const double backwardMove = -0.3;
 
         public HeuristicPlayer (PlayerColor color) : base (color)
         {
@@ -187,6 +190,11 @@ namespace Assets.Logic.Algorithms
                 heuristic += opponentTriangleH;
             }
 
+            if (oldField.x == checkers[checkerId].startingPlace.x && oldField.y == checkers[checkerId].startingPlace.y)
+            {
+                heuristic += notYetMoved;
+            }
+
             // patrzymy na pola o 1 i 2 odsunięte od newField w liniach prostych
             for (int i = 1; i < distance; i++)
             {
@@ -231,6 +239,23 @@ namespace Assets.Logic.Algorithms
                         heuristic += strongDistH;
                     else
                         heuristic += distH;
+                }
+            }
+
+            if (color == PlayerColor.Blue)
+            {
+                // backward jest gdy x lub y były zmniejszone
+                if (newField.x > oldField.x || newField.y > oldField.y)
+                {
+                    heuristic += forwardMove;
+                }
+            }
+            else // RED
+            {
+                // backward jest gdy x lub y były zwiększone
+                if (newField.x < oldField.x || newField.y < oldField.y)
+                {
+                    heuristic += forwardMove;
                 }
             }
 
