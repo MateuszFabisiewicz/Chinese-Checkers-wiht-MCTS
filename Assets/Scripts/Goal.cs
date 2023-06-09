@@ -15,7 +15,7 @@ public class Goal : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (gameManager.isPawnClicked)
+        if (gameManager.isPawnClicked && transform.GetComponent<Renderer>().material.color == Color.green)
         {
             gameManager.goalPosition = transform.position;
             gameManager.goalField = field;

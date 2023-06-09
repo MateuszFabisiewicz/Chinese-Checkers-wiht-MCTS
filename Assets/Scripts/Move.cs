@@ -1,3 +1,4 @@
+using Assets.Logic;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ public class Move : MonoBehaviour
     private GameManager gameManager;
     private int speed = 5;
     public Field field;
-    public int type;
+    public PlayerColor playerColor;
     public bool firstClick = false;
 
     // Start is called before the first frame update
@@ -50,11 +51,21 @@ public class Move : MonoBehaviour
     }
     private void OnMouseDown()
     {
-        firstClick = !firstClick;
-        if (firstClick)
+        if (!gameManager.isPawnClicked || firstClick)
         {
-            gameManager.HighlightPossibleMoveFields(field,Color.green);
-            gameManager.isPawnClicked = true;
+            firstClick = !firstClick;
+            if (firstClick)
+            {
+                if(gameManager.HighlightPossibleMoveFields(field, playerColor))
+                    gameManager.isPawnClicked = true;
+                else
+                    firstClick = false;
+            }
+            else
+            {
+                gameManager.ClearHighlihtOnBoard();
+                gameManager.isPawnClicked = false;
+            }
         }
     }
 }

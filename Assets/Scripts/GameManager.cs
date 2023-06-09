@@ -32,6 +32,8 @@ public class Field: IEquatable<Field>
 
 public class GameManager : MonoBehaviour
 {
+    private Color highlightColor = Color.green;
+    private Color clearColor = Color.white;
     private float x = -0.02f;
     private float y = 4.25f;
     private readonly int fieldsNumber = 81;
@@ -123,7 +125,7 @@ public class GameManager : MonoBehaviour
         {
             GameObject player1 = Instantiate(player1PawnPrefab, fields[i].prefab.transform.position, Quaternion.identity);
             var move = player1.GetComponent<Move>();
-            move.type = 1;
+            move.playerColor = PlayerColor.Red;
             move.field = new Field()
             {
                 id = fields[i].id,
@@ -145,7 +147,7 @@ public class GameManager : MonoBehaviour
         {
             GameObject player2 = Instantiate(player2PawnPrefab, fields[i].prefab.transform.position, Quaternion.identity);
             var move = player2.GetComponent<Move>();
-            move.type = 2;
+            move.playerColor = PlayerColor.Blue;
             move.field = new Field()
             {
                 id = fields[i].id,
@@ -208,35 +210,66 @@ public class GameManager : MonoBehaviour
         var adjacentPlayer2Pawns = Array.FindAll(player2Pawns, x => CheckNeighbour(f, x));
         var adjacentPlayersPawns = adjacentPlayer1Pawns.Union(adjacentPlayer2Pawns);
 
-        foreach(var neighbour in adjacentPlayersPawns)
+        foreach (var neighbour in adjacentPlayersPawns)
         {
             var adjacentFields = EmptyNeighbourFields(neighbour);
-            result.AddRange(adjacentFields.Where(x => 
-            Math.Abs(x.columnNumber - f.columnNumber) == 2 && Math.Abs(x.rowNumber - f.rowNumber) == 2
-            || Math.Abs(x.columnNumber - f.columnNumber) == 2 && Math.Abs(x.rowNumber - f.rowNumber) == 0
-            || Math.Abs(x.columnNumber - f.columnNumber) == 0 && Math.Abs(x.rowNumber - f.rowNumber) == 2));
+            result.AddRange(adjacentFields.Where(x =>
+             {
+                 if (x.rowNumber == 7 && f.rowNumber == 9 || x.rowNumber == 9 && f.rowNumber == 7)
+                 { 
+                     if(Math.Abs(x.columnNumber - f.columnNumber) == 1)
+                        return true;
+                     return false;
+                 }
+                 else if (Math.Abs(x.columnNumber - f.columnNumber) == 2 && Math.Abs(x.rowNumber - f.rowNumber) == 2)
+                     return true;
+                 else if (Math.Abs(x.columnNumber - f.columnNumber) == 2 && Math.Abs(x.rowNumber - f.rowNumber) == 0)
+                     return true;
+                 else if (Math.Abs(x.columnNumber - f.columnNumber) == 0 && Math.Abs(x.rowNumber - f.rowNumber) == 2)
+                     return true;
+
+                 return false;
+            }));
         }
 
         return result;
     }
     
-    public void HighlightPossibleMoveFields(Field f,Color c)
+    public bool HighlightPossibleMoveFields(Field f, PlayerColor playerColor)
     {
         var emptyFields = EmptyNeighbourFields(f);
         var fieldsToJump = FieldsWhereCanJump(f);
-        Debug.Log(fieldsToJump.Count);
+
         var pom = emptyFields.Union(fieldsToJump);
+
+        if(playerColor == PlayerColor.Blue && f.rowNumber <= 3)
+        {
+            pom = pom.Where(x => x.rowNumber <= 3);
+        }
+
+        if (playerColor == PlayerColor.Red && f.rowNumber >= 13)
+        {
+            pom = pom.Where(x => x.rowNumber >= 13);
+        }
+
+        // brak ruchów
+        if(!pom.Any())
+            return false;
+
+        // podœwietl mo¿liwe ruchy
         foreach (var field in pom)
         {
-            field.prefab.transform.GetComponent<Renderer>().material.color = c;
+            field.prefab.transform.GetComponent<Renderer>().material.color = highlightColor;
         }
+
+        return true;
     }
 
     public void ClearHighlihtOnBoard()
     {
         foreach(var field in fields)
         {
-            field.prefab.transform.GetComponent<Renderer>().material.color = Color.white;
+            field.prefab.transform.GetComponent<Renderer>().material.color = clearColor;
             field.prefab.transform.position = new Vector3(field.prefab.transform.position.x, field.prefab.transform.position.y,0.5f);
         }
     }
