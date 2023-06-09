@@ -35,7 +35,7 @@ public class Game
                 break;
 
             case PlayerType.Heuristic:
-                players[0] = new HeurPlayer (PlayerColor.Blue);
+                players[0] = new HeuristicPlayer (PlayerColor.Blue);
                 break;
         }
 
@@ -58,7 +58,7 @@ public class Game
                 break;
 
             case PlayerType.Heuristic:
-                players[1] = new HeurPlayer (PlayerColor.Red);
+                players[1] = new HeuristicPlayer (PlayerColor.Red);
                 break;
         }
 
@@ -76,13 +76,13 @@ public class Game
             {
                 board.fields[i, j].playerOnField = players[0].color;
                 board.fields[i, j].checker = players[0].checkers[checkerIndex];
-                //board.fields[i, j].checkerIndex = players[0].checkers[checkerIndex].ID;
                 players[0].checkers[checkerIndex].SetPosition (board.fields[i, j]);
+                players[0].checkers[checkerIndex].SetStartingPosition (board.fields[i, j]);
 
                 board.fields[Board.side - i - 1, Board.side - j - 1].playerOnField = players[1].color;
                 board.fields[Board.side - i - 1, Board.side - j - 1].checker = players[1].checkers[checkerIndex];
-                //board.fields[Board.side - i - 1, Board.side - j - 1].checkerIndex = players[1].checkers[checkerIndex].ID;
                 players[1].checkers[checkerIndex].SetPosition (board.fields[Board.side - i - 1, Board.side - j - 1]);
+                players[1].checkers[checkerIndex].SetStartingPosition (board.fields[Board.side - i - 1, Board.side - j - 1]);
 
                 checkerIndex++;
             }
