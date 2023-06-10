@@ -54,21 +54,21 @@ namespace Assets.Logic.Algorithms
             return node;
         }
 
-        internal override Node Rollout (Node leaf)
-        {
-            Node node = leaf;
-            while (node.children.Count > 0) // póki możemy iść dalej
-            {
-                // stosujemy random rollout policy -- zmienić też na UCT??
-                //Random random = new Random ();
-                //int randomIndex = random.Next (0, node.children.Count);
-                //node = node.children[randomIndex];
+        //internal override Node Rollout (Node leaf)
+        //{
+        //    Node node = leaf;
+        //    while (node.children.Count > 0) // póki możemy iść dalej
+        //    {
+        //         stosujemy random rollout policy -- zmienić też na UCT??
+        //        Random random = new Random ();
+        //        int randomIndex = random.Next (0, node.children.Count);
+        //        node = node.children[randomIndex];
 
-                node = BestAUCT (node);
-            }
+        //        node = BestAUCT (node);
+        //    }
 
-            return node; // zwracamy końcowy node
-        }
+        //    return node; // zwracamy końcowy node
+        //}
 
         // zmieniamy BestUCT na BestAUCT
         internal Node BestAUCT(Node node)

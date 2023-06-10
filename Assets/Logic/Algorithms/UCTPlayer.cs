@@ -11,7 +11,7 @@ namespace Assets.Logic.Algorithms
 {
     public class UCTPlayer : Player
     {
-        internal int loopCount = 2000;
+        internal int loopCount = 3000;
         internal double C = Math.Sqrt (2); // stała eksploracji
 
         public UCTPlayer (PlayerColor color) : base (color)
@@ -84,12 +84,12 @@ namespace Assets.Logic.Algorithms
             Node node = leaf;
             while (node.children.Count > 0) // póki możemy iść dalej
             {
-                // stosujemy random rollout policy -- zmienić też na UCT??
-                //Random random = new Random ();
-                //int randomIndex = random.Next (0, node.children.Count);
-                //node = node.children[randomIndex];
+                //stosujemy random rollout policy --zmienić też na UCT ??
+                Random random = new Random ();
+                int randomIndex = random.Next (0, node.children.Count);
+                node = node.children[randomIndex];
 
-                node = BestUCT (node);
+                //node = BestUCT (node);
             }
 
             return node; // zwracamy końcowy node

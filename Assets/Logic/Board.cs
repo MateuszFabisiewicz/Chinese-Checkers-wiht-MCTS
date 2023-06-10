@@ -58,7 +58,7 @@ public class Board // może być interpretowana jak stan gry
 
                 newField.fieldType = oldBoard.fields[i, j].fieldType;
                 newField.playerOnField = oldBoard.fields[i, j].playerOnField;
-                newField.checker = oldBoard.fields[i, j].checker != null ? new Checker (oldBoard.fields[i, j].checker) : null;
+                newField.checker = oldBoard.fields[i, j].checker != null ? oldBoard.fields[i, j].checker : null;
                 if (newField.checker != null) // potrzebne??
                 {
                     newField.checker.SetPosition (newField);
@@ -91,37 +91,60 @@ public class Board // może być interpretowana jak stan gry
         // jeśli drugi gracz wypełnił to uznajemy że przegrał 
         // wpp liczymy "stopień wygrania" - ile swoich pionków ma gracz na polach przeciwnika
 
-        int playerCounter = 0, opponentCounter = 0;
-        for (int i = 0; i < triangleSide; i++)
+        int playerCounter = 0, opponentCounter = 0, playerMovedOut = 0;
+
+        for (int i = 0; i < side; i++)
         {
-            for (int j = 0; j < triangleSide; j++)
+            for (int j = 0; j < side; j++)
             {
-                // if (fields[i, j].fieldType != PlayerColor.None) -- tylko takie rozważamy
                 if (fields[i, j].playerOnField != PlayerColor.None)
                 {
                     if (fields[i, j].playerOnField == color && fields[i, j].fieldType != color)
                     {
                         playerCounter++;
                     }
-                    else if (fields[i, j].playerOnField != color && fields[i, j].fieldType == color)
+                    else if (fields[i, j].playerOnField != color && fields[i,j].playerOnField != PlayerColor.None && fields[i, j].fieldType == color)
                     {
                         opponentCounter++;
                     }
                 }
-
-                if (fields[side - i - 1, side - j - 1].playerOnField != PlayerColor.None)
+                else if (fields[i, j].playerOnField == color)
                 {
-                    if (fields[side - i - 1, side - j - 1].playerOnField == color && fields[side - i - 1, side - j - 1].fieldType != color)
-                    {
-                        playerCounter++;
-                    }
-                    else if (fields[side - i - 1, side - j - 1].playerOnField != color && fields[side - i - 1, side - j - 1].fieldType == color)
-                    {
-                        opponentCounter++;
-                    }
+                    playerMovedOut++;
                 }
             }
         }
+
+        //for (int i = 0; i < triangleSide; i++)
+        //{
+        //    for (int j = 0; j < triangleSide; j++)
+        //    {
+        //        // if (fields[i, j].fieldType != PlayerColor.None) -- tylko takie rozważamy
+        //        if (fields[i, j].playerOnField != PlayerColor.None)
+        //        {
+        //            if (fields[i, j].playerOnField == color && fields[i, j].fieldType != color)
+        //            {
+        //                playerCounter++;
+        //            }
+        //            else if (fields[i, j].playerOnField != color && fields[i, j].fieldType == color)
+        //            {
+        //                opponentCounter++;
+        //            }
+        //        }
+
+        //        if (fields[side - i - 1, side - j - 1].playerOnField != PlayerColor.None)
+        //        {
+        //            if (fields[side - i - 1, side - j - 1].playerOnField == color && fields[side - i - 1, side - j - 1].fieldType != color)
+        //            {
+        //                playerCounter++;
+        //            }
+        //            else if (fields[side - i - 1, side - j - 1].playerOnField != color && fields[side - i - 1, side - j - 1].fieldType == color)
+        //            {
+        //                opponentCounter++;
+        //            }
+        //        }
+        //    }
+        //}
 
         if (playerCounter == Game.checkerCount)
         {
@@ -135,14 +158,10 @@ public class Board // może być interpretowana jak stan gry
         {
             // odległość "najwyższego pionka" od przeciwnej strony i też to ile mamy nie ruszony w ogóle
 
-            FieldInBoard mostOutChecker = FindCheckersPosition (0, color);
-            for (int i = 1; i < Game.checkerCount; i++)
-            {
-                if (color == PlayerColor.Blue && FindCheckersPosition (i, color).x >= mostOutChecker.x && FindCheckersPosition(i, color).y >= mostOutChecker.y)
-                {
-
-                }
-            }
+            //if (playerCounter == 0)
+            //{
+            //    return playerMovedOut / (2 * Game.checkerCount); // żeby dawało mniejsze "wygranie" niż faktyczne dotarcie do trójkąta
+            //}
 
             return (double)playerCounter / (double)Game.checkerCount;
         }

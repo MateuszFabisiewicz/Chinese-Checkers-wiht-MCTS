@@ -20,6 +20,9 @@ public class Goal : MonoBehaviour
             gameManager.goalPosition = transform.position;
             gameManager.goalField = field;
             gameManager.canMove = true;
+
+            gameManager.game.MoveChecker (gameManager.game.board.fields[gameManager.goalField.mctsX, gameManager.goalField.mctsY],
+                gameManager.game.board.fields[gameManager.startField.mctsX, gameManager.startField.mctsY].checker.ID, gameManager.playerMoving);
         }
     }
 }

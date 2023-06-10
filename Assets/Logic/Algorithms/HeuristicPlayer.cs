@@ -20,7 +20,7 @@ namespace Assets.Logic.Algorithms
         private const double opponentTriangleH = 0.2;
         private const double forwardMove = 0.4; // zhardkodowane dla kolorów
         private const double notYetMoved = 0.4; // startingField w checker
-        private const int maxList = 1000000000; // żeby zapobiec StackOverflowException
+        private const int maxList = 1000000; // żeby zapobiec StackOverflowException
 
         public HeuristicPlayer (PlayerColor color) : base (color)
         {

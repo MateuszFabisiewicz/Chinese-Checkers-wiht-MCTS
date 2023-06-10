@@ -32,6 +32,9 @@ public class Move : MonoBehaviour
                 firstClick = !firstClick;
                 gameManager.isPawnClicked = false;
 
+                //game.board.fields[startField.mctsX, startField.mctsY].checker.ID
+                //gameManager.movedCheckerId = gameManager.game.board.fields[field.mctsX, field.mctsY].checker.ID;
+
                 int index = Array.FindIndex(gameManager.player1Pawns,x => x.Equals(field));
                 if(index > 0)
                     gameManager.player1Pawns[index] = gameManager.goalField;
@@ -59,6 +62,7 @@ public class Move : MonoBehaviour
                 if (gameManager.HighlightPossibleMoveFields (field, playerColor))
                 { 
                     gameManager.isPawnClicked = true;
+                    //gameManager.movedCheckerId = gameManager.game.board.fields[field.mctsX, field.mctsY].checker.ID;
                     gameManager.startField = field;
                 }
                 else

@@ -48,6 +48,7 @@ public class GameManager : MonoBehaviour
     public Vector2 goalPosition;
     public Field goalField;
     public Field startField;
+    public int movedCheckerId;
     public bool isPawnClicked = false;
     public Game game;
     public int playerMoving = 0;
@@ -340,7 +341,7 @@ public class GameManager : MonoBehaviour
 
     public void EndHumanPlayerTurn()
     {
-        game.MoveChecker (game.board.fields[goalField.mctsX, goalField.mctsY], game.board.fields[startField.mctsX, startField.mctsY].checker.ID, playerMoving);
+        //game.MoveChecker (game.board.fields[goalField.mctsX, goalField.mctsY], movedCheckerId, playerMoving); //game.board.fields[startField.mctsX, startField.mctsY].checker.ID
 
         humanPlayerEndedTurn = true;
         playerMoving = (playerMoving + 1) % 2;
