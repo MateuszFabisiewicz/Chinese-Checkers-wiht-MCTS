@@ -68,12 +68,12 @@ public class GameManager : MonoBehaviour
         CreatePlayer1();
         CreatePlayer2();
 
-        player0Type = PlayerType.Heuristic;
-        player1Type = PlayerType.Heuristic;
+        //player0Type = PlayerType.UCT;
+        //player1Type = PlayerType.UCT;
         game = new Game (player0Type, player1Type);
-        playerMoving = 0;
+        //playerMoving = 0;
         playerColor = game.players[playerMoving].color;
-        opponentPlayer = 1;
+        //opponentPlayer = 1;
         oppColor = game.players[opponentPlayer].color;
 
 

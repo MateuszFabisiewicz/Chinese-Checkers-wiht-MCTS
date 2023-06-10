@@ -133,6 +133,17 @@ public class Board // może być interpretowana jak stan gry
         }
         else
         {
+            // odległość "najwyższego pionka" od przeciwnej strony i też to ile mamy nie ruszony w ogóle
+
+            FieldInBoard mostOutChecker = FindCheckersPosition (0, color);
+            for (int i = 1; i < Game.checkerCount; i++)
+            {
+                if (color == PlayerColor.Blue && FindCheckersPosition (i, color).x >= mostOutChecker.x && FindCheckersPosition(i, color).y >= mostOutChecker.y)
+                {
+
+                }
+            }
+
             return (double)playerCounter / (double)Game.checkerCount;
         }
     }
