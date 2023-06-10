@@ -53,13 +53,15 @@ public class GameManager : MonoBehaviour
     public PlayerColor playerColor;
     public int opponentPlayer = 1;
     public PlayerColor oppColor;
-    public PlayerType player0Type = PlayerType.AUCT;
-    public PlayerType player1Type = PlayerType.AUCT;
+    public PlayerType player0Type = PlayerType.RAVE;
+    public PlayerType player1Type = PlayerType.UCT;
     public int frameCounter = 0;
 
     public GameObject player1PawnPrefab;
     public GameObject player2PawnPrefab;
     public GameObject fieldPrefab;
+
+    public bool humanPlayerEndedTurn = false;
 
     // Start is called before the first frame update
     void Start()
@@ -328,6 +330,11 @@ public class GameManager : MonoBehaviour
             field.prefab.transform.GetComponent<Renderer>().material.color = clearColor;
             field.prefab.transform.position = new Vector3(field.prefab.transform.position.x, field.prefab.transform.position.y,0.5f);
         }
+    }
+
+    public void EndHumanPlayerTurn()
+    {
+        humanPlayerEndedTurn = true;
     }
 
 }
