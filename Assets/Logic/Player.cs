@@ -44,15 +44,3 @@ public class HumanPlayer : Player
     }
 }
 
-public class RAVEPlayer : Player // pozmieniać żeby były po UCTPlayer
-{
-    public RAVEPlayer (PlayerColor color) : base (color)
-    {
-        type = PlayerType.RAVE;
-    }
-
-    public override (FieldInBoard, int, PlayerColor) MakeChoice (Board board, Player opponentStats)
-    {
-        throw new System.NotImplementedException ();
-    }
-}
