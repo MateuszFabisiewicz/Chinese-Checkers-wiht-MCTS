@@ -156,6 +156,26 @@ public class TestScript1
     }
 
     [Test]
+    public void RAVEAndUCTGameTest()
+    {
+        int i = 0, currPlayer = 0;
+        Game testGame = new Game(PlayerType.RAVE, PlayerType.UCT);
+
+        while (testGame.Win() == PlayerColor.None && i < 30)
+        {
+            i++;
+            var answer = testGame.players[currPlayer].MakeChoice(testGame.board, testGame.players[1]);
+            testGame.MoveChecker(answer.newField, answer.checkerIndex, currPlayer);
+            currPlayer = (currPlayer + 1) % 2;
+        }
+
+        if (i < 30)
+            Assert.AreNotEqual(testGame.Win(), PlayerColor.None);
+        else
+            Assert.AreEqual(testGame.Win(), PlayerColor.None);
+    }
+
+    [Test]
     public void FirstHeuristicMoveTest ()
     {
         Game testGame = new Game (PlayerType.Heuristic, PlayerType.UCT);

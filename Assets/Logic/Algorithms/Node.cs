@@ -28,6 +28,10 @@ namespace Assets.Logic.Algorithms
 
         public double accWinRation { get; set; } // dla gracza AUCT
 
+        public int RAVEVisitCount { get; set; } // dla gracza RAVE
+
+        public double RAVEWinRation { get; set; } // dla gracza RAVE
+
         public (FieldInBoard newField, int checkerIndex, PlayerColor playerWhoMoved) move { get; private set; }
 
         public Node (Board state, Node parentNode)
@@ -202,6 +206,26 @@ namespace Assets.Logic.Algorithms
                     sum += child.winningProbability;
                 }
                 this.winningProbability = sum / this.children.Count;
+            }
+        }
+
+        public void UpdateRAVEWinRationAndRAVEVisitCount(PlayerColor color)
+        {
+            if (this.children.Count == 0)
+            {
+                this.RAVEWinRation = this.state.IsWinning(color);
+                this.RAVEVisitCount += 1;
+            }
+            else
+            {
+                double sum = 0;
+                double sum2 = 0;
+                foreach (var child in this.children)
+                {
+                    sum += child.RAVEWinRation;
+                    sum2 += child.RAVEVisitCount;
+                }
+                this.RAVEWinRation += sum / sum2;
             }
         }
 
