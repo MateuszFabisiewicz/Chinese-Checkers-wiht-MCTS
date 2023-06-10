@@ -43,7 +43,12 @@ namespace Assets.Logic.Algorithms
                 {
                     child.velocity = lambda * child.velocity;
                 }
-                node = BestAUCT (node);
+                Node tmpNode = NotYetVisitedChild (node);
+                if (tmpNode == null)
+                    node = BestAUCT (node);
+                else 
+                    node = tmpNode;
+
                 node.velocity += 1;
             }
             // aktualizacja velocity wygląda tak, że jesteśmy w pewnym node, rozważamy dzieci

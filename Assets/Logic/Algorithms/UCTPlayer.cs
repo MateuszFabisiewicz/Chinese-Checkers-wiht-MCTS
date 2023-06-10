@@ -103,11 +103,28 @@ namespace Assets.Logic.Algorithms
             while (node.children.Count != 0)
             {
                 node.visitCount++;
-                node = BestUCT (node);
+                Node tmpNode = NotYetVisitedChild (node);
+                if (tmpNode == null)
+                    node = BestUCT (node);
+                else
+                    node = tmpNode;
             }
 
             node.visitCount++;
             return node;
+        }
+
+        internal Node NotYetVisitedChild (Node node)
+        {
+            for (int i = 0; i < node.children.Count; i++)
+            {
+                if (node.children[i].visitCount == 1) // bo przy tworzeniu już dałam 1, i nie pamiętam dlaczego ale na razie tak zostawmy
+                {
+                    return node.children[i];
+                }
+            }
+
+            return null;
         }
 
         internal Node BestUCT (Node node)
