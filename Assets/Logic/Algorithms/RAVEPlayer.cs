@@ -21,7 +21,11 @@ namespace Assets.Logic.Algorithms
             while (node.children.Count != 0)
             {
                 node.visitCount++;
-                node = BestRAVE(node);
+                Node tmpNode = NotYetVisitedChild (node);
+                if (tmpNode == null)
+                    node = BestRAVE(node);
+                else 
+                    node = tmpNode;
             }
             
             node.visitCount++;

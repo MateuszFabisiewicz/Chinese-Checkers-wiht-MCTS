@@ -14,13 +14,14 @@ namespace Assets.Logic.Algorithms
         private const int strongDist = 1;
         private const int distance = 2;
         private const double jumpH = 0.3;
-        private const double strongDistH = 0.1;
+        private const double strongDistH = 0.01;
         private const double distH = 0.05;
         private const double triangleH = 0.5;
         private const double opponentTriangleH = 0.2;
         private const double forwardMove = 0.4; // zhardkodowane dla kolorów
         private const double notYetMoved = 0.4; // startingField w checker
         private const int maxList = 1000000; // żeby zapobiec StackOverflowException
+        private const int maxJump = 2;
 
         public HeuristicPlayer (PlayerColor color) : base (color)
         {
@@ -92,12 +93,13 @@ namespace Assets.Logic.Algorithms
             for (int i = 0; i < Game.checkerCount; i++)
             {
                 // sprawdzamy czy możemy się ruszyć
-                List<FieldInBoard> possibleJumps = GetPossibleFieldsThroughJumps (board.FindCheckersPosition (i, color), board, board.FindCheckersPosition (i, color));
+                List<FieldInBoard> possibleJumps = GetPossibleFieldsThroughJumps (board.FindCheckersPosition (i, color), board, board.FindCheckersPosition (i, color), 0);
                 foreach (FieldInBoard field in possibleJumps)
                 {
                     if (moves.Count < maxList)
                         moves.Add ((field, i, CalculateHeuristic (field, i, board, true, color, board.FindCheckersPosition (i, color))));
                 }
+                possibleJumps.Clear ();
 
                 List<FieldInBoard> possibleFieldsOneApart = GetPossibleFieldsOneApart (i, color, board);
                 foreach (FieldInBoard field in possibleFieldsOneApart)
@@ -105,81 +107,90 @@ namespace Assets.Logic.Algorithms
                     if (moves.Count < maxList)
                         moves.Add ((field, i, CalculateHeuristic (field, i, board, false, color, board.FindCheckersPosition (i, color))));
                 }
-
+                possibleFieldsOneApart.Clear ();
             }
 
             return moves;
         }
 
-        private List<FieldInBoard> GetPossibleFieldsThroughJumps (FieldInBoard startField, Board board, FieldInBoard previousPlace)
+        private List<FieldInBoard> GetPossibleFieldsThroughJumps (FieldInBoard startField, Board board, FieldInBoard previousPlace, int jumpCounter)
         {
             List<FieldInBoard> moves = new List<FieldInBoard> ();
             List<FieldInBoard> addMoves = new List<FieldInBoard> ();
 
-            addMoves = OneJump (startField, board, (startField.x, startField.y + 2), (startField.x, startField.y + 1), previousPlace);
-            for (int i = 0; i < addMoves.Count; i++)
+            if (jumpCounter >= maxJump)
             {
-                if (moves.Count >= maxList)
-                    break;
-                moves.Add (addMoves[i]);
+                return moves;
             }
-            //if (moves.Count < maxList)
-            //    moves.AddRange (OneJump (startField, board, (startField.x, startField.y + 2), (startField.x, startField.y + 1), previousPlace));
 
-            addMoves = OneJump (startField, board, (startField.x, startField.y - 2), (startField.x, startField.y - 1), previousPlace);
+            addMoves = OneJump (startField, board, (startField.x, startField.y + 2), (startField.x, startField.y + 1), previousPlace, jumpCounter + 1);
             for (int i = 0; i < addMoves.Count; i++)
             {
                 if (moves.Count >= maxList)
                     break;
                 moves.Add (addMoves[i]);
             }
+            addMoves.Clear ();
+
+            addMoves = OneJump (startField, board, (startField.x, startField.y - 2), (startField.x, startField.y - 1), previousPlace, jumpCounter + 1);
+            for (int i = 0; i < addMoves.Count; i++)
+            {
+                if (moves.Count >= maxList)
+                    break;
+                moves.Add (addMoves[i]);
+            }
+            addMoves.Clear ();
             //if (moves.Count < maxList)
             //    moves.AddRange (OneJump (startField, board, (startField.x, startField.y - 2), (startField.x, startField.y - 1), previousPlace));
 
-            addMoves = OneJump (startField, board, (startField.x + 2, startField.y), (startField.x + 1, startField.y), previousPlace);
+            addMoves = OneJump (startField, board, (startField.x + 2, startField.y), (startField.x + 1, startField.y), previousPlace, jumpCounter + 1);
             for (int i = 0; i < addMoves.Count; i++)
             {
                 if (moves.Count >= maxList)
                     break;
                 moves.Add (addMoves[i]);
             }
+            addMoves.Clear ();
             //if (moves.Count < maxList)
             //    moves.AddRange (OneJump (startField, board, (startField.x + 2, startField.y), (startField.x + 1, startField.y), previousPlace));
 
-            addMoves = OneJump (startField, board, (startField.x - 2, startField.y), (startField.x - 1, startField.y), previousPlace);
+            addMoves = OneJump (startField, board, (startField.x - 2, startField.y), (startField.x - 1, startField.y), previousPlace, jumpCounter + 1);
             for (int i = 0; i < addMoves.Count; i++)
             {
                 if (moves.Count >= maxList)
                     break;
                 moves.Add (addMoves[i]);
             }
+            addMoves.Clear ();
             //if (moves.Count < maxList)
             //    moves.AddRange (OneJump (startField, board, (startField.x - 2, startField.y), (startField.x - 1, startField.y), previousPlace));
 
-            addMoves = OneJump (startField, board, (startField.x - 2, startField.y + 2), (startField.x - 1, startField.y + 1), previousPlace);
+            addMoves = OneJump (startField, board, (startField.x - 2, startField.y + 2), (startField.x - 1, startField.y + 1), previousPlace, jumpCounter + 1);
             for (int i = 0; i < addMoves.Count; i++)
             {
                 if (moves.Count >= maxList)
                     break;
                 moves.Add (addMoves[i]);
             }
+            addMoves.Clear ();
             //if (moves.Count < maxList)
             //    moves.AddRange (OneJump (startField, board, (startField.x - 2, startField.y + 2), (startField.x - 1, startField.y + 1), previousPlace));
 
-            addMoves = OneJump (startField, board, (startField.x + 2, startField.y - 2), (startField.x + 1, startField.y - 1), previousPlace);
+            addMoves = OneJump (startField, board, (startField.x + 2, startField.y - 2), (startField.x + 1, startField.y - 1), previousPlace, jumpCounter + 1);
             for (int i = 0; i < addMoves.Count; i++)
             {
                 if (moves.Count >= maxList)
                     break;
                 moves.Add (addMoves[i]);
             }
+            addMoves.Clear ();
             //if (moves.Count < maxList)
             //    moves.AddRange (OneJump (startField, board, (startField.x + 2, startField.y - 2), (startField.x + 1, startField.y - 1), previousPlace));
 
             return moves;
         }
 
-        private List<FieldInBoard> OneJump (FieldInBoard startField, Board board, (int X, int Y) newField, (int X, int Y) interField, FieldInBoard previousPlace)
+        private List<FieldInBoard> OneJump (FieldInBoard startField, Board board, (int X, int Y) newField, (int X, int Y) interField, FieldInBoard previousPlace, int jumpCounter)
         {
             List<FieldInBoard> moves = new List<FieldInBoard> ();
             PlayerColor opponentColor = color == PlayerColor.Blue ? PlayerColor.Red : PlayerColor.Blue;
@@ -195,7 +206,7 @@ namespace Assets.Logic.Algorithms
                 {
                     moves.Add (board.fields[newField.X, newField.Y]);
 
-                    List<FieldInBoard> addMoves = GetPossibleFieldsThroughJumps (board.fields[newField.X, newField.Y], board, startField);
+                    List<FieldInBoard> addMoves = GetPossibleFieldsThroughJumps (board.fields[newField.X, newField.Y], board, startField, jumpCounter);
 
                     for (int i = 0; i < addMoves.Count; i++)
                     {
@@ -203,6 +214,7 @@ namespace Assets.Logic.Algorithms
                             break;
                         moves.Add (addMoves[i]);
                     }
+                    addMoves.Clear ();
                     //moves.AddRange (addMoves);
                 }
             }
@@ -323,8 +335,8 @@ namespace Assets.Logic.Algorithms
                 }
             }
 
-            if (!inOpponent)
-            {
+            //if (!inOpponent)
+            //{
                 if (color == PlayerColor.Blue)
                 {
                     // backward jest gdy x lub y były zmniejszone
@@ -341,7 +353,7 @@ namespace Assets.Logic.Algorithms
                         heuristic += forwardMove;
                     }
                 }
-            }
+            //}
 
             return heuristic;
         }
