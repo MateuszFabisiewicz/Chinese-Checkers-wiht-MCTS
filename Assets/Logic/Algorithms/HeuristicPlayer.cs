@@ -14,7 +14,7 @@ namespace Assets.Logic.Algorithms
         private const int strongDist = 1;
         private const int distance = 2;
         private const double jumpH = 0.3;
-        private const double strongDistH = 0.1;
+        private const double strongDistH = 0.01;
         private const double distH = 0.05;
         private const double triangleH = 0.5;
         private const double opponentTriangleH = 0.2;
@@ -335,8 +335,8 @@ namespace Assets.Logic.Algorithms
                 }
             }
 
-            if (!inOpponent)
-            {
+            //if (!inOpponent)
+            //{
                 if (color == PlayerColor.Blue)
                 {
                     // backward jest gdy x lub y były zmniejszone
@@ -353,7 +353,7 @@ namespace Assets.Logic.Algorithms
                         heuristic += forwardMove;
                     }
                 }
-            }
+            //}
 
             return heuristic;
         }
