@@ -59,10 +59,10 @@ public class Board // może być interpretowana jak stan gry
                 newField.fieldType = oldBoard.fields[i, j].fieldType;
                 newField.playerOnField = oldBoard.fields[i, j].playerOnField;
                 newField.checker = oldBoard.fields[i, j].checker != null ? oldBoard.fields[i, j].checker : null;
-                if (newField.checker != null) // potrzebne??
-                {
-                    newField.checker.SetPosition (newField);
-                }
+                //if (newField.checker != null) // potrzebne??
+                //{
+                //    newField.checker.SetPosition (newField);
+                //}
 
                 fields[i, j] = newField;
             }
@@ -83,6 +83,62 @@ public class Board // może być interpretowana jak stan gry
         }
 
         throw new System.Exception ("Nie znaleziono pionka o podanym indeksie i kolorze");
+    }
+
+    public static FieldInBoard FindCheckersPosition (int checker, PlayerColor color, FieldInBoard[,] fields)
+    {
+        for (int i = 0; i < side; i++)
+        {
+            for (int j = 0; j < side; j++)
+            {
+                if (fields[i, j].playerOnField == color && fields[i, j].checker.ID == checker)
+                {
+                    return fields[i, j];
+                }
+            }
+        }
+
+        throw new System.Exception ("Nie znaleziono pionka o podanym indeksie i kolorze");
+    }
+
+    public static double IsWinning (PlayerColor color, FieldInBoard[,] fields)
+    {
+        int playerCounter = 0, opponentCounter = 0, playerMovedOut = 0;
+
+        for (int i = 0; i < side; i++)
+        {
+            for (int j = 0; j < side; j++)
+            {
+                if (fields[i, j].playerOnField != PlayerColor.None)
+                {
+                    if (fields[i, j].playerOnField == color && fields[i, j].fieldType != color)
+                    {
+                        playerCounter++;
+                    }
+                    else if (fields[i, j].playerOnField != color && fields[i, j].playerOnField != PlayerColor.None && fields[i, j].fieldType == color)
+                    {
+                        opponentCounter++;
+                    }
+                }
+                else if (fields[i, j].playerOnField == color)
+                {
+                    playerMovedOut++;
+                }
+            }
+        }
+
+        if (playerCounter == Game.checkerCount)
+        {
+            return 1;
+        }
+        else if (opponentCounter == Game.checkerCount)
+        {
+            return 0;
+        }
+        else
+        {
+            return (double)playerCounter / (double)Game.checkerCount;
+        }
     }
 
     public double IsWinning (PlayerColor color)
@@ -171,7 +227,7 @@ public class Board // może być interpretowana jak stan gry
     {
         fields[newField.x, newField.y].playerOnField = oldField.playerOnField;
         fields[newField.x, newField.y].checker = new Checker (oldField.checker);
-        fields[newField.x, newField.y].checker.SetPosition (fields[newField.x, newField.y]);
+        //fields[newField.x, newField.y].checker.SetPosition (fields[newField.x, newField.y]);
 
         fields[oldField.x, oldField.y].playerOnField = PlayerColor.None;
         fields[oldField.x, oldField.y].checker = null;

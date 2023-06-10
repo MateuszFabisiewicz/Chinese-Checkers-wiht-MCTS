@@ -84,7 +84,7 @@ public class GameManager : MonoBehaviour
     {
         frameCounter++;
 
-        if ((player0Type != PlayerType.Human && player1Type != PlayerType.Human && frameCounter >= 500) ||
+        if ((player0Type != PlayerType.Human && player1Type != PlayerType.Human && frameCounter >= 200) ||
             ((player0Type == PlayerType.Human || player1Type == PlayerType.Human) && humanPlayerEndedTurn))
         {
             frameCounter = 0;

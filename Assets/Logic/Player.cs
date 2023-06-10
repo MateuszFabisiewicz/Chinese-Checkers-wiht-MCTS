@@ -23,10 +23,10 @@ public abstract class Player
         }
     }
 
-    public void MakeMove (int checkerIndex, FieldInBoard end)
-    {
-        checkers[checkerIndex].SetPosition (end);
-    }
+    //public void MakeMove (int checkerIndex, FieldInBoard end)
+    //{
+    //    checkers[checkerIndex].SetPosition (end);
+    //}
 
     public abstract (FieldInBoard newField, int checkerIndex, PlayerColor player) MakeChoice (Board board, Player opponentStats);
 }
