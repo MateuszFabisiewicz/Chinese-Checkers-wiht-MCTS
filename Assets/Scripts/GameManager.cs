@@ -53,8 +53,8 @@ public class GameManager : MonoBehaviour
     public PlayerColor playerColor;
     public int opponentPlayer = 1;
     public PlayerColor oppColor;
-    public PlayerType player0Type = PlayerType.Heuristic;
-    public PlayerType player1Type = PlayerType.Heuristic;
+    public PlayerType player0Type = PlayerType.AUCT;
+    public PlayerType player1Type = PlayerType.AUCT;
     public int frameCounter = 0;
 
     public GameObject player1PawnPrefab;
@@ -68,16 +68,9 @@ public class GameManager : MonoBehaviour
         CreatePlayer1();
         CreatePlayer2();
 
-        //player0Type = PlayerType.UCT;
-        //player1Type = PlayerType.UCT;
         game = new Game (player0Type, player1Type);
-        //playerMoving = 0;
         playerColor = game.players[playerMoving].color;
-        //opponentPlayer = 1;
         oppColor = game.players[opponentPlayer].color;
-
-
-
     }
 
     // Update is called once per frame
