@@ -51,11 +51,23 @@ namespace Assets.Logic.Algorithms
             // i jeśli zostanie ten wybrany, to dodajemy mu 1 (wpp. "dodajemy" 0)
 
             node.visitCount++;
-            //foreach (var child in node.children)
-            //{
-            //    child.velocity = lambda * child.velocity;
-            //} // bessęsu, nie ma dzieci przecie
             return node;
+        }
+
+        internal override Node Rollout (Node leaf)
+        {
+            Node node = leaf;
+            while (node.children.Count > 0) // póki możemy iść dalej
+            {
+                // stosujemy random rollout policy -- zmienić też na UCT??
+                //Random random = new Random ();
+                //int randomIndex = random.Next (0, node.children.Count);
+                //node = node.children[randomIndex];
+
+                node = BestAUCT (node);
+            }
+
+            return node; // zwracamy końcowy node
         }
 
         // zmieniamy BestUCT na BestAUCT

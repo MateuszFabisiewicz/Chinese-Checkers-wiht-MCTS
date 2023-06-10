@@ -56,8 +56,11 @@ public class Move : MonoBehaviour
             firstClick = !firstClick;
             if (firstClick)
             {
-                if(gameManager.HighlightPossibleMoveFields(field, playerColor))
+                if (gameManager.HighlightPossibleMoveFields (field, playerColor))
+                { 
                     gameManager.isPawnClicked = true;
+                    gameManager.startField = field;
+                }
                 else
                     firstClick = false;
             }

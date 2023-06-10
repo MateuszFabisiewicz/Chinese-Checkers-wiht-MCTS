@@ -11,7 +11,7 @@ namespace Assets.Logic.Algorithms
 {
     public class UCTPlayer : Player
     {
-        internal int loopCount = 1000;
+        internal int loopCount = 2000;
         internal double C = Math.Sqrt (2); // stała eksploracji
 
         public UCTPlayer (PlayerColor color) : base (color)
@@ -45,24 +45,25 @@ namespace Assets.Logic.Algorithms
 
         private Node BestChild (Node root)
         {
-            double currentBest = 0;
-            Node bestChild = null;
+            //double currentBest = 0;
+            //Node bestChild = null;
 
-            foreach (Node child in root.children)
-            {
-                if (child.winningProbability > currentBest)
-                {
-                    currentBest = child.winningProbability;
-                    bestChild = child;
-                }
-            }
+            root.children.Sort ((x, y) => x.winningProbability.CompareTo (y.winningProbability));
+            //foreach (Node child in root.children)
+            //{
+            //    if (child.winningProbability > currentBest)
+            //    {
+            //        currentBest = child.winningProbability;
+            //        bestChild = child;
+            //    }
+            //}
 
-            if (bestChild == null)
-            {
-                bestChild = root.children[0];
-            }
+            //if (bestChild == null)
+            //{
+            //    bestChild = root.children[0];
+            //}
 
-            return bestChild;
+            return root.children.Last ();
         }
 
         internal virtual void Backpropagate (Node leaf, Node simulationResult) // leaf niepotrzebny?
@@ -78,15 +79,17 @@ namespace Assets.Logic.Algorithms
             }
         }
 
-        private Node Rollout (Node leaf)
+        internal virtual Node Rollout (Node leaf)
         {
             Node node = leaf;
             while (node.children.Count > 0) // póki możemy iść dalej
             {
-                // stosujemy random rollout policy
-                Random random = new Random ();
-                int randomIndex = random.Next (0, node.children.Count);
-                node = node.children[randomIndex];
+                // stosujemy random rollout policy -- zmienić też na UCT??
+                //Random random = new Random ();
+                //int randomIndex = random.Next (0, node.children.Count);
+                //node = node.children[randomIndex];
+
+                node = BestUCT (node);
             }
 
             return node; // zwracamy końcowy node
