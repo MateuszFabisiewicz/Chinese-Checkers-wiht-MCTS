@@ -11,7 +11,7 @@ namespace Assets.Logic.Algorithms
 {
     public class UCTPlayer : Player
     {
-        internal int loopCount = 4000;
+        internal int loopCount = 1500;
         internal double C = Math.Sqrt (2); // stała eksploracji
 
         public UCTPlayer (PlayerColor color) : base (color)

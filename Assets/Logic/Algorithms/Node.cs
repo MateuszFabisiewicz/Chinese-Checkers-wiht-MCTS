@@ -16,6 +16,7 @@ namespace Assets.Logic.Algorithms
     public class Node
     {
         private const int maxList = 1000000; // żeby zapobiec StackOverflowException
+        private const int maxJump = 2;
         public Node parent { get; private set; }
 
         public List<Node> children { get; private set; }
@@ -119,7 +120,7 @@ namespace Assets.Logic.Algorithms
                 #region skok
                 // patrzymy na możliwości skoku - nie rozważamy cofnięć!
                 // while można się ruszyć 
-                var listOfJumpResults = Jump (field, state, field, field, color);
+                var listOfJumpResults = Jump (field, state, field, field, color, 0);
                 listOfJumpResults = listOfJumpResults.Distinct ().ToList (); // sprawdzić czy distnict działa poprawnie
 
                 foreach (var result in listOfJumpResults)
@@ -202,7 +203,7 @@ namespace Assets.Logic.Algorithms
             return newState;
         }
 
-        private List<(FieldInBoard newField, FieldInBoard[,] newState)> OneJump ((int x, int y) end, (int x, int y) inter, FieldInBoard[,] fields, FieldInBoard oldField, FieldInBoard lastPlace, FieldInBoard originalPlace, PlayerColor playerColor)
+        private List<(FieldInBoard newField, FieldInBoard[,] newState)> OneJump ((int x, int y) end, (int x, int y) inter, FieldInBoard[,] fields, FieldInBoard oldField, FieldInBoard lastPlace, FieldInBoard originalPlace, PlayerColor playerColor, int jumpCounter)
         {
             List<(FieldInBoard newField, FieldInBoard[,] newState)> jumps = new List<(FieldInBoard newField, FieldInBoard[,] newState)> ();
             PlayerColor opponentColor = playerColor == PlayerColor.Red ? PlayerColor.Blue : PlayerColor.Red;
@@ -219,7 +220,7 @@ namespace Assets.Logic.Algorithms
                 FieldInBoard[,] newState = CopyBoardWithMove (fields, (oldField.x, oldField.y), end, playerColor);
 
                 jumps.Add ((newState[end.x, end.y], newState));
-                List<(FieldInBoard, FieldInBoard[,] newState)> addJumps = Jump (newState[end.x, end.y], newState, oldField, originalPlace, playerColor);
+                List<(FieldInBoard, FieldInBoard[,] newState)> addJumps = Jump (newState[end.x, end.y], newState, oldField, originalPlace, playerColor, jumpCounter);
                 for (int i = 0; i < addJumps.Count; i++)
                 {
                     if (jumps.Count >= maxList)
@@ -232,14 +233,18 @@ namespace Assets.Logic.Algorithms
             return jumps;
         }
 
-        private List<(FieldInBoard newField, FieldInBoard[,] newState)> Jump (FieldInBoard oldField, FieldInBoard[,] fields, FieldInBoard lastPlace, FieldInBoard originalPlace, PlayerColor playerColor) // dodać zapobieganie zawracania (w stosunku do rodzica)
+        private List<(FieldInBoard newField, FieldInBoard[,] newState)> Jump (FieldInBoard oldField, FieldInBoard[,] fields, FieldInBoard lastPlace, FieldInBoard originalPlace, PlayerColor playerColor, int jumpCounter) // dodać zapobieganie zawracania (w stosunku do rodzica)
         {
             // rozważamy też te 6 pól dookoła oraz pole w linii prostej
             // po wykonaniu skoku możemy dalej skakać (potencjalnie)
             List<(FieldInBoard newField, FieldInBoard[,] newState)> jumps = new List<(FieldInBoard newField, FieldInBoard[,] newState)> ();
             List<(FieldInBoard, FieldInBoard[,] newState)> addJumps = new List<(FieldInBoard, FieldInBoard[,] newState)> ();
 
-            addJumps = OneJump ((oldField.x, oldField.y + 2), (oldField.x, oldField.y + 1), fields, oldField, lastPlace, originalPlace, playerColor);
+            if (jumpCounter >= maxJump)
+            {
+                return jumps;
+            }
+            addJumps = OneJump ((oldField.x, oldField.y + 2), (oldField.x, oldField.y + 1), fields, oldField, lastPlace, originalPlace, playerColor, jumpCounter + 1);
             for (int i = 0; i < addJumps.Count; i++)
             {
                 if (jumps.Count >= maxList)
@@ -249,7 +254,7 @@ namespace Assets.Logic.Algorithms
             addJumps.Clear ();
             //jumps.AddRange (OneJump ((oldField.x, oldField.y + 2), (oldField.x, oldField.y + 1), board, oldField, lastPlace, originalPlace, playerColor));
 
-            addJumps = OneJump ((oldField.x + 2, oldField.y), (oldField.x + 1, oldField.y), fields, oldField, lastPlace, originalPlace, playerColor);
+            addJumps = OneJump ((oldField.x + 2, oldField.y), (oldField.x + 1, oldField.y), fields, oldField, lastPlace, originalPlace, playerColor, jumpCounter + 1);
             for (int i = 0; i < addJumps.Count; i++)
             {
                 if (jumps.Count >= maxList)
@@ -259,7 +264,7 @@ namespace Assets.Logic.Algorithms
             addJumps.Clear ();
             //jumps.AddRange (OneJump ((oldField.x + 2, oldField.y), (oldField.x + 1, oldField.y), board, oldField, lastPlace, originalPlace, playerColor));
 
-            addJumps = OneJump ((oldField.x, oldField.y - 2), (oldField.x, oldField.y - 1), fields, oldField, lastPlace, originalPlace, playerColor);
+            addJumps = OneJump ((oldField.x, oldField.y - 2), (oldField.x, oldField.y - 1), fields, oldField, lastPlace, originalPlace, playerColor, jumpCounter + 1);
             for (int i = 0; i < addJumps.Count; i++)
             {
                 if (jumps.Count >= maxList)
@@ -269,7 +274,7 @@ namespace Assets.Logic.Algorithms
             addJumps.Clear ();
             //jumps.AddRange (OneJump ((oldField.x, oldField.y - 2), (oldField.x, oldField.y - 1), board, oldField, lastPlace, originalPlace, playerColor));
 
-            addJumps = OneJump ((oldField.x - 2, oldField.y), (oldField.x - 1, oldField.y), fields, oldField, lastPlace, originalPlace, playerColor);
+            addJumps = OneJump ((oldField.x - 2, oldField.y), (oldField.x - 1, oldField.y), fields, oldField, lastPlace, originalPlace, playerColor, jumpCounter + 1);
             for (int i = 0; i < addJumps.Count; i++)
             {
                 if (jumps.Count >= maxList)
@@ -279,7 +284,7 @@ namespace Assets.Logic.Algorithms
             addJumps.Clear ();
             //jumps.AddRange (OneJump ((oldField.x - 2, oldField.y), (oldField.x - 1, oldField.y), board, oldField, lastPlace, originalPlace, playerColor));
 
-            addJumps = OneJump ((oldField.x + 2, oldField.y - 2), (oldField.x + 1, oldField.y - 1), fields, oldField, lastPlace, originalPlace, playerColor);
+            addJumps = OneJump ((oldField.x + 2, oldField.y - 2), (oldField.x + 1, oldField.y - 1), fields, oldField, lastPlace, originalPlace, playerColor, jumpCounter + 1);
             for (int i = 0; i < addJumps.Count; i++)
             {
                 if (jumps.Count >= maxList)
@@ -289,7 +294,7 @@ namespace Assets.Logic.Algorithms
             addJumps.Clear ();
             //jumps.AddRange (OneJump ((oldField.x + 2, oldField.y - 2), (oldField.x + 1, oldField.y - 1), board, oldField, lastPlace, originalPlace, playerColor));
 
-            addJumps = OneJump ((oldField.x - 2, oldField.y + 2), (oldField.x - 1, oldField.y + 1), fields, oldField, lastPlace, originalPlace, playerColor);
+            addJumps = OneJump ((oldField.x - 2, oldField.y + 2), (oldField.x - 1, oldField.y + 1), fields, oldField, lastPlace, originalPlace, playerColor, jumpCounter + 1);
             for (int i = 0; i < addJumps.Count; i++)
             {
                 if (jumps.Count >= maxList)
