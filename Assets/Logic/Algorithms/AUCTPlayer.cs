@@ -54,7 +54,7 @@ namespace Assets.Logic.Algorithms
             return node;
         }
 
-        internal virtual Node Rollout (Node leaf)
+        internal override Node Rollout (Node leaf)
         {
             Node node = leaf;
             while (node.children.Count > 0) // póki możemy iść dalej
