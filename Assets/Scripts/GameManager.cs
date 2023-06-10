@@ -55,6 +55,7 @@ public class GameManager : MonoBehaviour
     public PlayerColor oppColor;
     public PlayerType player0Type = PlayerType.Heuristic;
     public PlayerType player1Type = PlayerType.Heuristic;
+    public int frameCounter = 0;
 
     public GameObject player1PawnPrefab;
     public GameObject player2PawnPrefab;
@@ -67,63 +68,65 @@ public class GameManager : MonoBehaviour
         CreatePlayer1();
         CreatePlayer2();
 
-        //player0Type = PlayerType.Heuristic;
-        //player1Type = PlayerType.Heuristic;
-        //game = new Game (player0Type, player1Type);
-        //playerMoving = 0;
-        //playerColor = game.players[playerMoving].color;
-        //opponentPlayer = 1;
-        //oppColor = game.players[opponentPlayer].color;
+        player0Type = PlayerType.Heuristic;
+        player1Type = PlayerType.Heuristic;
+        game = new Game (player0Type, player1Type);
+        playerMoving = 0;
+        playerColor = game.players[playerMoving].color;
+        opponentPlayer = 1;
+        oppColor = game.players[opponentPlayer].color;
 
-        
-        
+
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        //if (player0Type != PlayerType.Human && player1Type != PlayerType.Human)
-        //{
-        //    if (game.Win () == PlayerColor.None)
-        //    {
-        //        var answer = game.players[playerMoving].MakeChoice (game.board, game.players[opponentPlayer]);
-        //        var oldLogicField = game.board.FindCheckersPosition (answer.checkerIndex, playerColor);
-        //        Field oldField = fields.First (f => f.mctsX == oldLogicField.x && f.mctsY == oldLogicField.y);
-        //        Field newField = fields.First (f => f.mctsX == answer.newField.x && f.mctsY == answer.newField.y);
+        frameCounter++;
+        if (frameCounter >= 500 && player0Type != PlayerType.Human && player1Type != PlayerType.Human)
+        {
+            frameCounter = 0;
+            if (game.Win () == PlayerColor.None)
+            {
+                var answer = game.players[playerMoving].MakeChoice (game.board, game.players[opponentPlayer]);
+                var oldLogicField = game.board.FindCheckersPosition (answer.checkerIndex, playerColor);
+                Field oldField = fields.First (f => f.mctsX == oldLogicField.x && f.mctsY == oldLogicField.y);
+                Field newField = fields.First (f => f.mctsX == answer.newField.x && f.mctsY == answer.newField.y);
 
-        //        game.MoveChecker (answer.newField, answer.checkerIndex, playerMoving);
-        //        goalField = newField;
-        //        // znajdujemy checkersa który ma pozycję oldField i robimy dla niego move
-        //        for (int i = 0; i < playerPawnsNumber; i++)
-        //        {
-        //            if (playerMoving == 0)
-        //            {
-        //                if (player1Pawns[i].mctsX == oldField.mctsX && player1Pawns[i].mctsY == oldField.mctsY)
-        //                {
-        //                    player1Pawns[i].mctsX = newField.mctsX;
-        //                    player1Pawns[i].mctsY = newField.mctsY;
-        //                    player1Pawns[i].prefab.transform.position = new Vector3 (newField.prefab.transform.position.x, newField.prefab.transform.position.y, -1); // wygenerowane automatycznie, zobaczymy czy zadziała
-        //                    break;
-        //                }
-        //            }
-        //            else
-        //            {
-        //                if (player2Pawns[i].mctsX == oldField.mctsX && player2Pawns[i].mctsY == oldField.mctsY)
-        //                {
-        //                    player2Pawns[i].mctsX = newField.mctsX;
-        //                    player2Pawns[i].mctsY = newField.mctsY;
-        //                    player2Pawns[i].prefab.transform.position = new Vector3 (newField.prefab.transform.position.x, newField.prefab.transform.position.y, -1); // wygenerowane automatycznie, zobaczymy czy zadziała
-        //                    break;
-        //                }
-        //            }
-        //        }
+                game.MoveChecker (answer.newField, answer.checkerIndex, playerMoving);
+                goalField = newField;
+                // znajdujemy checkersa który ma pozycję oldField i robimy dla niego move
+                for (int i = 0; i < playerPawnsNumber; i++)
+                {
+                    if (playerMoving == 0)
+                    {
+                        if (player2Pawns[i].mctsX == oldField.mctsX && player2Pawns[i].mctsY == oldField.mctsY)
+                        {
+                            player2Pawns[i].mctsX = newField.mctsX;
+                            player2Pawns[i].mctsY = newField.mctsY;
+                            player2Pawns[i].prefab.transform.position = new Vector3 (newField.prefab.transform.position.x, newField.prefab.transform.position.y, -1); // wygenerowane automatycznie, zobaczymy czy zadziała
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        if (player1Pawns[i].mctsX == oldField.mctsX && player1Pawns[i].mctsY == oldField.mctsY)
+                        {
+                            player1Pawns[i].mctsX = newField.mctsX;
+                            player1Pawns[i].mctsY = newField.mctsY;
+                            player1Pawns[i].prefab.transform.position = new Vector3 (newField.prefab.transform.position.x, newField.prefab.transform.position.y, -1); // wygenerowane automatycznie, zobaczymy czy zadziała
+                            break;
+                        }
+                    }
+                }
 
-        //        playerMoving = (playerMoving + 1) % 2;
-        //        opponentPlayer = (opponentPlayer + 1) % 2;
-        //        playerColor = game.players[playerMoving].color;
-        //        oppColor = game.players[opponentPlayer].color; 
-        //    }
-        //}
+                playerMoving = (playerMoving + 1) % 2;
+                opponentPlayer = (opponentPlayer + 1) % 2;
+                playerColor = game.players[playerMoving].color;
+                oppColor = game.players[opponentPlayer].color;
+            }
+        }
     }
 
     void CreateBoard()
