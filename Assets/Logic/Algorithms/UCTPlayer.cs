@@ -11,7 +11,7 @@ namespace Assets.Logic.Algorithms
 {
     public class UCTPlayer : Player
     {
-        internal int loopCount = 3000;
+        internal int loopCount = 2000;
         internal double C = Math.Sqrt (2); // stała eksploracji
 
         public UCTPlayer (PlayerColor color) : base (color)
@@ -45,24 +45,25 @@ namespace Assets.Logic.Algorithms
 
         private Node BestChild (Node root)
         {
-            double currentBest = 0;
-            Node bestChild = null;
+            //double currentBest = 0;
+            //Node bestChild = null;
 
-            foreach (Node child in root.children)
-            {
-                if (child.winningProbability > currentBest)
-                {
-                    currentBest = child.winningProbability;
-                    bestChild = child;
-                }
-            }
+            root.children.Sort ((x, y) => x.winningProbability.CompareTo (y.winningProbability));
+            //foreach (Node child in root.children)
+            //{
+            //    if (child.winningProbability > currentBest)
+            //    {
+            //        currentBest = child.winningProbability;
+            //        bestChild = child;
+            //    }
+            //}
 
-            if (bestChild == null)
-            {
-                bestChild = root.children[0];
-            }
+            //if (bestChild == null)
+            //{
+            //    bestChild = root.children[0];
+            //}
 
-            return bestChild;
+            return root.children.Last ();
         }
 
         internal virtual void Backpropagate (Node leaf, Node simulationResult) // leaf niepotrzebny?

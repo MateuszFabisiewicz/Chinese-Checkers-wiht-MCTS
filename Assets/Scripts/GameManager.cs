@@ -47,13 +47,14 @@ public class GameManager : MonoBehaviour
     public bool humanPlaying = false;
     public Vector2 goalPosition;
     public Field goalField;
+    public Field startField;
     public bool isPawnClicked = false;
     public Game game;
     public int playerMoving = 0;
     public PlayerColor playerColor;
     public int opponentPlayer = 1;
     public PlayerColor oppColor;
-    public PlayerType player0Type = PlayerType.RAVE;
+    public PlayerType player0Type = PlayerType.Human; // ustawiać w unity
     public PlayerType player1Type = PlayerType.UCT;
     public int frameCounter = 0;
 
@@ -71,6 +72,8 @@ public class GameManager : MonoBehaviour
         CreatePlayer2();
 
         game = new Game (player0Type, player1Type);
+        //player0Type = PlayerType.Human;
+        //player1Type = PlayerType.UCT;
         playerColor = game.players[playerMoving].color;
         oppColor = game.players[opponentPlayer].color;
     }
@@ -79,9 +82,12 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         frameCounter++;
-        if (frameCounter >= 500 && player0Type != PlayerType.Human && player1Type != PlayerType.Human)
+
+        if ((player0Type != PlayerType.Human && player1Type != PlayerType.Human && frameCounter >= 500) ||
+            ((player0Type == PlayerType.Human || player1Type == PlayerType.Human) && humanPlayerEndedTurn))
         {
             frameCounter = 0;
+            humanPlayerEndedTurn = false;
             if (game.Win () == PlayerColor.None)
             {
                 var answer = game.players[playerMoving].MakeChoice (game.board, game.players[opponentPlayer]);
@@ -334,7 +340,13 @@ public class GameManager : MonoBehaviour
 
     public void EndHumanPlayerTurn()
     {
+        game.MoveChecker (game.board.fields[goalField.mctsX, goalField.mctsY], game.board.fields[startField.mctsX, startField.mctsY].checker.ID, playerMoving);
+
         humanPlayerEndedTurn = true;
+        playerMoving = (playerMoving + 1) % 2;
+        opponentPlayer = (opponentPlayer + 1) % 2;
+        playerColor = game.players[playerMoving].color;
+        oppColor = game.players[opponentPlayer].color;
     }
 
 }
