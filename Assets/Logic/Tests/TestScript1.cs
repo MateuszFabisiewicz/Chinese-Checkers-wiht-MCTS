@@ -88,15 +88,16 @@ public class TestScript1
     [Test]
     public void TwoUCTGameTest ()
     {
-        int i = 0, currPlayer = 0;
+        int i = 0, currPlayer = 0, oppPlayer = 1;
         Game testGame = new Game (PlayerType.UCT, PlayerType.UCT);
 
         while (testGame.Win () == PlayerColor.None && i < 100)
         {
             i++;
-            var answer = testGame.players[currPlayer].MakeChoice (testGame.board, testGame.players[1]);
+            var answer = testGame.players[currPlayer].MakeChoice (testGame.board, testGame.players[oppPlayer]);
             testGame.MoveChecker (answer.newField, answer.checkerIndex, currPlayer);
             currPlayer = (currPlayer + 1) % 2;
+            oppPlayer = (oppPlayer + 1) % 2;
         }
 
         if (i < 100)
@@ -118,15 +119,16 @@ public class TestScript1
     [Test]
     public void TwoAUCTGameTest ()
     {
-        int i = 0, currPlayer = 0;
+        int i = 0, currPlayer = 0, oppPlayer = 1;
         Game testGame = new Game (PlayerType.AUCT, PlayerType.AUCT);
 
         while (testGame.Win () == PlayerColor.None && i < 10)
         {
             i++;
-            var answer = testGame.players[currPlayer].MakeChoice (testGame.board, testGame.players[1]);
+            var answer = testGame.players[currPlayer].MakeChoice (testGame.board, testGame.players[oppPlayer]);
             testGame.MoveChecker (answer.newField, answer.checkerIndex, currPlayer);
             currPlayer = (currPlayer + 1) % 2;
+            oppPlayer = (oppPlayer + 1) % 2;
         }
 
         if (i < 10)
@@ -138,15 +140,16 @@ public class TestScript1
     [Test]
     public void AUCTAndUCTGameTest ()
     {
-        int i = 0, currPlayer = 0;
+        int i = 0, currPlayer = 0, oppPlayer = 1;
         Game testGame = new Game (PlayerType.AUCT, PlayerType.UCT);
 
         while (testGame.Win () == PlayerColor.None && i < 30)
         {
             i++;
-            var answer = testGame.players[currPlayer].MakeChoice (testGame.board, testGame.players[1]);
+            var answer = testGame.players[currPlayer].MakeChoice (testGame.board, testGame.players[oppPlayer]);
             testGame.MoveChecker (answer.newField, answer.checkerIndex, currPlayer);
             currPlayer = (currPlayer + 1) % 2;
+            oppPlayer = (oppPlayer + 1) % 2;
         }
 
         if (i < 30)
@@ -168,15 +171,16 @@ public class TestScript1
     [Test]
     public void TwoHeuristicGameTest ()
     {
-        int i = 0, currPlayer = 0;
+        int i = 0, currPlayer = 0, oppPlayer = 1;
         Game testGame = new Game (PlayerType.Heuristic, PlayerType.Heuristic);
 
         while (testGame.Win () == PlayerColor.None && i < 100)
         {
             i++;
-            var answer = testGame.players[currPlayer].MakeChoice (testGame.board, testGame.players[1]);
+            var answer = testGame.players[currPlayer].MakeChoice (testGame.board, testGame.players[oppPlayer]);
             testGame.MoveChecker (answer.newField, answer.checkerIndex, currPlayer);
             currPlayer = (currPlayer + 1) % 2;
+            oppPlayer = (oppPlayer + 1) % 2;
         }
 
         if (i < 100)

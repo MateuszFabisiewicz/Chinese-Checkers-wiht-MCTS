@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Assets.Logic;
@@ -44,9 +44,17 @@ public class GameManager : MonoBehaviour
     public Field[] player1Pawns;
     public Field[] player2Pawns;
     public bool canMove = false;
+    public bool humanPlaying = false;
     public Vector2 goalPosition;
     public Field goalField;
     public bool isPawnClicked = false;
+    public Game game;
+    public int playerMoving = 0;
+    public PlayerColor playerColor;
+    public int opponentPlayer = 1;
+    public PlayerColor oppColor;
+    public PlayerType player0Type = PlayerType.Heuristic;
+    public PlayerType player1Type = PlayerType.Heuristic;
 
     public GameObject player1PawnPrefab;
     public GameObject player2PawnPrefab;
@@ -58,12 +66,64 @@ public class GameManager : MonoBehaviour
         CreateBoard();
         CreatePlayer1();
         CreatePlayer2();
+
+        //player0Type = PlayerType.Heuristic;
+        //player1Type = PlayerType.Heuristic;
+        //game = new Game (player0Type, player1Type);
+        //playerMoving = 0;
+        //playerColor = game.players[playerMoving].color;
+        //opponentPlayer = 1;
+        //oppColor = game.players[opponentPlayer].color;
+
+        
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        //if (player0Type != PlayerType.Human && player1Type != PlayerType.Human)
+        //{
+        //    if (game.Win () == PlayerColor.None)
+        //    {
+        //        var answer = game.players[playerMoving].MakeChoice (game.board, game.players[opponentPlayer]);
+        //        var oldLogicField = game.board.FindCheckersPosition (answer.checkerIndex, playerColor);
+        //        Field oldField = fields.First (f => f.mctsX == oldLogicField.x && f.mctsY == oldLogicField.y);
+        //        Field newField = fields.First (f => f.mctsX == answer.newField.x && f.mctsY == answer.newField.y);
+
+        //        game.MoveChecker (answer.newField, answer.checkerIndex, playerMoving);
+        //        goalField = newField;
+        //        // znajdujemy checkersa który ma pozycję oldField i robimy dla niego move
+        //        for (int i = 0; i < playerPawnsNumber; i++)
+        //        {
+        //            if (playerMoving == 0)
+        //            {
+        //                if (player1Pawns[i].mctsX == oldField.mctsX && player1Pawns[i].mctsY == oldField.mctsY)
+        //                {
+        //                    player1Pawns[i].mctsX = newField.mctsX;
+        //                    player1Pawns[i].mctsY = newField.mctsY;
+        //                    player1Pawns[i].prefab.transform.position = new Vector3 (newField.prefab.transform.position.x, newField.prefab.transform.position.y, -1); // wygenerowane automatycznie, zobaczymy czy zadziała
+        //                    break;
+        //                }
+        //            }
+        //            else
+        //            {
+        //                if (player2Pawns[i].mctsX == oldField.mctsX && player2Pawns[i].mctsY == oldField.mctsY)
+        //                {
+        //                    player2Pawns[i].mctsX = newField.mctsX;
+        //                    player2Pawns[i].mctsY = newField.mctsY;
+        //                    player2Pawns[i].prefab.transform.position = new Vector3 (newField.prefab.transform.position.x, newField.prefab.transform.position.y, -1); // wygenerowane automatycznie, zobaczymy czy zadziała
+        //                    break;
+        //                }
+        //            }
+        //        }
+
+        //        playerMoving = (playerMoving + 1) % 2;
+        //        opponentPlayer = (opponentPlayer + 1) % 2;
+        //        playerColor = game.players[playerMoving].color;
+        //        oppColor = game.players[opponentPlayer].color; 
+        //    }
+        //}
     }
 
     void CreateBoard()
@@ -92,7 +152,7 @@ public class GameManager : MonoBehaviour
             y -= 0.5f;
         }
         
-        // konwersja wsp�rz�dnych planszy na wsp�rz�dne z Board
+        // konwersja wspó³rzêdnych planszy na wspó³rzêdne z Board
         int col = 0;
         int row = 16;
         
@@ -252,11 +312,11 @@ public class GameManager : MonoBehaviour
             pom = pom.Where(x => x.rowNumber >= 13);
         }
 
-        // brak ruch�w
+        // brak ruchów
         if(!pom.Any())
             return false;
 
-        // pod�wietl mo�liwe ruchy
+        // podœwietl mo¿liwe ruchy
         foreach (var field in pom)
         {
             field.prefab.transform.GetComponent<Renderer>().material.color = highlightColor;
