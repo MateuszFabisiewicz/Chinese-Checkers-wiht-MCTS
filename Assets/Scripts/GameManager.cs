@@ -107,6 +107,8 @@ public class GameManager : MonoBehaviour
                         {
                             player2Pawns[i].mctsX = newField.mctsX;
                             player2Pawns[i].mctsY = newField.mctsY;
+                            player2Pawns[i].columnNumber = newField.columnNumber;
+                            player2Pawns[i].rowNumber = newField.rowNumber;
                             player2Pawns[i].prefab.transform.position = new Vector3 (newField.prefab.transform.position.x, newField.prefab.transform.position.y, -1); // wygenerowane automatycznie, zobaczymy czy zadziała
                             break;
                         }
@@ -117,6 +119,8 @@ public class GameManager : MonoBehaviour
                         {
                             player1Pawns[i].mctsX = newField.mctsX;
                             player1Pawns[i].mctsY = newField.mctsY;
+                            player1Pawns[i].columnNumber = newField.columnNumber;
+                            player1Pawns[i].rowNumber = newField.rowNumber;
                             player1Pawns[i].prefab.transform.position = new Vector3 (newField.prefab.transform.position.x, newField.prefab.transform.position.y, -1); // wygenerowane automatycznie, zobaczymy czy zadziała
                             break;
                         }
