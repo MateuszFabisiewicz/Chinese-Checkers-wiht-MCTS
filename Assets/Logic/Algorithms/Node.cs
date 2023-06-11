@@ -25,7 +25,6 @@ namespace Assets.Logic.Algorithms
 
         public int visitCount { get; set; } // N
 
-        //public Board state { get; private set; }
         public FieldInBoard[,] state { get; private set; }
 
         public double velocity { get; set; } // dla gracza AUCT
@@ -40,7 +39,6 @@ namespace Assets.Logic.Algorithms
 
         public Node (Board state, Node parentNode)
         {
-            //this.state = state;
             this.state = CopyBoard (state.fields);
             this.parent = parentNode;
             children = new List<Node> ();
@@ -50,7 +48,6 @@ namespace Assets.Logic.Algorithms
 
         public Node (FieldInBoard[,] fields, Node parentNode, int changedChecker, FieldInBoard fieldOfChecker, PlayerColor player)
         {
-            //this.state = state;
             this.state = CopyBoard (fields);
             this.parent = parentNode;
             children = new List<Node> ();
@@ -127,7 +124,7 @@ namespace Assets.Logic.Algorithms
                 {
                     Checker checker = new Checker (field.checker);
 
-                    Node node = new Node (result.newState, this, checker.ID, result.newField, color);//(newState, this, checker.ID, result.newField, color);
+                    Node node = new Node (result.newState, this, checker.ID, result.newField, color);
                     children.Add (node);
                 }
 
@@ -146,7 +143,6 @@ namespace Assets.Logic.Algorithms
                 && fields[end.x, end.y].playerOnField == PlayerColor.None &&
                 ((isInOpponent && fields[end.x, end.y].fieldType == opponentColor) || !isInOpponent))
             {
-                //Board newState = new Board (board, oldField, board.fields[end.x, end.y]);
                 FieldInBoard[,] newState = CopyBoardWithMove (fields, (oldField.x, oldField.y), end, playerColor);
 
                 Node node = new Node (newState, this, oldField.checker.ID, newState[end.x, end.y], oldField.checker.color);
@@ -195,8 +191,7 @@ namespace Assets.Logic.Algorithms
                 }
             }
             newState[end.x, end.y].playerOnField = player;
-            newState[end.x, end.y].checker = fields[oldField.x, oldField.y].checker; //new Checker (oldField.checker);
-            //newState[end.x, end.y].checker.SetPosition (fields[end.x, end.y]);
+            newState[end.x, end.y].checker = fields[oldField.x, oldField.y].checker; 
             newState[oldField.x, oldField.y].playerOnField = PlayerColor.None;
             newState[oldField.x, oldField.y].checker = null;
 
@@ -216,7 +211,6 @@ namespace Assets.Logic.Algorithms
                 && end.x != originalPlace.x && end.y != lastPlace.y &&
                 ((isInOpponent && fields[end.x, end.y].fieldType == opponentColor) || !isInOpponent))
             {
-                //Board newState = new Board (board, oldField, board.fields[end.x, end.y]);
                 FieldInBoard[,] newState = CopyBoardWithMove (fields, (oldField.x, oldField.y), end, playerColor);
 
                 jumps.Add ((newState[end.x, end.y], newState));
@@ -252,7 +246,6 @@ namespace Assets.Logic.Algorithms
                 jumps.Add (addJumps[i]);
             }
             addJumps.Clear ();
-            //jumps.AddRange (OneJump ((oldField.x, oldField.y + 2), (oldField.x, oldField.y + 1), board, oldField, lastPlace, originalPlace, playerColor));
 
             addJumps = OneJump ((oldField.x + 2, oldField.y), (oldField.x + 1, oldField.y), fields, oldField, lastPlace, originalPlace, playerColor, jumpCounter + 1);
             for (int i = 0; i < addJumps.Count; i++)
@@ -262,7 +255,6 @@ namespace Assets.Logic.Algorithms
                 jumps.Add (addJumps[i]);
             }
             addJumps.Clear ();
-            //jumps.AddRange (OneJump ((oldField.x + 2, oldField.y), (oldField.x + 1, oldField.y), board, oldField, lastPlace, originalPlace, playerColor));
 
             addJumps = OneJump ((oldField.x, oldField.y - 2), (oldField.x, oldField.y - 1), fields, oldField, lastPlace, originalPlace, playerColor, jumpCounter + 1);
             for (int i = 0; i < addJumps.Count; i++)
@@ -272,7 +264,6 @@ namespace Assets.Logic.Algorithms
                 jumps.Add (addJumps[i]);
             }
             addJumps.Clear ();
-            //jumps.AddRange (OneJump ((oldField.x, oldField.y - 2), (oldField.x, oldField.y - 1), board, oldField, lastPlace, originalPlace, playerColor));
 
             addJumps = OneJump ((oldField.x - 2, oldField.y), (oldField.x - 1, oldField.y), fields, oldField, lastPlace, originalPlace, playerColor, jumpCounter + 1);
             for (int i = 0; i < addJumps.Count; i++)
@@ -282,7 +273,6 @@ namespace Assets.Logic.Algorithms
                 jumps.Add (addJumps[i]);
             }
             addJumps.Clear ();
-            //jumps.AddRange (OneJump ((oldField.x - 2, oldField.y), (oldField.x - 1, oldField.y), board, oldField, lastPlace, originalPlace, playerColor));
 
             addJumps = OneJump ((oldField.x + 2, oldField.y - 2), (oldField.x + 1, oldField.y - 1), fields, oldField, lastPlace, originalPlace, playerColor, jumpCounter + 1);
             for (int i = 0; i < addJumps.Count; i++)
@@ -292,7 +282,6 @@ namespace Assets.Logic.Algorithms
                 jumps.Add (addJumps[i]);
             }
             addJumps.Clear ();
-            //jumps.AddRange (OneJump ((oldField.x + 2, oldField.y - 2), (oldField.x + 1, oldField.y - 1), board, oldField, lastPlace, originalPlace, playerColor));
 
             addJumps = OneJump ((oldField.x - 2, oldField.y + 2), (oldField.x - 1, oldField.y + 1), fields, oldField, lastPlace, originalPlace, playerColor, jumpCounter + 1);
             for (int i = 0; i < addJumps.Count; i++)
@@ -302,7 +291,6 @@ namespace Assets.Logic.Algorithms
                 jumps.Add (addJumps[i]);
             }
             addJumps.Clear ();
-            //jumps.AddRange (OneJump ((oldField.x - 2, oldField.y + 2), (oldField.x - 1, oldField.y + 1), board, oldField, lastPlace, originalPlace, playerColor));
 
             return jumps;
         }
@@ -346,7 +334,6 @@ namespace Assets.Logic.Algorithms
 
         public void UpdateAccWinRation (PlayerColor color)
         {
-            //this.accWinRation = 0;
             if (this.children.Count == 0)
             {
                 this.accWinRation = Board.IsWinning (color, state);

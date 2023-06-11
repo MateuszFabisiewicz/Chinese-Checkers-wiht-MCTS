@@ -76,22 +76,15 @@ public class Game
             {
                 board.fields[i, j].playerOnField = players[0].color;
                 board.fields[i, j].checker = players[0].checkers[checkerIndex];
-                //players[0].checkers[checkerIndex].SetPosition (board.fields[i, j]);
                 players[0].checkers[checkerIndex].SetStartingPosition (board.fields[i, j]);
 
                 board.fields[Board.side - i - 1, Board.side - j - 1].playerOnField = players[1].color;
                 board.fields[Board.side - i - 1, Board.side - j - 1].checker = players[1].checkers[checkerIndex];
-                //players[1].checkers[checkerIndex].SetPosition (board.fields[Board.side - i - 1, Board.side - j - 1]);
                 players[1].checkers[checkerIndex].SetStartingPosition (board.fields[Board.side - i - 1, Board.side - j - 1]);
 
                 checkerIndex++;
             }
         }
-    }
-
-    public void Start ()
-    {
-
     }
 
     public PlayerColor Win ()
@@ -128,7 +121,6 @@ public class Game
 
         board.fields[newField.x, newField.y].playerOnField = players[playerWhoMoved].color;
         board.fields[newField.x, newField.y].checker = players[playerWhoMoved].checkers[checkerIndex];
-        //players[playerWhoMoved].checkers[checkerIndex].SetPosition (newField);
 
         board.fields[oldField.x, oldField.y].playerOnField = PlayerColor.None;
         board.fields[oldField.x, oldField.y].checker = null;
