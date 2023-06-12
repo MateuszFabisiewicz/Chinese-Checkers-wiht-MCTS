@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Scripting.APIUpdating;
 
-public class Board // może być interpretowana jak stan gry
+public class Board
 {
     public const int side = 9; // liczba pól na boku
     public const int triangleSide = 4; // wielkość boku trójkąta gracza
@@ -59,10 +59,6 @@ public class Board // może być interpretowana jak stan gry
                 newField.fieldType = oldBoard.fields[i, j].fieldType;
                 newField.playerOnField = oldBoard.fields[i, j].playerOnField;
                 newField.checker = oldBoard.fields[i, j].checker != null ? oldBoard.fields[i, j].checker : null;
-                //if (newField.checker != null) // potrzebne??
-                //{
-                //    newField.checker.SetPosition (newField);
-                //}
 
                 fields[i, j] = newField;
             }
@@ -171,37 +167,6 @@ public class Board // może być interpretowana jak stan gry
             }
         }
 
-        //for (int i = 0; i < triangleSide; i++)
-        //{
-        //    for (int j = 0; j < triangleSide; j++)
-        //    {
-        //        // if (fields[i, j].fieldType != PlayerColor.None) -- tylko takie rozważamy
-        //        if (fields[i, j].playerOnField != PlayerColor.None)
-        //        {
-        //            if (fields[i, j].playerOnField == color && fields[i, j].fieldType != color)
-        //            {
-        //                playerCounter++;
-        //            }
-        //            else if (fields[i, j].playerOnField != color && fields[i, j].fieldType == color)
-        //            {
-        //                opponentCounter++;
-        //            }
-        //        }
-
-        //        if (fields[side - i - 1, side - j - 1].playerOnField != PlayerColor.None)
-        //        {
-        //            if (fields[side - i - 1, side - j - 1].playerOnField == color && fields[side - i - 1, side - j - 1].fieldType != color)
-        //            {
-        //                playerCounter++;
-        //            }
-        //            else if (fields[side - i - 1, side - j - 1].playerOnField != color && fields[side - i - 1, side - j - 1].fieldType == color)
-        //            {
-        //                opponentCounter++;
-        //            }
-        //        }
-        //    }
-        //}
-
         if (playerCounter == Game.checkerCount)
         {
             return 1;
@@ -214,11 +179,6 @@ public class Board // może być interpretowana jak stan gry
         {
             // odległość "najwyższego pionka" od przeciwnej strony i też to ile mamy nie ruszony w ogóle
 
-            //if (playerCounter == 0)
-            //{
-            //    return playerMovedOut / (2 * Game.checkerCount); // żeby dawało mniejsze "wygranie" niż faktyczne dotarcie do trójkąta
-            //}
-
             return (double)playerCounter / (double)Game.checkerCount;
         }
     }
@@ -227,7 +187,6 @@ public class Board // może być interpretowana jak stan gry
     {
         fields[newField.x, newField.y].playerOnField = oldField.playerOnField;
         fields[newField.x, newField.y].checker = new Checker (oldField.checker);
-        //fields[newField.x, newField.y].checker.SetPosition (fields[newField.x, newField.y]);
 
         fields[oldField.x, oldField.y].playerOnField = PlayerColor.None;
         fields[oldField.x, oldField.y].checker = null;

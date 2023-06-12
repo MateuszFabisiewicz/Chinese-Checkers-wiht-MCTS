@@ -81,8 +81,10 @@ namespace Assets.Logic.Algorithms
 
             // zwracamy ruch z największą wartością heurystyki
             possibleMoves.Sort ((x, y) => y.heuristic.CompareTo (x.heuristic));
-            //possibleMoves.OrderByDescending (x => x.heuristic);
-            return (possibleMoves[0].newField, possibleMoves[0].checkerId, color);
+            if (possibleMoves.Count > 0)
+                return (possibleMoves[0].newField, possibleMoves[0].checkerId, color);
+            else
+                return (board.FindCheckersPosition (0, color), 0, color); // z jakiegoś powodu brak ruchów - nie ruszamy się
         }
 
         private List<(FieldInBoard newField, int checkerId, double heuristic)> GenerateMoves (Board board, Player opponentStats, PlayerColor color)
@@ -139,8 +141,6 @@ namespace Assets.Logic.Algorithms
                 moves.Add (addMoves[i]);
             }
             addMoves.Clear ();
-            //if (moves.Count < maxList)
-            //    moves.AddRange (OneJump (startField, board, (startField.x, startField.y - 2), (startField.x, startField.y - 1), previousPlace));
 
             addMoves = OneJump (startField, board, (startField.x + 2, startField.y), (startField.x + 1, startField.y), previousPlace, jumpCounter + 1);
             for (int i = 0; i < addMoves.Count; i++)
@@ -150,8 +150,6 @@ namespace Assets.Logic.Algorithms
                 moves.Add (addMoves[i]);
             }
             addMoves.Clear ();
-            //if (moves.Count < maxList)
-            //    moves.AddRange (OneJump (startField, board, (startField.x + 2, startField.y), (startField.x + 1, startField.y), previousPlace));
 
             addMoves = OneJump (startField, board, (startField.x - 2, startField.y), (startField.x - 1, startField.y), previousPlace, jumpCounter + 1);
             for (int i = 0; i < addMoves.Count; i++)
@@ -161,8 +159,6 @@ namespace Assets.Logic.Algorithms
                 moves.Add (addMoves[i]);
             }
             addMoves.Clear ();
-            //if (moves.Count < maxList)
-            //    moves.AddRange (OneJump (startField, board, (startField.x - 2, startField.y), (startField.x - 1, startField.y), previousPlace));
 
             addMoves = OneJump (startField, board, (startField.x - 2, startField.y + 2), (startField.x - 1, startField.y + 1), previousPlace, jumpCounter + 1);
             for (int i = 0; i < addMoves.Count; i++)
@@ -172,8 +168,6 @@ namespace Assets.Logic.Algorithms
                 moves.Add (addMoves[i]);
             }
             addMoves.Clear ();
-            //if (moves.Count < maxList)
-            //    moves.AddRange (OneJump (startField, board, (startField.x - 2, startField.y + 2), (startField.x - 1, startField.y + 1), previousPlace));
 
             addMoves = OneJump (startField, board, (startField.x + 2, startField.y - 2), (startField.x + 1, startField.y - 1), previousPlace, jumpCounter + 1);
             for (int i = 0; i < addMoves.Count; i++)
@@ -183,8 +177,6 @@ namespace Assets.Logic.Algorithms
                 moves.Add (addMoves[i]);
             }
             addMoves.Clear ();
-            //if (moves.Count < maxList)
-            //    moves.AddRange (OneJump (startField, board, (startField.x + 2, startField.y - 2), (startField.x + 1, startField.y - 1), previousPlace));
 
             return moves;
         }
@@ -214,7 +206,6 @@ namespace Assets.Logic.Algorithms
                         moves.Add (addMoves[i]);
                     }
                     addMoves.Clear ();
-                    //moves.AddRange (addMoves);
                 }
             }
 
@@ -334,25 +325,22 @@ namespace Assets.Logic.Algorithms
                 }
             }
 
-            //if (!inOpponent)
-            //{
-                if (color == PlayerColor.Blue)
+            if (color == PlayerColor.Blue)
+            {
+                // backward jest gdy x lub y były zmniejszone
+                if (newField.x >= oldField.x && newField.y >= oldField.y)
                 {
-                    // backward jest gdy x lub y były zmniejszone
-                    if (newField.x >= oldField.x && newField.y >= oldField.y)
-                    {
-                        heuristic += forwardMove;
-                    }
+                    heuristic += forwardMove;
                 }
-                else // RED
+            }
+            else // RED
+            {
+                // backward jest gdy x lub y były zwiększone
+                if (newField.x <= oldField.x && newField.y <= oldField.y)
                 {
-                    // backward jest gdy x lub y były zwiększone
-                    if (newField.x <= oldField.x && newField.y <= oldField.y)
-                    {
-                        heuristic += forwardMove;
-                    }
+                    heuristic += forwardMove;
                 }
-            //}
+            }
 
             return heuristic;
         }

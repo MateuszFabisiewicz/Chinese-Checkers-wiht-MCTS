@@ -57,8 +57,10 @@ public class GameManager : MonoBehaviour
     public PlayerColor playerColor;
     public int opponentPlayer = 1;
     public PlayerColor oppColor;
+
     public PlayerType player0Type;
     public PlayerType player1Type;
+
     public int frameCounter = 0;
 
     public GameObject player1PawnPrefab;
@@ -98,6 +100,7 @@ public class GameManager : MonoBehaviour
 
         //player0Dropdown = canvas.transform.GetChild(0).GetComponent<Dropdown>();
         //Debug.Log(player0Dropdown);
+
     }
 
     // Update is called once per frame
@@ -126,27 +129,23 @@ public class GameManager : MonoBehaviour
                     {
                         if (playerMoving == 0)
                         {
-                            if (player2Pawns[i].mctsX == oldField.mctsX && player2Pawns[i].mctsY == oldField.mctsY)
-                            {
-                                player2Pawns[i].mctsX = newField.mctsX;
-                                player2Pawns[i].mctsY = newField.mctsY;
-                                player2Pawns[i].columnNumber = newField.columnNumber;
-                                player2Pawns[i].rowNumber = newField.rowNumber;
-                                player2Pawns[i].prefab.transform.position = new Vector3(newField.prefab.transform.position.x, newField.prefab.transform.position.y, -1); // wygenerowane automatycznie, zobaczymy czy zadziała
-                                break;
-                            }
+
+                            player2Pawns[i].mctsX = newField.mctsX;
+                            player2Pawns[i].mctsY = newField.mctsY;
+                            player2Pawns[i].columnNumber = newField.columnNumber;
+                            player2Pawns[i].rowNumber = newField.rowNumber;
+                            player2Pawns[i].prefab.transform.position = new Vector3 (newField.prefab.transform.position.x, newField.prefab.transform.position.y, -1); 
+                            break;
+
                         }
                         else
                         {
-                            if (player1Pawns[i].mctsX == oldField.mctsX && player1Pawns[i].mctsY == oldField.mctsY)
-                            {
-                                player1Pawns[i].mctsX = newField.mctsX;
-                                player1Pawns[i].mctsY = newField.mctsY;
-                                player1Pawns[i].columnNumber = newField.columnNumber;
-                                player1Pawns[i].rowNumber = newField.rowNumber;
-                                player1Pawns[i].prefab.transform.position = new Vector3(newField.prefab.transform.position.x, newField.prefab.transform.position.y, -1); // wygenerowane automatycznie, zobaczymy czy zadziała
-                                break;
-                            }
+                            player1Pawns[i].mctsX = newField.mctsX;
+                            player1Pawns[i].mctsY = newField.mctsY;
+                            player1Pawns[i].columnNumber = newField.columnNumber;
+                            player1Pawns[i].rowNumber = newField.rowNumber;
+                            player1Pawns[i].prefab.transform.position = new Vector3 (newField.prefab.transform.position.x, newField.prefab.transform.position.y, -1);
+                            break;
                         }
                     }
 
@@ -185,7 +184,7 @@ public class GameManager : MonoBehaviour
             y -= 0.5f;
         }
         
-        // konwersja wspó³rzêdnych planszy na wspó³rzêdne z Board
+        // konwersja współrzędnych planszy na współrzędne z Board
         int col = 0;
         int row = 16;
         
@@ -349,7 +348,7 @@ public class GameManager : MonoBehaviour
         if(!pom.Any())
             return false;
 
-        // podœwietl mo¿liwe ruchy
+        // podświetl możliwe ruchy
         foreach (var field in pom)
         {
             field.prefab.transform.GetComponent<Renderer>().material.color = highlightColor;
@@ -369,8 +368,6 @@ public class GameManager : MonoBehaviour
 
     public void EndHumanPlayerTurn()
     {
-        //game.MoveChecker (game.board.fields[goalField.mctsX, goalField.mctsY], movedCheckerId, playerMoving); //game.board.fields[startField.mctsX, startField.mctsY].checker.ID
-
         humanPlayerEndedTurn = true;
         playerMoving = (playerMoving + 1) % 2;
         opponentPlayer = (opponentPlayer + 1) % 2;

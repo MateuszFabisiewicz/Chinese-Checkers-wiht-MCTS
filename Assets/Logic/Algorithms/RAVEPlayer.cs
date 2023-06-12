@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ namespace Assets.Logic.Algorithms
 {
     public class RAVEPlayer : UCTPlayer
     {
-        private double b = 0.5; // chyba?
+        private double b = 0.5;
 
         public RAVEPlayer(PlayerColor color,int seed) : base(color,seed)
         {
@@ -32,9 +32,9 @@ namespace Assets.Logic.Algorithms
            
             return node;
         }
-        internal override void Backpropagate(Node leaf, Node simulationResult) // leaf niepotrzebny?
+        internal override void Backpropagate(Node leaf, Node simulationResult)
         {
-            //idziemy od simulationResult po parentach, a¿ dojdziemy do leaf
+            //idziemy od simulationResult po parentach, aÅ¼ dojdziemy do leaf
             simulationResult.UpdateWinningProbability(color);
             simulationResult.UpdateRAVEWinRationAndRAVEVisitCount(color);
 
@@ -49,7 +49,7 @@ namespace Assets.Logic.Algorithms
         }
 
         // n - liczba wizyt w stanie
-        // nn - liczba wszystkich symulacji zawieraj¹cych ruch i
+        // nn - liczba wszystkich symulacji zawierajÂ¹cych ruch i
         private double Beta(int n, int nn)
         {
             return nn / (n + nn + 4 * b * b * n * nn);

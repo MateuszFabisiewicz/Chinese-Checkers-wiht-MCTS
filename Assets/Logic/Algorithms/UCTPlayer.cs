@@ -23,13 +23,13 @@ namespace Assets.Logic.Algorithms
         public override (FieldInBoard, int, PlayerColor) MakeChoice (Board board, Player opponentStats)
         {
             root = new Node (board, null);
-            root.winningProbability = 0.5; // lub 0, jeszcze rozważyć
+            root.winningProbability = 0.5;
 
             bool childrenGenerated = root.GenerateChildren (this.color); // tworzymy startowe drzewo - póki co tylko dzieci root, każde z szansą 0.5 wygranej,
                                                                          // chyba że akurat jest wygrana
 
             int i = 0;
-            while (i < loopCount) // ileś loopów
+            while (i < loopCount)
             {
                 Node leaf = Traverse (root); // wybieramy liść do rozbudowy
                 Expand (leaf);
@@ -46,28 +46,12 @@ namespace Assets.Logic.Algorithms
 
         private Node BestChild (Node root)
         {
-            //double currentBest = 0;
-            //Node bestChild = null;
-
             root.children.Sort ((x, y) => x.winningProbability.CompareTo (y.winningProbability));
-            //foreach (Node child in root.children)
-            //{
-            //    if (child.winningProbability > currentBest)
-            //    {
-            //        currentBest = child.winningProbability;
-            //        bestChild = child;
-            //    }
-            //}
-
-            //if (bestChild == null)
-            //{
-            //    bestChild = root.children[0];
-            //}
 
             return root.children.Last ();
         }
 
-        internal virtual void Backpropagate (Node leaf, Node simulationResult) // leaf niepotrzebny?
+        internal virtual void Backpropagate (Node leaf, Node simulationResult) 
         {
             //idziemy od simulationResult po parentach, aż dojdziemy do leaf
             simulationResult.UpdateWinningProbability (color);
@@ -85,20 +69,19 @@ namespace Assets.Logic.Algorithms
             Node node = leaf;
             while (node.children.Count > 0) // póki możemy iść dalej
             {
-                //stosujemy random rollout policy --zmienić też na UCT ??
-                //Random random = new Random ();
+                //stosujemy random rollout policy
+                Random random = new Random ();
+
                 int randomIndex = random.Next (0, node.children.Count);
                 node = node.children[randomIndex];
-
-                //node = BestUCT (node);
             }
 
             return node; // zwracamy końcowy node
         }
 
-        internal virtual Node Traverse (Node root) // selection/exploration and exploitation
+        internal virtual Node Traverse (Node root)
         {
-            // choose node according to UCT policy
+            // zgodnie z UCT
             Node node = root;
 
             while (node.children.Count != 0)
@@ -119,7 +102,7 @@ namespace Assets.Logic.Algorithms
         {
             for (int i = 0; i < node.children.Count; i++)
             {
-                if (node.children[i].visitCount == 1) // bo przy tworzeniu już dałam 1, i nie pamiętam dlaczego ale na razie tak zostawmy
+                if (node.children[i].visitCount == 1) // tworzenie ustawia visitCount na 1
                 {
                     return node.children[i];
                 }
@@ -150,15 +133,6 @@ namespace Assets.Logic.Algorithms
             if (leaf.children.Count == 0)
             {
                 bool expanded = leaf.GenerateChildren (this.color);
-
-                //if (expanded) // powstały dzieci, możemy iść dalej
-                //{
-                //    foreach (Node child in leaf.children)
-                //    {
-                //        child.GenerateChildren (this.color);
-                //        //Expand (child);
-                //    }
-                //}
             }
         }
     }

@@ -9,7 +9,7 @@ namespace Assets.Logic.Algorithms
 {
     public class AUCTPlayer : UCTPlayer
     {
-        internal double lambda = 0.5; // do przetestowania ewentualnie
+        internal double lambda = 0.5;
 
         public AUCTPlayer (PlayerColor color,int seed) : base (color, seed)
         {
@@ -59,22 +59,6 @@ namespace Assets.Logic.Algorithms
             return node;
         }
 
-        //internal override Node Rollout (Node leaf)
-        //{
-        //    Node node = leaf;
-        //    while (node.children.Count > 0) // póki możemy iść dalej
-        //    {
-        //         stosujemy random rollout policy -- zmienić też na UCT??
-        //        Random random = new Random ();
-        //        int randomIndex = random.Next (0, node.children.Count);
-        //        node = node.children[randomIndex];
-
-        //        node = BestAUCT (node);
-        //    }
-
-        //    return node; // zwracamy końcowy node
-        //}
-
         // zmieniamy BestUCT na BestAUCT
         internal Node BestAUCT(Node node)
         {
@@ -82,8 +66,6 @@ namespace Assets.Logic.Algorithms
 
             for (int i = 0; i < node.children.Count; i++)
             {
-                //node.children[i].velocity = lambda * node.children[i].velocity;
-                //node.children[i].UpdateAccWinRation (color); // chyba?
                 AUCTValues[i] = node.children[i].accWinRation + C * Math.Sqrt (Math.Log (node.visitCount) / node.children[i].visitCount);
             }
 
