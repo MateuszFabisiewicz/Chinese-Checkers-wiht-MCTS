@@ -1,5 +1,4 @@
-﻿using Codice.CM.Client.Differences;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -7,9 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Unity.Jobs.LowLevel.Unsafe;
 using UnityEngine;
-using static Codice.Client.BaseCommands.WkStatus.Printers.StatusChangeInfo;
-using static PlasticPipe.PlasticProtocol.Messages.Serialization.ItemHandlerMessagesSerialization;
-using static UnityEditor.Graphs.Styles;
 
 namespace Assets.Logic.Algorithms
 {
