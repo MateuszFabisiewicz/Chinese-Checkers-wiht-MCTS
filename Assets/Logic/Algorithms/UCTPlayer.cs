@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TreeEditor;
 using Unity.VisualScripting;
 using UnityEngine.SocialPlatforms.Impl;
 
@@ -13,10 +12,12 @@ namespace Assets.Logic.Algorithms
     {
         internal int loopCount = 1500;
         internal double C = Math.Sqrt (2); // stała eksploracji
+        Random random;
 
-        public UCTPlayer (PlayerColor color) : base (color)
+        public UCTPlayer (PlayerColor color,int seed) : base (color)
         {
             type = PlayerType.UCT;
+            random = new Random (seed);
         }
 
         public override (FieldInBoard, int, PlayerColor) MakeChoice (Board board, Player opponentStats)
@@ -70,6 +71,7 @@ namespace Assets.Logic.Algorithms
             {
                 //stosujemy random rollout policy
                 Random random = new Random ();
+
                 int randomIndex = random.Next (0, node.children.Count);
                 node = node.children[randomIndex];
             }

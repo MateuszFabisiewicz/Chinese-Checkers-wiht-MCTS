@@ -13,7 +13,7 @@ public class Game
     public Player[] players = new Player[playerCount];
 
 
-    public Game (PlayerType playerBlue, PlayerType playerRed)
+    public Game (PlayerType playerBlue, PlayerType playerRed,int seed=123)
     {
         // tworzymy graczy
         switch (playerBlue)
@@ -23,15 +23,15 @@ public class Game
                 break;
 
             case PlayerType.UCT:
-                players[0] = new UCTPlayer (PlayerColor.Blue);
+                players[0] = new UCTPlayer (PlayerColor.Blue,seed);
                 break;
 
             case PlayerType.RAVE:
-                players[0] = new RAVEPlayer (PlayerColor.Blue);
+                players[0] = new RAVEPlayer (PlayerColor.Blue,seed);
                 break;
 
             case PlayerType.AUCT:
-                players[0] = new AUCTPlayer (PlayerColor.Blue);
+                players[0] = new AUCTPlayer (PlayerColor.Blue,seed);
                 break;
 
             case PlayerType.Heuristic:
@@ -46,21 +46,22 @@ public class Game
                 break;
 
             case PlayerType.UCT:
-                players[1] = new UCTPlayer (PlayerColor.Red);
+                players[1] = new UCTPlayer (PlayerColor.Red,seed);
                 break;
 
             case PlayerType.RAVE:
-                players[1] = new RAVEPlayer (PlayerColor.Red);
+                players[1] = new RAVEPlayer (PlayerColor.Red, seed);
                 break;
 
             case PlayerType.AUCT:
-                players[1] = new AUCTPlayer (PlayerColor.Red);
+                players[1] = new AUCTPlayer (PlayerColor.Red,seed);
                 break;
 
             case PlayerType.Heuristic:
                 players[1] = new HeuristicPlayer (PlayerColor.Red);
                 break;
         }
+
 
         players[0].id = 0;
         players[1].id = 1;

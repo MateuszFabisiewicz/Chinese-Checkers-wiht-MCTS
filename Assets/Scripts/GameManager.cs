@@ -4,6 +4,8 @@ using UnityEngine;
 using Assets.Logic;
 using System;
 using System.Linq;
+using UnityEngine.UI;
+using TMPro;
 
 [System.Serializable]
 public class Field: IEquatable<Field>
@@ -55,8 +57,10 @@ public class GameManager : MonoBehaviour
     public PlayerColor playerColor;
     public int opponentPlayer = 1;
     public PlayerColor oppColor;
-    public PlayerType player0Type = PlayerType.Human; // ustawiać w edytorze unity
-    public PlayerType player1Type = PlayerType.UCT;
+
+    public PlayerType player0Type;
+    public PlayerType player1Type;
+
     public int frameCounter = 0;
 
     public GameObject player1PawnPrefab;
@@ -65,55 +69,76 @@ public class GameManager : MonoBehaviour
 
     public bool humanPlayerEndedTurn = false;
 
+    private TMP_Dropdown player0Dropdown;
+    private TMP_Dropdown player1Dropdown;
+    private TMP_InputField seedInputField;
+    private bool gameStarted = false;
+
+    private void Awake()
+    {
+        
+    }
+
     // Start is called before the first frame update
     void Start()
     {
+
+        seedInputField = GameObject.Find("SeedInputField").GetComponent<TMP_InputField>();
+        player0Dropdown = GameObject.Find("Player1Dropdown").GetComponent<TMP_Dropdown>();
+        PopulateDropDownWithEnum(player0Dropdown, player0Type);
+        player1Dropdown = GameObject.Find("Player2Dropdown").GetComponent<TMP_Dropdown>();
+        PopulateDropDownWithEnum(player1Dropdown, player1Type);
         CreateBoard();
         CreatePlayer1();
         CreatePlayer2();
 
-        game = new Game (player0Type, player1Type);
-        playerColor = game.players[playerMoving].color;
-        oppColor = game.players[opponentPlayer].color;
+        //game = new Game (player0Type, player1Type);
+        //player0Type = PlayerType.Human;
+        //player1Type = PlayerType.UCT;
+        //playerColor = game.players[playerMoving].color;
+        //oppColor = game.players[opponentPlayer].color;
+
+        //player0Dropdown = canvas.transform.GetChild(0).GetComponent<Dropdown>();
+        //Debug.Log(player0Dropdown);
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        frameCounter++;
-
-        if ((player0Type != PlayerType.Human && player1Type != PlayerType.Human && frameCounter >= 200) ||
-            ((player0Type == PlayerType.Human || player1Type == PlayerType.Human) && humanPlayerEndedTurn))
+        if (gameStarted)
         {
-            frameCounter = 0;
-            humanPlayerEndedTurn = false;
-            if (game.Win () == PlayerColor.None)
-            {
-                var answer = game.players[playerMoving].MakeChoice (game.board, game.players[opponentPlayer]);
-                var oldLogicField = game.board.FindCheckersPosition (answer.checkerIndex, playerColor);
-                Field oldField = fields.First (f => f.mctsX == oldLogicField.x && f.mctsY == oldLogicField.y);
-                Field newField = fields.First (f => f.mctsX == answer.newField.x && f.mctsY == answer.newField.y);
+            frameCounter++;
 
-                game.MoveChecker (answer.newField, answer.checkerIndex, playerMoving);
-                goalField = newField;
-                // znajdujemy checkersa który ma pozycję oldField i robimy dla niego move
-                for (int i = 0; i < playerPawnsNumber; i++)
+            if ((player0Type != PlayerType.Human && player1Type != PlayerType.Human && frameCounter >= 200) ||
+                ((player0Type == PlayerType.Human || player1Type == PlayerType.Human) && humanPlayerEndedTurn))
+            {
+                frameCounter = 0;
+                humanPlayerEndedTurn = false;
+                if (game.Win() == PlayerColor.None)
                 {
-                    if (playerMoving == 0)
+                    var answer = game.players[playerMoving].MakeChoice(game.board, game.players[opponentPlayer]);
+                    var oldLogicField = game.board.FindCheckersPosition(answer.checkerIndex, playerColor);
+                    Field oldField = fields.First(f => f.mctsX == oldLogicField.x && f.mctsY == oldLogicField.y);
+                    Field newField = fields.First(f => f.mctsX == answer.newField.x && f.mctsY == answer.newField.y);
+
+                    game.MoveChecker(answer.newField, answer.checkerIndex, playerMoving);
+                    goalField = newField;
+                    // znajdujemy checkersa który ma pozycję oldField i robimy dla niego move
+                    for (int i = 0; i < playerPawnsNumber; i++)
                     {
-                        if (player2Pawns[i].mctsX == oldField.mctsX && player2Pawns[i].mctsY == oldField.mctsY)
+                        if (playerMoving == 0)
                         {
+
                             player2Pawns[i].mctsX = newField.mctsX;
                             player2Pawns[i].mctsY = newField.mctsY;
                             player2Pawns[i].columnNumber = newField.columnNumber;
                             player2Pawns[i].rowNumber = newField.rowNumber;
                             player2Pawns[i].prefab.transform.position = new Vector3 (newField.prefab.transform.position.x, newField.prefab.transform.position.y, -1); 
                             break;
+
                         }
-                    }
-                    else
-                    {
-                        if (player1Pawns[i].mctsX == oldField.mctsX && player1Pawns[i].mctsY == oldField.mctsY)
+                        else
                         {
                             player1Pawns[i].mctsX = newField.mctsX;
                             player1Pawns[i].mctsY = newField.mctsY;
@@ -123,12 +148,12 @@ public class GameManager : MonoBehaviour
                             break;
                         }
                     }
-                }
 
-                playerMoving = (playerMoving + 1) % 2;
-                opponentPlayer = (opponentPlayer + 1) % 2;
-                playerColor = game.players[playerMoving].color;
-                oppColor = game.players[opponentPlayer].color;
+                    playerMoving = (playerMoving + 1) % 2;
+                    opponentPlayer = (opponentPlayer + 1) % 2;
+                    playerColor = game.players[playerMoving].color;
+                    oppColor = game.players[opponentPlayer].color;
+                }
             }
         }
     }
@@ -348,6 +373,35 @@ public class GameManager : MonoBehaviour
         opponentPlayer = (opponentPlayer + 1) % 2;
         playerColor = game.players[playerMoving].color;
         oppColor = game.players[opponentPlayer].color;
+    }
+
+    public static void PopulateDropDownWithEnum(TMP_Dropdown dropdown, Enum targetEnum)//You can populate any dropdown with any enum with this method
+    {
+        Type enumType = targetEnum.GetType();//Type of enum(FormatPresetType in my example)
+        List<TMP_Dropdown.OptionData> newOptions = new();
+
+        for (int i = 0; i < Enum.GetNames(enumType).Length; i++)//Populate new Options
+        {
+            newOptions.Add(new TMP_Dropdown.OptionData(Enum.GetName(enumType, i)));
+        }
+
+        dropdown.ClearOptions();//Clear old options
+        dropdown.AddOptions(newOptions);//Add new options
+    }
+
+    public void StartGame()
+    {
+        player0Type = (PlayerType)player0Dropdown.value;
+        player1Type = (PlayerType)player1Dropdown.value;
+        
+        int seed = 123;
+        if (seedInputField.text != "")
+            seed = int.Parse(seedInputField.text);
+        game = new Game (player0Type, player1Type,seed);
+        
+        playerColor = game.players[playerMoving].color;
+        oppColor = game.players[opponentPlayer].color;
+        gameStarted = true;
     }
 
 }
