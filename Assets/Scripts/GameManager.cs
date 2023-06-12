@@ -87,7 +87,7 @@ public class GameManager : MonoBehaviour
         player0Dropdown = GameObject.Find("Player1Dropdown").GetComponent<TMP_Dropdown>();
         PopulateDropDownWithEnum(player0Dropdown, player0Type);
         player1Dropdown = GameObject.Find("Player2Dropdown").GetComponent<TMP_Dropdown>();
-        PopulateDropDownWithEnum(player1Dropdown, player1Type);
+        PopulateDropDownWithEnum(player1Dropdown, player1Type, false);
         CreateBoard();
         CreatePlayer1();
         CreatePlayer2();
@@ -133,6 +133,8 @@ public class GameManager : MonoBehaviour
                             {
                                 player2Pawns[i].mctsX = newField.mctsX;
                                 player2Pawns[i].mctsY = newField.mctsY;
+                                player2Pawns[i].columnNumber = newField.columnNumber;
+                                player2Pawns[i].rowNumber = newField.rowNumber;
                                 player2Pawns[i].prefab.transform.position = new Vector3(newField.prefab.transform.position.x, newField.prefab.transform.position.y, -1); // wygenerowane automatycznie, zobaczymy czy zadziała
                                 break;
                             }
@@ -143,6 +145,8 @@ public class GameManager : MonoBehaviour
                             {
                                 player1Pawns[i].mctsX = newField.mctsX;
                                 player1Pawns[i].mctsY = newField.mctsY;
+                                player1Pawns[i].columnNumber = newField.columnNumber;
+                                player1Pawns[i].rowNumber = newField.rowNumber;
                                 player1Pawns[i].prefab.transform.position = new Vector3(newField.prefab.transform.position.x, newField.prefab.transform.position.y, -1); // wygenerowane automatycznie, zobaczymy czy zadziała
                                 break;
                             }
@@ -375,12 +379,12 @@ public class GameManager : MonoBehaviour
         oppColor = game.players[opponentPlayer].color;
     }
 
-    public static void PopulateDropDownWithEnum(TMP_Dropdown dropdown, Enum targetEnum)//You can populate any dropdown with any enum with this method
+    public static void PopulateDropDownWithEnum(TMP_Dropdown dropdown, Enum targetEnum, bool withHuman = true)
     {
-        Type enumType = targetEnum.GetType();//Type of enum(FormatPresetType in my example)
+        Type enumType = targetEnum.GetType();//Type of enum
         List<TMP_Dropdown.OptionData> newOptions = new();
 
-        for (int i = 0; i < Enum.GetNames(enumType).Length; i++)//Populate new Options
+        for (int i = withHuman ? 0 : 1; i < Enum.GetNames(enumType).Length; i++)//Populate new Options
         {
             newOptions.Add(new TMP_Dropdown.OptionData(Enum.GetName(enumType, i)));
         }
@@ -392,7 +396,7 @@ public class GameManager : MonoBehaviour
     public void StartGame()
     {
         player0Type = (PlayerType)player0Dropdown.value;
-        player1Type = (PlayerType)player1Dropdown.value;
+        player1Type = (PlayerType)(player1Dropdown.value + 1);
         
         int seed = 123;
         if (seedInputField.text != "")
