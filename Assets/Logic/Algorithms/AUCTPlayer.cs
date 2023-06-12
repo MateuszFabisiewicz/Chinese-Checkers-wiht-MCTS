@@ -11,7 +11,7 @@ namespace Assets.Logic.Algorithms
     {
         internal double lambda = 0.5; // do przetestowania ewentualnie
 
-        public AUCTPlayer (PlayerColor color) : base (color)
+        public AUCTPlayer (PlayerColor color,int seed) : base (color, seed)
         {
             type = PlayerType.AUCT;
         }

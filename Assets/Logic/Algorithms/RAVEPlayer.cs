@@ -10,7 +10,7 @@ namespace Assets.Logic.Algorithms
     {
         private double b = 0.5; // chyba?
 
-        public RAVEPlayer(PlayerColor color) : base(color)
+        public RAVEPlayer(PlayerColor color,int seed) : base(color,seed)
         {
             type = PlayerType.RAVE;
         }

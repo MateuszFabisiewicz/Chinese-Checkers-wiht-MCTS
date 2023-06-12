@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Assets.Logic;
 using NUnit.Framework;
 using UnityEngine;
@@ -158,22 +160,1297 @@ public class TestScript1
             Assert.AreEqual (testGame.Win (), PlayerColor.None);
     }
 
+    #region RAVEandRAVE
     [Test]
-    public void RAVEAndUCTGameTest()
+    public void RAVEAndRAVEGameTest1()
     {
-        int i = 0, currPlayer = 0;
-        Game testGame = new Game(PlayerType.RAVE, PlayerType.UCT);
-
-        while (testGame.Win() == PlayerColor.None && i < 30)
+        int i = 0, currPlayer = 0, oppPlayer = 1;
+        Game testGame = new Game(PlayerType.RAVE, PlayerType.RAVE, 1);
+        Stopwatch stopwatch = new();
+        TimeSpan ts = new();
+        while (testGame.Win() == PlayerColor.None && i < 200)
         {
             i++;
-            var answer = testGame.players[currPlayer].MakeChoice(testGame.board, testGame.players[1]);
+            stopwatch.Start();
+            var answer = testGame.players[currPlayer].MakeChoice(testGame.board, testGame.players[oppPlayer]);
+            stopwatch.Stop();
+            if (currPlayer == 0)
+                ts = ts.Add(stopwatch.Elapsed);
+            stopwatch.Reset();
             testGame.MoveChecker(answer.newField, answer.checkerIndex, currPlayer);
             currPlayer = (currPlayer + 1) % 2;
+            oppPlayer = (oppPlayer + 1) % 2;
         }
+        ts = ts.Divide(i / 2);
+        UnityEngine.Debug.Log(ts);
 
-        if (i < 30)
-            Assert.AreNotEqual(testGame.Win(), PlayerColor.None);
+        if (i < 200)
+        {
+            PlayerColor winner = testGame.Win();
+            UnityEngine.Debug.Log(winner);
+            Assert.AreNotEqual(winner, PlayerColor.None);
+        }
+        else
+            Assert.AreEqual(testGame.Win(), PlayerColor.None);
+    }
+    [Test]
+    public void RAVEAndRAVEGameTest2()
+    {
+        int i = 0, currPlayer = 0, oppPlayer = 1;
+        Game testGame = new Game(PlayerType.RAVE, PlayerType.RAVE, 2);
+        Stopwatch stopwatch = new();
+        TimeSpan ts = new();
+        while (testGame.Win() == PlayerColor.None && i < 200)
+        {
+            i++;
+            stopwatch.Start();
+            var answer = testGame.players[currPlayer].MakeChoice(testGame.board, testGame.players[oppPlayer]);
+            stopwatch.Stop();
+            if (currPlayer == 0)
+                ts = ts.Add(stopwatch.Elapsed);
+            stopwatch.Reset();
+            testGame.MoveChecker(answer.newField, answer.checkerIndex, currPlayer);
+            currPlayer = (currPlayer + 1) % 2;
+            oppPlayer = (oppPlayer + 1) % 2;
+        }
+        ts = ts.Divide(i / 2);
+        UnityEngine.Debug.Log(ts);
+
+        if (i < 200)
+        {
+            PlayerColor winner = testGame.Win();
+            UnityEngine.Debug.Log(winner);
+            Assert.AreNotEqual(winner, PlayerColor.None);
+        }
+        else
+            Assert.AreEqual(testGame.Win(), PlayerColor.None);
+    }
+    [Test]
+    public void RAVEAndRAVEGameTest3()
+    {
+        int i = 0, currPlayer = 0, oppPlayer = 1;
+        Game testGame = new Game(PlayerType.RAVE, PlayerType.RAVE, 3);
+        Stopwatch stopwatch = new();
+        TimeSpan ts = new();
+        while (testGame.Win() == PlayerColor.None && i < 200)
+        {
+            i++;
+            stopwatch.Start();
+            var answer = testGame.players[currPlayer].MakeChoice(testGame.board, testGame.players[oppPlayer]);
+            stopwatch.Stop();
+            if (currPlayer == 0)
+                ts = ts.Add(stopwatch.Elapsed);
+            stopwatch.Reset();
+            testGame.MoveChecker(answer.newField, answer.checkerIndex, currPlayer);
+            currPlayer = (currPlayer + 1) % 2;
+            oppPlayer = (oppPlayer + 1) % 2;
+        }
+        ts = ts.Divide(i / 2);
+        UnityEngine.Debug.Log(ts);
+
+        if (i < 200)
+        {
+            PlayerColor winner = testGame.Win();
+            UnityEngine.Debug.Log(winner);
+            Assert.AreNotEqual(winner, PlayerColor.None);
+        }
+        else
+            Assert.AreEqual(testGame.Win(), PlayerColor.None);
+    }
+    [Test]
+    public void RAVEAndRAVEGameTest4()
+    {
+        int i = 0, currPlayer = 0, oppPlayer = 1;
+        Game testGame = new Game(PlayerType.RAVE, PlayerType.RAVE, 4);
+        Stopwatch stopwatch = new();
+        TimeSpan ts = new();
+        while (testGame.Win() == PlayerColor.None && i < 200)
+        {
+            i++;
+            stopwatch.Start();
+            var answer = testGame.players[currPlayer].MakeChoice(testGame.board, testGame.players[oppPlayer]);
+            stopwatch.Stop();
+            if (currPlayer == 0)
+                ts = ts.Add(stopwatch.Elapsed);
+            stopwatch.Reset();
+            testGame.MoveChecker(answer.newField, answer.checkerIndex, currPlayer);
+            currPlayer = (currPlayer + 1) % 2;
+            oppPlayer = (oppPlayer + 1) % 2;
+        }
+        ts = ts.Divide(i / 2);
+        UnityEngine.Debug.Log(ts);
+
+        if (i < 200)
+        {
+            PlayerColor winner = testGame.Win();
+            UnityEngine.Debug.Log(winner);
+            Assert.AreNotEqual(winner, PlayerColor.None);
+        }
+        else
+            Assert.AreEqual(testGame.Win(), PlayerColor.None);
+    }
+    [Test]
+    public void RAVEAndRAVEGameTest5()
+    {
+        int i = 0, currPlayer = 0, oppPlayer = 1;
+        Game testGame = new Game(PlayerType.RAVE, PlayerType.RAVE, 5);
+        Stopwatch stopwatch = new();
+        TimeSpan ts = new();
+        while (testGame.Win() == PlayerColor.None && i < 200)
+        {
+            i++;
+            stopwatch.Start();
+            var answer = testGame.players[currPlayer].MakeChoice(testGame.board, testGame.players[oppPlayer]);
+            stopwatch.Stop();
+            if (currPlayer == 0)
+                ts = ts.Add(stopwatch.Elapsed);
+            stopwatch.Reset();
+            testGame.MoveChecker(answer.newField, answer.checkerIndex, currPlayer);
+            currPlayer = (currPlayer + 1) % 2;
+            oppPlayer = (oppPlayer + 1) % 2;
+        }
+        ts = ts.Divide(i / 2);
+        UnityEngine.Debug.Log(ts);
+
+        if (i < 200)
+        {
+            PlayerColor winner = testGame.Win();
+            UnityEngine.Debug.Log(winner);
+            Assert.AreNotEqual(winner, PlayerColor.None);
+        }
+        else
+            Assert.AreEqual(testGame.Win(), PlayerColor.None);
+    }
+    [Test]
+    public void RAVEAndRAVEGameTest6()
+    {
+        int i = 0, currPlayer = 0, oppPlayer = 1;
+        Game testGame = new Game(PlayerType.RAVE, PlayerType.RAVE, 6);
+        Stopwatch stopwatch = new();
+        TimeSpan ts = new();
+        while (testGame.Win() == PlayerColor.None && i < 200)
+        {
+            i++;
+            stopwatch.Start();
+            var answer = testGame.players[currPlayer].MakeChoice(testGame.board, testGame.players[oppPlayer]);
+            stopwatch.Stop();
+            if (currPlayer == 0)
+                ts = ts.Add(stopwatch.Elapsed);
+            stopwatch.Reset();
+            testGame.MoveChecker(answer.newField, answer.checkerIndex, currPlayer);
+            currPlayer = (currPlayer + 1) % 2;
+            oppPlayer = (oppPlayer + 1) % 2;
+        }
+        ts = ts.Divide(i / 2);
+        UnityEngine.Debug.Log(ts);
+
+        if (i < 200)
+        {
+            PlayerColor winner = testGame.Win();
+            UnityEngine.Debug.Log(winner);
+            Assert.AreNotEqual(winner, PlayerColor.None);
+        }
+        else
+            Assert.AreEqual(testGame.Win(), PlayerColor.None);
+    }
+    [Test]
+    public void RAVEAndRAVEGameTest7()
+    {
+        int i = 0, currPlayer = 0, oppPlayer = 1;
+        Game testGame = new Game(PlayerType.RAVE, PlayerType.RAVE, 7);
+        Stopwatch stopwatch = new();
+        TimeSpan ts = new();
+        while (testGame.Win() == PlayerColor.None && i < 200)
+        {
+            i++;
+            stopwatch.Start();
+            var answer = testGame.players[currPlayer].MakeChoice(testGame.board, testGame.players[oppPlayer]);
+            stopwatch.Stop();
+            if (currPlayer == 0)
+                ts = ts.Add(stopwatch.Elapsed);
+            stopwatch.Reset();
+            testGame.MoveChecker(answer.newField, answer.checkerIndex, currPlayer);
+            currPlayer = (currPlayer + 1) % 2;
+            oppPlayer = (oppPlayer + 1) % 2;
+        }
+        ts = ts.Divide(i / 2);
+        UnityEngine.Debug.Log(ts);
+
+        if (i < 200)
+        {
+            PlayerColor winner = testGame.Win();
+            UnityEngine.Debug.Log(winner);
+            Assert.AreNotEqual(winner, PlayerColor.None);
+        }
+        else
+            Assert.AreEqual(testGame.Win(), PlayerColor.None);
+    }
+    [Test]
+    public void RAVEAndRAVEGameTest8()
+    {
+        int i = 0, currPlayer = 0, oppPlayer = 1;
+        Game testGame = new Game(PlayerType.RAVE, PlayerType.RAVE, 8);
+        Stopwatch stopwatch = new();
+        TimeSpan ts = new();
+        while (testGame.Win() == PlayerColor.None && i < 200)
+        {
+            i++;
+            stopwatch.Start();
+            var answer = testGame.players[currPlayer].MakeChoice(testGame.board, testGame.players[oppPlayer]);
+            stopwatch.Stop();
+            if (currPlayer == 0)
+                ts = ts.Add(stopwatch.Elapsed);
+            stopwatch.Reset();
+            testGame.MoveChecker(answer.newField, answer.checkerIndex, currPlayer);
+            currPlayer = (currPlayer + 1) % 2;
+            oppPlayer = (oppPlayer + 1) % 2;
+        }
+        ts = ts.Divide(i / 2);
+        UnityEngine.Debug.Log(ts);
+
+        if (i < 200)
+        {
+            PlayerColor winner = testGame.Win();
+            UnityEngine.Debug.Log(winner);
+            Assert.AreNotEqual(winner, PlayerColor.None);
+        }
+        else
+            Assert.AreEqual(testGame.Win(), PlayerColor.None);
+    }
+    [Test]
+    public void RAVEAndRAVEGameTest9()
+    {
+        int i = 0, currPlayer = 0, oppPlayer = 1;
+        Game testGame = new Game(PlayerType.RAVE, PlayerType.RAVE, 9);
+        Stopwatch stopwatch = new();
+        TimeSpan ts = new();
+        while (testGame.Win() == PlayerColor.None && i < 200)
+        {
+            i++;
+            stopwatch.Start();
+            var answer = testGame.players[currPlayer].MakeChoice(testGame.board, testGame.players[oppPlayer]);
+            stopwatch.Stop();
+            if (currPlayer == 0)
+                ts = ts.Add(stopwatch.Elapsed);
+            stopwatch.Reset();
+            testGame.MoveChecker(answer.newField, answer.checkerIndex, currPlayer);
+            currPlayer = (currPlayer + 1) % 2;
+            oppPlayer = (oppPlayer + 1) % 2;
+        }
+        ts = ts.Divide(i / 2);
+        UnityEngine.Debug.Log(ts);
+
+        if (i < 200)
+        {
+            PlayerColor winner = testGame.Win();
+            UnityEngine.Debug.Log(winner);
+            Assert.AreNotEqual(winner, PlayerColor.None);
+        }
+        else
+            Assert.AreEqual(testGame.Win(), PlayerColor.None);
+    }
+    [Test]
+    public void RAVEAndRAVEGameTest10()
+    {
+        int i = 0, currPlayer = 0, oppPlayer = 1;
+        Game testGame = new Game(PlayerType.RAVE, PlayerType.RAVE, 10);
+        Stopwatch stopwatch = new();
+        TimeSpan ts = new();
+        while (testGame.Win() == PlayerColor.None && i < 200)
+        {
+            i++;
+            stopwatch.Start();
+            var answer = testGame.players[currPlayer].MakeChoice(testGame.board, testGame.players[oppPlayer]);
+            stopwatch.Stop();
+            if (currPlayer == 0)
+                ts = ts.Add(stopwatch.Elapsed);
+            stopwatch.Reset();
+            testGame.MoveChecker(answer.newField, answer.checkerIndex, currPlayer);
+            currPlayer = (currPlayer + 1) % 2;
+            oppPlayer = (oppPlayer + 1) % 2;
+        }
+        ts = ts.Divide(i / 2);
+        UnityEngine.Debug.Log(ts);
+
+        if (i < 200)
+        {
+            PlayerColor winner = testGame.Win();
+            UnityEngine.Debug.Log(winner);
+            Assert.AreNotEqual(winner, PlayerColor.None);
+        }
+        else
+            Assert.AreEqual(testGame.Win(), PlayerColor.None);
+    }
+    #endregion
+    #region RAVEandAUCT
+    [Test]
+    public void RAVEAndAUCTGameTest1()
+    {
+        int i = 0, currPlayer = 0, oppPlayer = 1;
+        Game testGame = new Game(PlayerType.RAVE, PlayerType.AUCT, 1);
+        Stopwatch stopwatch = new();
+        TimeSpan ts = new();
+        TimeSpan ts2 = new();
+        while (testGame.Win() == PlayerColor.None && i < 100)
+        {
+            i++;
+            stopwatch.Start();
+            var answer = testGame.players[currPlayer].MakeChoice(testGame.board, testGame.players[oppPlayer]);
+            stopwatch.Stop();
+            if (currPlayer == 0)
+                ts = ts.Add(stopwatch.Elapsed);
+            else
+                ts2 = ts2.Add(stopwatch.Elapsed);
+            stopwatch.Reset();
+            testGame.MoveChecker(answer.newField, answer.checkerIndex, currPlayer);
+            currPlayer = (currPlayer + 1) % 2;
+            oppPlayer = (oppPlayer + 1) % 2;
+        }
+        ts = ts.Divide(i / 2);
+        ts2 = ts2.Divide(i / 2);
+        UnityEngine.Debug.Log(ts);
+        UnityEngine.Debug.Log(ts2);
+        if (i < 100)
+        {
+            PlayerColor winner = testGame.Win();
+            UnityEngine.Debug.Log(winner);
+            Assert.AreNotEqual(winner, PlayerColor.None);
+        }
+        else
+            Assert.AreEqual(testGame.Win(), PlayerColor.None);
+    }
+    [Test]
+    public void RAVEAndAUCTGameTest2()
+    {
+        int i = 0, currPlayer = 0, oppPlayer = 1;
+        Game testGame = new Game(PlayerType.RAVE, PlayerType.AUCT, 2);
+        Stopwatch stopwatch = new();
+        TimeSpan ts = new();
+        while (testGame.Win() == PlayerColor.None && i < 200)
+        {
+            i++;
+            stopwatch.Start();
+            var answer = testGame.players[currPlayer].MakeChoice(testGame.board, testGame.players[oppPlayer]);
+            stopwatch.Stop();
+            if (currPlayer == 0)
+                ts = ts.Add(stopwatch.Elapsed);
+            stopwatch.Reset();
+            testGame.MoveChecker(answer.newField, answer.checkerIndex, currPlayer);
+            currPlayer = (currPlayer + 1) % 2;
+            oppPlayer = (oppPlayer + 1) % 2;
+        }
+        ts = ts.Divide(i / 2);
+        UnityEngine.Debug.Log(ts);
+
+        if (i < 200)
+        {
+            PlayerColor winner = testGame.Win();
+            UnityEngine.Debug.Log(winner);
+            Assert.AreNotEqual(winner, PlayerColor.None);
+        }
+        else
+            Assert.AreEqual(testGame.Win(), PlayerColor.None);
+    }
+    [Test]
+    public void RAVEAndAUCTGameTest3()
+    {
+        int i = 0, currPlayer = 0, oppPlayer = 1;
+        Game testGame = new Game(PlayerType.RAVE, PlayerType.AUCT, 3);
+        Stopwatch stopwatch = new();
+        TimeSpan ts = new();
+        while (testGame.Win() == PlayerColor.None && i < 200)
+        {
+            i++;
+            stopwatch.Start();
+            var answer = testGame.players[currPlayer].MakeChoice(testGame.board, testGame.players[oppPlayer]);
+            stopwatch.Stop();
+            if (currPlayer == 0)
+                ts = ts.Add(stopwatch.Elapsed);
+            stopwatch.Reset();
+            testGame.MoveChecker(answer.newField, answer.checkerIndex, currPlayer);
+            currPlayer = (currPlayer + 1) % 2;
+            oppPlayer = (oppPlayer + 1) % 2;
+        }
+        ts = ts.Divide(i / 2);
+        UnityEngine.Debug.Log(ts);
+
+        if (i < 200)
+        {
+            PlayerColor winner = testGame.Win();
+            UnityEngine.Debug.Log(winner);
+            Assert.AreNotEqual(winner, PlayerColor.None);
+        }
+        else
+            Assert.AreEqual(testGame.Win(), PlayerColor.None);
+    }
+    [Test]
+    public void RAVEAndAUCTGameTest4()
+    {
+        int i = 0, currPlayer = 0, oppPlayer = 1;
+        Game testGame = new Game(PlayerType.RAVE, PlayerType.AUCT, 4);
+        Stopwatch stopwatch = new();
+        TimeSpan ts = new();
+        while (testGame.Win() == PlayerColor.None && i < 200)
+        {
+            i++;
+            stopwatch.Start();
+            var answer = testGame.players[currPlayer].MakeChoice(testGame.board, testGame.players[oppPlayer]);
+            stopwatch.Stop();
+            if (currPlayer == 0)
+                ts = ts.Add(stopwatch.Elapsed);
+            stopwatch.Reset();
+            testGame.MoveChecker(answer.newField, answer.checkerIndex, currPlayer);
+            currPlayer = (currPlayer + 1) % 2;
+            oppPlayer = (oppPlayer + 1) % 2;
+        }
+        ts = ts.Divide(i / 2);
+        UnityEngine.Debug.Log(ts);
+
+        if (i < 200)
+        {
+            PlayerColor winner = testGame.Win();
+            UnityEngine.Debug.Log(winner);
+            Assert.AreNotEqual(winner, PlayerColor.None);
+        }
+        else
+            Assert.AreEqual(testGame.Win(), PlayerColor.None);
+    }
+    [Test]
+    public void RAVEAndAUCTGameTest5()
+    {
+        int i = 0, currPlayer = 0, oppPlayer = 1;
+        Game testGame = new Game(PlayerType.RAVE, PlayerType.AUCT, 5);
+        Stopwatch stopwatch = new();
+        TimeSpan ts = new();
+        while (testGame.Win() == PlayerColor.None && i < 200)
+        {
+            i++;
+            stopwatch.Start();
+            var answer = testGame.players[currPlayer].MakeChoice(testGame.board, testGame.players[oppPlayer]);
+            stopwatch.Stop();
+            if (currPlayer == 0)
+                ts = ts.Add(stopwatch.Elapsed);
+            stopwatch.Reset();
+            testGame.MoveChecker(answer.newField, answer.checkerIndex, currPlayer);
+            currPlayer = (currPlayer + 1) % 2;
+            oppPlayer = (oppPlayer + 1) % 2;
+        }
+        ts = ts.Divide(i / 2);
+        UnityEngine.Debug.Log(ts);
+
+        if (i < 200)
+        {
+            PlayerColor winner = testGame.Win();
+            UnityEngine.Debug.Log(winner);
+            Assert.AreNotEqual(winner, PlayerColor.None);
+        }
+        else
+            Assert.AreEqual(testGame.Win(), PlayerColor.None);
+    }
+    [Test]
+    public void RAVEAndAUCTGameTest6()
+    {
+        int i = 0, currPlayer = 0, oppPlayer = 1;
+        Game testGame = new Game(PlayerType.RAVE, PlayerType.AUCT, 6);
+        Stopwatch stopwatch = new();
+        TimeSpan ts = new();
+        while (testGame.Win() == PlayerColor.None && i < 200)
+        {
+            i++;
+            stopwatch.Start();
+            var answer = testGame.players[currPlayer].MakeChoice(testGame.board, testGame.players[oppPlayer]);
+            stopwatch.Stop();
+            if (currPlayer == 0)
+                ts = ts.Add(stopwatch.Elapsed);
+            stopwatch.Reset();
+            testGame.MoveChecker(answer.newField, answer.checkerIndex, currPlayer);
+            currPlayer = (currPlayer + 1) % 2;
+            oppPlayer = (oppPlayer + 1) % 2;
+        }
+        ts = ts.Divide(i / 2);
+        UnityEngine.Debug.Log(ts);
+
+        if (i < 200)
+        {
+            PlayerColor winner = testGame.Win();
+            UnityEngine.Debug.Log(winner);
+            Assert.AreNotEqual(winner, PlayerColor.None);
+        }
+        else
+            Assert.AreEqual(testGame.Win(), PlayerColor.None);
+    }
+    [Test]
+    public void RAVEAndAUCTGameTest7()
+    {
+        int i = 0, currPlayer = 0, oppPlayer = 1;
+        Game testGame = new Game(PlayerType.RAVE, PlayerType.AUCT, 7);
+        Stopwatch stopwatch = new();
+        TimeSpan ts = new();
+        while (testGame.Win() == PlayerColor.None && i < 200)
+        {
+            i++;
+            stopwatch.Start();
+            var answer = testGame.players[currPlayer].MakeChoice(testGame.board, testGame.players[oppPlayer]);
+            stopwatch.Stop();
+            if (currPlayer == 0)
+                ts = ts.Add(stopwatch.Elapsed);
+            stopwatch.Reset();
+            testGame.MoveChecker(answer.newField, answer.checkerIndex, currPlayer);
+            currPlayer = (currPlayer + 1) % 2;
+            oppPlayer = (oppPlayer + 1) % 2;
+        }
+        ts = ts.Divide(i / 2);
+        UnityEngine.Debug.Log(ts);
+
+        if (i < 200)
+        {
+            PlayerColor winner = testGame.Win();
+            UnityEngine.Debug.Log(winner);
+            Assert.AreNotEqual(winner, PlayerColor.None);
+        }
+        else
+            Assert.AreEqual(testGame.Win(), PlayerColor.None);
+    }
+    [Test]
+    public void RAVEAndAUCTGameTest8()
+    {
+        int i = 0, currPlayer = 0, oppPlayer = 1;
+        Game testGame = new Game(PlayerType.RAVE, PlayerType.AUCT, 8);
+        Stopwatch stopwatch = new();
+        TimeSpan ts = new();
+        while (testGame.Win() == PlayerColor.None && i < 200)
+        {
+            i++;
+            stopwatch.Start();
+            var answer = testGame.players[currPlayer].MakeChoice(testGame.board, testGame.players[oppPlayer]);
+            stopwatch.Stop();
+            if (currPlayer == 0)
+                ts = ts.Add(stopwatch.Elapsed);
+            stopwatch.Reset();
+            testGame.MoveChecker(answer.newField, answer.checkerIndex, currPlayer);
+            currPlayer = (currPlayer + 1) % 2;
+            oppPlayer = (oppPlayer + 1) % 2;
+        }
+        ts = ts.Divide(i / 2);
+        UnityEngine.Debug.Log(ts);
+
+        if (i < 200)
+        {
+            PlayerColor winner = testGame.Win();
+            UnityEngine.Debug.Log(winner);
+            Assert.AreNotEqual(winner, PlayerColor.None);
+        }
+        else
+            Assert.AreEqual(testGame.Win(), PlayerColor.None);
+    }
+    [Test]
+    public void RAVEAndAUCTGameTest9()
+    {
+        int i = 0, currPlayer = 0, oppPlayer = 1;
+        Game testGame = new Game(PlayerType.RAVE, PlayerType.AUCT, 9);
+        Stopwatch stopwatch = new();
+        TimeSpan ts = new();
+        while (testGame.Win() == PlayerColor.None && i < 200)
+        {
+            i++;
+            stopwatch.Start();
+            var answer = testGame.players[currPlayer].MakeChoice(testGame.board, testGame.players[oppPlayer]);
+            stopwatch.Stop();
+            if (currPlayer == 0)
+                ts = ts.Add(stopwatch.Elapsed);
+            stopwatch.Reset();
+            testGame.MoveChecker(answer.newField, answer.checkerIndex, currPlayer);
+            currPlayer = (currPlayer + 1) % 2;
+            oppPlayer = (oppPlayer + 1) % 2;
+        }
+        ts = ts.Divide(i / 2);
+        UnityEngine.Debug.Log(ts);
+
+        if (i < 200)
+        {
+            PlayerColor winner = testGame.Win();
+            UnityEngine.Debug.Log(winner);
+            Assert.AreNotEqual(winner, PlayerColor.None);
+        }
+        else
+            Assert.AreEqual(testGame.Win(), PlayerColor.None);
+    }
+    [Test]
+    public void RAVEAndAUCTGameTest10()
+    {
+        int i = 0, currPlayer = 0, oppPlayer = 1;
+        Game testGame = new Game(PlayerType.RAVE, PlayerType.AUCT, 10);
+        Stopwatch stopwatch = new();
+        TimeSpan ts = new();
+        while (testGame.Win() == PlayerColor.None && i < 200)
+        {
+            i++;
+            stopwatch.Start();
+            var answer = testGame.players[currPlayer].MakeChoice(testGame.board, testGame.players[oppPlayer]);
+            stopwatch.Stop();
+            if (currPlayer == 0)
+                ts = ts.Add(stopwatch.Elapsed);
+            stopwatch.Reset();
+            testGame.MoveChecker(answer.newField, answer.checkerIndex, currPlayer);
+            currPlayer = (currPlayer + 1) % 2;
+            oppPlayer = (oppPlayer + 1) % 2;
+        }
+        ts = ts.Divide(i / 2);
+        UnityEngine.Debug.Log(ts);
+
+        if (i < 200)
+        {
+            PlayerColor winner = testGame.Win();
+            UnityEngine.Debug.Log(winner);
+            Assert.AreNotEqual(winner, PlayerColor.None);
+        }
+        else
+            Assert.AreEqual(testGame.Win(), PlayerColor.None);
+    }
+    #endregion
+    #region RAVEandUCT
+    [Test]
+    public void RAVEAndUCTGameTest1()
+    {
+        int i = 0, currPlayer = 0, oppPlayer = 1;
+        Game testGame = new Game(PlayerType.RAVE, PlayerType.UCT,1);
+        Stopwatch stopwatch = new();
+        TimeSpan ts = new();
+        TimeSpan ts2 = new();
+        while (testGame.Win() == PlayerColor.None && i < 100)
+        {
+            i++;
+            stopwatch.Start ();
+            var answer = testGame.players[currPlayer].MakeChoice(testGame.board, testGame.players[oppPlayer]);
+            stopwatch.Stop ();
+            if (currPlayer == 0)
+               ts = ts.Add(stopwatch.Elapsed);
+            else
+                ts2 = ts2.Add(stopwatch.Elapsed);
+            stopwatch.Reset();
+            testGame.MoveChecker(answer.newField, answer.checkerIndex, currPlayer);
+            currPlayer = (currPlayer + 1) % 2;
+            oppPlayer = (oppPlayer + 1) % 2;
+        }
+        ts = ts.Divide(i/2);
+        ts2 = ts2.Divide(i/2);
+        UnityEngine.Debug.Log(ts);
+        UnityEngine.Debug.Log(ts2);
+        if (i < 100)
+        {
+            PlayerColor winner = testGame.Win();
+            UnityEngine.Debug.Log(winner);
+            Assert.AreNotEqual(winner, PlayerColor.None);
+        }
+        else
+            Assert.AreEqual(testGame.Win(), PlayerColor.None);
+    }
+    [Test]
+    public void RAVEAndUCTGameTest2()
+    {
+        int i = 0, currPlayer = 0, oppPlayer = 1;
+        Game testGame = new Game(PlayerType.RAVE, PlayerType.UCT, 2);
+        Stopwatch stopwatch = new();
+        TimeSpan ts = new();
+        while (testGame.Win() == PlayerColor.None && i < 200)
+        {
+            i++;
+            stopwatch.Start();
+            var answer = testGame.players[currPlayer].MakeChoice(testGame.board, testGame.players[oppPlayer]);
+            stopwatch.Stop();
+            if (currPlayer == 0)
+                ts = ts.Add(stopwatch.Elapsed);
+            stopwatch.Reset();
+            testGame.MoveChecker(answer.newField, answer.checkerIndex, currPlayer);
+            currPlayer = (currPlayer + 1) % 2;
+            oppPlayer = (oppPlayer + 1) % 2;
+        }
+        ts = ts.Divide(i / 2);
+        UnityEngine.Debug.Log(ts);
+
+        if (i < 200)
+        {
+            PlayerColor winner = testGame.Win();
+            UnityEngine.Debug.Log(winner);
+            Assert.AreNotEqual(winner, PlayerColor.None);
+        }
+        else
+            Assert.AreEqual(testGame.Win(), PlayerColor.None);
+    }
+    [Test]
+    public void RAVEAndUCTGameTest3()
+    {
+        int i = 0, currPlayer = 0, oppPlayer = 1;
+        Game testGame = new Game(PlayerType.RAVE, PlayerType.UCT, 3);
+        Stopwatch stopwatch = new();
+        TimeSpan ts = new();
+        while (testGame.Win() == PlayerColor.None && i < 200)
+        {
+            i++;
+            stopwatch.Start();
+            var answer = testGame.players[currPlayer].MakeChoice(testGame.board, testGame.players[oppPlayer]);
+            stopwatch.Stop();
+            if (currPlayer == 0)
+                ts = ts.Add(stopwatch.Elapsed);
+            stopwatch.Reset();
+            testGame.MoveChecker(answer.newField, answer.checkerIndex, currPlayer);
+            currPlayer = (currPlayer + 1) % 2;
+            oppPlayer = (oppPlayer + 1) % 2;
+        }
+        ts = ts.Divide(i / 2);
+        UnityEngine.Debug.Log(ts);
+
+        if (i < 200)
+        {
+            PlayerColor winner = testGame.Win();
+            UnityEngine.Debug.Log(winner);
+            Assert.AreNotEqual(winner, PlayerColor.None);
+        }
+        else
+            Assert.AreEqual(testGame.Win(), PlayerColor.None);
+    }
+    [Test]
+    public void RAVEAndUCTGameTest4()
+    {
+        int i = 0, currPlayer = 0, oppPlayer = 1;
+        Game testGame = new Game(PlayerType.RAVE, PlayerType.UCT, 4);
+        Stopwatch stopwatch = new();
+        TimeSpan ts = new();
+        while (testGame.Win() == PlayerColor.None && i < 200)
+        {
+            i++;
+            stopwatch.Start();
+            var answer = testGame.players[currPlayer].MakeChoice(testGame.board, testGame.players[oppPlayer]);
+            stopwatch.Stop();
+            if (currPlayer == 0)
+                ts = ts.Add(stopwatch.Elapsed);
+            stopwatch.Reset();
+            testGame.MoveChecker(answer.newField, answer.checkerIndex, currPlayer);
+            currPlayer = (currPlayer + 1) % 2;
+            oppPlayer = (oppPlayer + 1) % 2;
+        }
+        ts = ts.Divide(i / 2);
+        UnityEngine.Debug.Log(ts);
+
+        if (i < 200)
+        {
+            PlayerColor winner = testGame.Win();
+            UnityEngine.Debug.Log(winner);
+            Assert.AreNotEqual(winner, PlayerColor.None);
+        }
+        else
+            Assert.AreEqual(testGame.Win(), PlayerColor.None);
+    }
+    [Test]
+    public void RAVEAndUCTGameTest5()
+    {
+        int i = 0, currPlayer = 0, oppPlayer = 1;
+        Game testGame = new Game(PlayerType.RAVE, PlayerType.UCT, 5);
+        Stopwatch stopwatch = new();
+        TimeSpan ts = new();
+        while (testGame.Win() == PlayerColor.None && i < 200)
+        {
+            i++;
+            stopwatch.Start();
+            var answer = testGame.players[currPlayer].MakeChoice(testGame.board, testGame.players[oppPlayer]);
+            stopwatch.Stop();
+            if (currPlayer == 0)
+                ts = ts.Add(stopwatch.Elapsed);
+            stopwatch.Reset();
+            testGame.MoveChecker(answer.newField, answer.checkerIndex, currPlayer);
+            currPlayer = (currPlayer + 1) % 2;
+            oppPlayer = (oppPlayer + 1) % 2;
+        }
+        ts = ts.Divide(i / 2);
+        UnityEngine.Debug.Log(ts);
+
+        if (i < 200)
+        {
+            PlayerColor winner = testGame.Win();
+            UnityEngine.Debug.Log(winner);
+            Assert.AreNotEqual(winner, PlayerColor.None);
+        }
+        else
+            Assert.AreEqual(testGame.Win(), PlayerColor.None);
+    }
+    [Test]
+    public void RAVEAndUCTGameTest6()
+    {
+        int i = 0, currPlayer = 0, oppPlayer = 1;
+        Game testGame = new Game(PlayerType.RAVE, PlayerType.UCT, 6);
+        Stopwatch stopwatch = new();
+        TimeSpan ts = new();
+        while (testGame.Win() == PlayerColor.None && i < 200)
+        {
+            i++;
+            stopwatch.Start();
+            var answer = testGame.players[currPlayer].MakeChoice(testGame.board, testGame.players[oppPlayer]);
+            stopwatch.Stop();
+            if (currPlayer == 0)
+                ts = ts.Add(stopwatch.Elapsed);
+            stopwatch.Reset();
+            testGame.MoveChecker(answer.newField, answer.checkerIndex, currPlayer);
+            currPlayer = (currPlayer + 1) % 2;
+            oppPlayer = (oppPlayer + 1) % 2;
+        }
+        ts = ts.Divide(i / 2);
+        UnityEngine.Debug.Log(ts);
+
+        if (i < 200)
+        {
+            PlayerColor winner = testGame.Win();
+            UnityEngine.Debug.Log(winner);
+            Assert.AreNotEqual(winner, PlayerColor.None);
+        }
+        else
+            Assert.AreEqual(testGame.Win(), PlayerColor.None);
+    }
+    [Test]
+    public void RAVEAndUCTGameTest7()
+    {
+        int i = 0, currPlayer = 0, oppPlayer = 1;
+        Game testGame = new Game(PlayerType.RAVE, PlayerType.UCT, 7);
+        Stopwatch stopwatch = new();
+        TimeSpan ts = new();
+        while (testGame.Win() == PlayerColor.None && i < 200)
+        {
+            i++;
+            stopwatch.Start();
+            var answer = testGame.players[currPlayer].MakeChoice(testGame.board, testGame.players[oppPlayer]);
+            stopwatch.Stop();
+            if (currPlayer == 0)
+                ts = ts.Add(stopwatch.Elapsed);
+            stopwatch.Reset();
+            testGame.MoveChecker(answer.newField, answer.checkerIndex, currPlayer);
+            currPlayer = (currPlayer + 1) % 2;
+            oppPlayer = (oppPlayer + 1) % 2;
+        }
+        ts = ts.Divide(i / 2);
+        UnityEngine.Debug.Log(ts);
+
+        if (i < 200)
+        {
+            PlayerColor winner = testGame.Win();
+            UnityEngine.Debug.Log(winner);
+            Assert.AreNotEqual(winner, PlayerColor.None);
+        }
+        else
+            Assert.AreEqual(testGame.Win(), PlayerColor.None);
+    }
+    [Test]
+    public void RAVEAndUCTGameTest8()
+    {
+        int i = 0, currPlayer = 0, oppPlayer = 1;
+        Game testGame = new Game(PlayerType.RAVE, PlayerType.UCT, 8);
+        Stopwatch stopwatch = new();
+        TimeSpan ts = new();
+        while (testGame.Win() == PlayerColor.None && i < 200)
+        {
+            i++;
+            stopwatch.Start();
+            var answer = testGame.players[currPlayer].MakeChoice(testGame.board, testGame.players[oppPlayer]);
+            stopwatch.Stop();
+            if (currPlayer == 0)
+                ts = ts.Add(stopwatch.Elapsed);
+            stopwatch.Reset();
+            testGame.MoveChecker(answer.newField, answer.checkerIndex, currPlayer);
+            currPlayer = (currPlayer + 1) % 2;
+            oppPlayer = (oppPlayer + 1) % 2;
+        }
+        ts = ts.Divide(i / 2);
+        UnityEngine.Debug.Log(ts);
+
+        if (i < 200)
+        {
+            PlayerColor winner = testGame.Win();
+            UnityEngine.Debug.Log(winner);
+            Assert.AreNotEqual(winner, PlayerColor.None);
+        }
+        else
+            Assert.AreEqual(testGame.Win(), PlayerColor.None);
+    }
+    [Test]
+    public void RAVEAndUCTGameTest9()
+    {
+        int i = 0, currPlayer = 0, oppPlayer = 1;
+        Game testGame = new Game(PlayerType.RAVE, PlayerType.UCT, 9);
+        Stopwatch stopwatch = new();
+        TimeSpan ts = new();
+        while (testGame.Win() == PlayerColor.None && i < 200)
+        {
+            i++;
+            stopwatch.Start();
+            var answer = testGame.players[currPlayer].MakeChoice(testGame.board, testGame.players[oppPlayer]);
+            stopwatch.Stop();
+            if (currPlayer == 0)
+                ts = ts.Add(stopwatch.Elapsed);
+            stopwatch.Reset();
+            testGame.MoveChecker(answer.newField, answer.checkerIndex, currPlayer);
+            currPlayer = (currPlayer + 1) % 2;
+            oppPlayer = (oppPlayer + 1) % 2;
+        }
+        ts = ts.Divide(i / 2);
+        UnityEngine.Debug.Log(ts);
+
+        if (i < 200)
+        {
+            PlayerColor winner = testGame.Win();
+            UnityEngine.Debug.Log(winner);
+            Assert.AreNotEqual(winner, PlayerColor.None);
+        }
+        else
+            Assert.AreEqual(testGame.Win(), PlayerColor.None);
+    }
+    [Test]
+    public void RAVEAndUCTGameTest10()
+    {
+        int i = 0, currPlayer = 0, oppPlayer = 1;
+        Game testGame = new Game(PlayerType.RAVE, PlayerType.UCT, 10);
+        Stopwatch stopwatch = new();
+        TimeSpan ts = new();
+        while (testGame.Win() == PlayerColor.None && i < 200)
+        {
+            i++;
+            stopwatch.Start();
+            var answer = testGame.players[currPlayer].MakeChoice(testGame.board, testGame.players[oppPlayer]);
+            stopwatch.Stop();
+            if (currPlayer == 0)
+                ts = ts.Add(stopwatch.Elapsed);
+            stopwatch.Reset();
+            testGame.MoveChecker(answer.newField, answer.checkerIndex, currPlayer);
+            currPlayer = (currPlayer + 1) % 2;
+            oppPlayer = (oppPlayer + 1) % 2;
+        }
+        ts = ts.Divide(i / 2);
+        UnityEngine.Debug.Log(ts);
+
+        if (i < 200)
+        {
+            PlayerColor winner = testGame.Win();
+            UnityEngine.Debug.Log(winner);
+            Assert.AreNotEqual(winner, PlayerColor.None);
+        }
+        else
+            Assert.AreEqual(testGame.Win(), PlayerColor.None);
+    }
+    #endregion
+    [Test]
+    public void RAVEAndHeuristicGameTest1()
+    {
+        int i = 0, currPlayer = 0, oppPlayer = 1;
+        Game testGame = new Game(PlayerType.RAVE, PlayerType.Heuristic, 1);
+        Stopwatch stopwatch = new();
+        TimeSpan ts = new();
+        while (testGame.Win() == PlayerColor.None && i < 200)
+        {
+            i++;
+            stopwatch.Start();
+            var answer = testGame.players[currPlayer].MakeChoice(testGame.board, testGame.players[oppPlayer]);
+            stopwatch.Stop();
+            if (currPlayer == 0)
+                ts = ts.Add(stopwatch.Elapsed);
+            stopwatch.Reset();
+            testGame.MoveChecker(answer.newField, answer.checkerIndex, currPlayer);
+            currPlayer = (currPlayer + 1) % 2;
+            oppPlayer = (oppPlayer + 1) % 2;
+        }
+        ts = ts.Divide(i / 2);
+        UnityEngine.Debug.Log(ts);
+
+        if (i < 200)
+        {
+            PlayerColor winner = testGame.Win();
+            UnityEngine.Debug.Log(winner);
+            Assert.AreNotEqual(winner, PlayerColor.None);
+        }
+        else
+            Assert.AreEqual(testGame.Win(), PlayerColor.None);
+    }
+    [Test]
+    public void RAVEAndHeuristicGameTest2()
+    {
+        int i = 0, currPlayer = 0, oppPlayer = 1;
+        Game testGame = new Game(PlayerType.RAVE, PlayerType.Heuristic, 2);
+        Stopwatch stopwatch = new();
+        TimeSpan ts = new();
+        while (testGame.Win() == PlayerColor.None && i < 200)
+        {
+            i++;
+            stopwatch.Start();
+            var answer = testGame.players[currPlayer].MakeChoice(testGame.board, testGame.players[oppPlayer]);
+            stopwatch.Stop();
+            if (currPlayer == 0)
+                ts = ts.Add(stopwatch.Elapsed);
+            stopwatch.Reset();
+            testGame.MoveChecker(answer.newField, answer.checkerIndex, currPlayer);
+            currPlayer = (currPlayer + 1) % 2;
+            oppPlayer = (oppPlayer + 1) % 2;
+        }
+        ts = ts.Divide(i / 2);
+        UnityEngine.Debug.Log(ts);
+
+        if (i < 200)
+        {
+            PlayerColor winner = testGame.Win();
+            UnityEngine.Debug.Log(winner);
+            Assert.AreNotEqual(winner, PlayerColor.None);
+        }
+        else
+            Assert.AreEqual(testGame.Win(), PlayerColor.None);
+    }
+    [Test]
+    public void RAVEAndHeuristicGameTest3()
+    {
+        int i = 0, currPlayer = 0, oppPlayer = 1;
+        Game testGame = new Game(PlayerType.RAVE, PlayerType.Heuristic, 3);
+        Stopwatch stopwatch = new();
+        TimeSpan ts = new();
+        while (testGame.Win() == PlayerColor.None && i < 200)
+        {
+            i++;
+            stopwatch.Start();
+            var answer = testGame.players[currPlayer].MakeChoice(testGame.board, testGame.players[oppPlayer]);
+            stopwatch.Stop();
+            if (currPlayer == 0)
+                ts = ts.Add(stopwatch.Elapsed);
+            stopwatch.Reset();
+            testGame.MoveChecker(answer.newField, answer.checkerIndex, currPlayer);
+            currPlayer = (currPlayer + 1) % 2;
+            oppPlayer = (oppPlayer + 1) % 2;
+        }
+        ts = ts.Divide(i / 2);
+        UnityEngine.Debug.Log(ts);
+
+        if (i < 200)
+        {
+            PlayerColor winner = testGame.Win();
+            UnityEngine.Debug.Log(winner);
+            Assert.AreNotEqual(winner, PlayerColor.None);
+        }
+        else
+            Assert.AreEqual(testGame.Win(), PlayerColor.None);
+    }
+    [Test]
+    public void RAVEAndHeuristicGameTest4()
+    {
+        int i = 0, currPlayer = 0, oppPlayer = 1;
+        Game testGame = new Game(PlayerType.RAVE, PlayerType.Heuristic, 4);
+        Stopwatch stopwatch = new();
+        TimeSpan ts = new();
+        while (testGame.Win() == PlayerColor.None && i < 200)
+        {
+            i++;
+            stopwatch.Start();
+            var answer = testGame.players[currPlayer].MakeChoice(testGame.board, testGame.players[oppPlayer]);
+            stopwatch.Stop();
+            if (currPlayer == 0)
+                ts = ts.Add(stopwatch.Elapsed);
+            stopwatch.Reset();
+            testGame.MoveChecker(answer.newField, answer.checkerIndex, currPlayer);
+            currPlayer = (currPlayer + 1) % 2;
+            oppPlayer = (oppPlayer + 1) % 2;
+        }
+        ts = ts.Divide(i / 2);
+        UnityEngine.Debug.Log(ts);
+
+        if (i < 200)
+        {
+            PlayerColor winner = testGame.Win();
+            UnityEngine.Debug.Log(winner);
+            Assert.AreNotEqual(winner, PlayerColor.None);
+        }
+        else
+            Assert.AreEqual(testGame.Win(), PlayerColor.None);
+    }
+    [Test]
+    public void RAVEAndHeuristicGameTest5()
+    {
+        int i = 0, currPlayer = 0, oppPlayer = 1;
+        Game testGame = new Game(PlayerType.RAVE, PlayerType.Heuristic, 5);
+        Stopwatch stopwatch = new();
+        TimeSpan ts = new();
+        while (testGame.Win() == PlayerColor.None && i < 200)
+        {
+            i++;
+            stopwatch.Start();
+            var answer = testGame.players[currPlayer].MakeChoice(testGame.board, testGame.players[oppPlayer]);
+            stopwatch.Stop();
+            if (currPlayer == 0)
+                ts = ts.Add(stopwatch.Elapsed);
+            stopwatch.Reset();
+            testGame.MoveChecker(answer.newField, answer.checkerIndex, currPlayer);
+            currPlayer = (currPlayer + 1) % 2;
+            oppPlayer = (oppPlayer + 1) % 2;
+        }
+        ts = ts.Divide(i / 2);
+        UnityEngine.Debug.Log(ts);
+
+        if (i < 200)
+        {
+            PlayerColor winner = testGame.Win();
+            UnityEngine.Debug.Log(winner);
+            Assert.AreNotEqual(winner, PlayerColor.None);
+        }
+        else
+            Assert.AreEqual(testGame.Win(), PlayerColor.None);
+    }
+    [Test]
+    public void RAVEAndHeuristicGameTest6()
+    {
+        int i = 0, currPlayer = 0, oppPlayer = 1;
+        Game testGame = new Game(PlayerType.RAVE, PlayerType.Heuristic, 6);
+        Stopwatch stopwatch = new();
+        TimeSpan ts = new();
+        while (testGame.Win() == PlayerColor.None && i < 200)
+        {
+            i++;
+            stopwatch.Start();
+            var answer = testGame.players[currPlayer].MakeChoice(testGame.board, testGame.players[oppPlayer]);
+            stopwatch.Stop();
+            if (currPlayer == 0)
+                ts = ts.Add(stopwatch.Elapsed);
+            stopwatch.Reset();
+            testGame.MoveChecker(answer.newField, answer.checkerIndex, currPlayer);
+            currPlayer = (currPlayer + 1) % 2;
+            oppPlayer = (oppPlayer + 1) % 2;
+        }
+        ts = ts.Divide(i / 2);
+        UnityEngine.Debug.Log(ts);
+
+        if (i < 200)
+        {
+            PlayerColor winner = testGame.Win();
+            UnityEngine.Debug.Log(winner);
+            Assert.AreNotEqual(winner, PlayerColor.None);
+        }
+        else
+            Assert.AreEqual(testGame.Win(), PlayerColor.None);
+    }
+    [Test]
+    public void RAVEAndHeuristicGameTest7()
+    {
+        int i = 0, currPlayer = 0, oppPlayer = 1;
+        Game testGame = new Game(PlayerType.RAVE, PlayerType.Heuristic, 7);
+        Stopwatch stopwatch = new();
+        TimeSpan ts = new();
+        while (testGame.Win() == PlayerColor.None && i < 200)
+        {
+            i++;
+            stopwatch.Start();
+            var answer = testGame.players[currPlayer].MakeChoice(testGame.board, testGame.players[oppPlayer]);
+            stopwatch.Stop();
+            if (currPlayer == 0)
+                ts = ts.Add(stopwatch.Elapsed);
+            stopwatch.Reset();
+            testGame.MoveChecker(answer.newField, answer.checkerIndex, currPlayer);
+            currPlayer = (currPlayer + 1) % 2;
+            oppPlayer = (oppPlayer + 1) % 2;
+        }
+        ts = ts.Divide(i / 2);
+        UnityEngine.Debug.Log(ts);
+
+        if (i < 200)
+        {
+            PlayerColor winner = testGame.Win();
+            UnityEngine.Debug.Log(winner);
+            Assert.AreNotEqual(winner, PlayerColor.None);
+        }
+        else
+            Assert.AreEqual(testGame.Win(), PlayerColor.None);
+    }
+    [Test]
+    public void RAVEAndHeuristicGameTest8()
+    {
+        int i = 0, currPlayer = 0, oppPlayer = 1;
+        Game testGame = new Game(PlayerType.RAVE, PlayerType.Heuristic, 8);
+        Stopwatch stopwatch = new();
+        TimeSpan ts = new();
+        while (testGame.Win() == PlayerColor.None && i < 200)
+        {
+            i++;
+            stopwatch.Start();
+            var answer = testGame.players[currPlayer].MakeChoice(testGame.board, testGame.players[oppPlayer]);
+            stopwatch.Stop();
+            if (currPlayer == 0)
+                ts = ts.Add(stopwatch.Elapsed);
+            stopwatch.Reset();
+            testGame.MoveChecker(answer.newField, answer.checkerIndex, currPlayer);
+            currPlayer = (currPlayer + 1) % 2;
+            oppPlayer = (oppPlayer + 1) % 2;
+        }
+        ts = ts.Divide(i / 2);
+        UnityEngine.Debug.Log(ts);
+
+        if (i < 200)
+        {
+            PlayerColor winner = testGame.Win();
+            UnityEngine.Debug.Log(winner);
+            Assert.AreNotEqual(winner, PlayerColor.None);
+        }
+        else
+            Assert.AreEqual(testGame.Win(), PlayerColor.None);
+    }
+    [Test]
+    public void RAVEAndHeuristicGameTest9()
+    {
+        int i = 0, currPlayer = 0, oppPlayer = 1;
+        Game testGame = new Game(PlayerType.RAVE, PlayerType.Heuristic, 9);
+        Stopwatch stopwatch = new();
+        TimeSpan ts = new();
+        while (testGame.Win() == PlayerColor.None && i < 200)
+        {
+            i++;
+            stopwatch.Start();
+            var answer = testGame.players[currPlayer].MakeChoice(testGame.board, testGame.players[oppPlayer]);
+            stopwatch.Stop();
+            if (currPlayer == 0)
+                ts = ts.Add(stopwatch.Elapsed);
+            stopwatch.Reset();
+            testGame.MoveChecker(answer.newField, answer.checkerIndex, currPlayer);
+            currPlayer = (currPlayer + 1) % 2;
+            oppPlayer = (oppPlayer + 1) % 2;
+        }
+        ts = ts.Divide(i / 2);
+        UnityEngine.Debug.Log(ts);
+
+        if (i < 200)
+        {
+            PlayerColor winner = testGame.Win();
+            UnityEngine.Debug.Log(winner);
+            Assert.AreNotEqual(winner, PlayerColor.None);
+        }
+        else
+            Assert.AreEqual(testGame.Win(), PlayerColor.None);
+    }
+    [Test]
+    public void RAVEAndHeuristicGameTest10()
+    {
+        int i = 0, currPlayer = 0, oppPlayer = 1;
+        Game testGame = new Game(PlayerType.RAVE, PlayerType.Heuristic, 10);
+        Stopwatch stopwatch = new();
+        TimeSpan ts = new();
+        while (testGame.Win() == PlayerColor.None && i < 200)
+        {
+            i++;
+            stopwatch.Start();
+            var answer = testGame.players[currPlayer].MakeChoice(testGame.board, testGame.players[oppPlayer]);
+            stopwatch.Stop();
+            if (currPlayer == 0)
+                ts = ts.Add(stopwatch.Elapsed);
+            stopwatch.Reset();
+            testGame.MoveChecker(answer.newField, answer.checkerIndex, currPlayer);
+            currPlayer = (currPlayer + 1) % 2;
+            oppPlayer = (oppPlayer + 1) % 2;
+        }
+        ts = ts.Divide(i / 2);
+        UnityEngine.Debug.Log(ts);
+
+        if (i < 200)
+        {
+            PlayerColor winner = testGame.Win();
+            UnityEngine.Debug.Log(winner);
+            Assert.AreNotEqual(winner, PlayerColor.None);
+        }
         else
             Assert.AreEqual(testGame.Win(), PlayerColor.None);
     }

@@ -16,7 +16,7 @@ namespace Assets.Logic.Algorithms
     public class Node
     {
         private const int maxList = 1000000; // żeby zapobiec StackOverflowException
-        private const int maxJump = 2;
+        private const int maxJump = 5;
         public Node parent { get; private set; }
 
         public List<Node> children { get; private set; }

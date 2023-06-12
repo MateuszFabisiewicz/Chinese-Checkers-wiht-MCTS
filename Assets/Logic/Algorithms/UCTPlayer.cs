@@ -13,10 +13,12 @@ namespace Assets.Logic.Algorithms
     {
         internal int loopCount = 1500;
         internal double C = Math.Sqrt (2); // stała eksploracji
+        Random random;
 
-        public UCTPlayer (PlayerColor color) : base (color)
+        public UCTPlayer (PlayerColor color,int seed) : base (color)
         {
             type = PlayerType.UCT;
+            random = new Random (seed);
         }
 
         public override (FieldInBoard, int, PlayerColor) MakeChoice (Board board, Player opponentStats)
@@ -85,7 +87,7 @@ namespace Assets.Logic.Algorithms
             while (node.children.Count > 0) // póki możemy iść dalej
             {
                 //stosujemy random rollout policy --zmienić też na UCT ??
-                Random random = new Random ();
+                //Random random = new Random ();
                 int randomIndex = random.Next (0, node.children.Count);
                 node = node.children[randomIndex];
 
